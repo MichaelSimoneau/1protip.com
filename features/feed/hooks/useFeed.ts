@@ -15,9 +15,24 @@ export function useFeed() {
     error: null,
   });
 
+  const syncLinkedInPosts = useCallback(async () => {
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session.session) return;
+
+      await supabase.functions.invoke('linkedin-get-posts', {
+        body: {},
+      });
+    } catch (error) {
+      console.log('LinkedIn sync skipped:', error);
+    }
+  }, []);
+
   const fetchPublishedTips = useCallback(async () => {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+      await syncLinkedInPosts();
 
       const { data, error } = await supabase
         .from('tips')
@@ -39,7 +54,7 @@ export function useFeed() {
         error: error as Error,
       }));
     }
-  }, []);
+  }, [syncLinkedInPosts]);
 
   const refreshFeed = useCallback(async () => {
     await fetchPublishedTips();

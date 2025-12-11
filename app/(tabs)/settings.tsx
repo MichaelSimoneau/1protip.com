@@ -2,9 +2,14 @@ import { View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView } from
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link2, Database, Shield } from 'lucide-react-native';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
+import { useEffect } from 'react';
 
 export default function SettingsTab() {
-  const { login, profile, isLoading, error } = useLinkedInAuth();
+  const { login, profile, isLoading, error, getProfile } = useLinkedInAuth();
+
+  useEffect(() => {
+    getProfile();
+  }, [getProfile]);
 
   const handleLinkedInConnect = async () => {
     try {

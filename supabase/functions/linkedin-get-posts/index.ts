@@ -7,13 +7,20 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
 };
 
-interface LinkedInProfileResponse {
+interface LinkedInPost {
   id: string;
-  localizedFirstName: string;
-  localizedLastName: string;
-  profilePicture?: {
-    displayImage: string;
+  author: string;
+  created: {
+    time: number;
   };
+  text?: {
+    text: string;
+  };
+  commentary?: string;
+}
+
+interface LinkedInPostsResponse {
+  elements: LinkedInPost[];
 }
 
 Deno.serve(async (req: Request) => {
@@ -56,7 +63,7 @@ Deno.serve(async (req: Request) => {
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("linkedin_access_token")
+      .select("linkedin_access_token, linkedin_profile_id")
       .eq("id", user.id)
       .maybeSingle();
 
@@ -70,16 +77,21 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const profileResponse = await fetch("https://api.linkedin.com/v2/me", {
+    const postsUrl = `https://api.linkedin.com/v2/ugcPosts?q=authors&authors=List(urn:li:person:${profile.linkedin_profile_id})&count=50`;
+
+    const postsResponse = await fetch(postsUrl, {
       headers: {
         "Authorization": `Bearer ${profile.linkedin_access_token}`,
         "Content-Type": "application/json",
+        "X-Restli-Protocol-Version": "2.0.0",
       },
     });
 
-    if (!profileResponse.ok) {
+    if (!postsResponse.ok) {
+      const errorText = await postsResponse.text();
+      console.error("Failed to fetch LinkedIn posts:", errorText);
       return new Response(
-        JSON.stringify({ error: "Failed to fetch LinkedIn profile" }),
+        JSON.stringify({ error: "Failed to fetch LinkedIn posts" }),
         {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -87,32 +99,49 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const linkedInProfile: LinkedInProfileResponse = await profileResponse.json();
+    const postsData: LinkedInPostsResponse = await postsResponse.json();
 
-    await supabase
-      .from("profiles")
-      .update({
-        linkedin_profile_id: linkedInProfile.id,
-        full_name: `${linkedInProfile.localizedFirstName} ${linkedInProfile.localizedLastName}`,
-        avatar_url: linkedInProfile.profilePicture?.displayImage,
-        updated_at: new Date().toISOString(),
+    const posts = postsData.elements
+      .filter(post => {
+        const text = post.text?.text || post.commentary || "";
+        return text.toLowerCase().includes("#1protip");
       })
-      .eq("id", user.id);
+      .map(post => ({
+        id: post.id,
+        content: post.text?.text || post.commentary || "",
+        created_at: new Date(post.created.time).toISOString(),
+        linkedin_post_id: post.id,
+      }));
+
+    for (const post of posts) {
+      const { data: existingTip } = await supabase
+        .from("tips")
+        .select("id")
+        .eq("linkedin_post_id", post.linkedin_post_id)
+        .maybeSingle();
+
+      if (!existingTip) {
+        await supabase
+          .from("tips")
+          .insert({
+            content: post.content,
+            linkedin_post_id: post.linkedin_post_id,
+            user_id: user.id,
+            published: true,
+            created_at: post.created_at,
+          });
+      }
+    }
 
     return new Response(
-      JSON.stringify({
-        id: linkedInProfile.id,
-        firstName: linkedInProfile.localizedFirstName,
-        lastName: linkedInProfile.localizedLastName,
-        profilePicture: linkedInProfile.profilePicture?.displayImage,
-      }),
+      JSON.stringify({ posts, synced: posts.length }),
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       }
     );
   } catch (error) {
-    console.error("Error fetching LinkedIn profile:", error);
+    console.error("Error fetching LinkedIn posts:", error);
     return new Response(
       JSON.stringify({ error: "Internal server error" }),
       {

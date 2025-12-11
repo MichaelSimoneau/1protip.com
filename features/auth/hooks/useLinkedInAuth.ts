@@ -96,33 +96,6 @@ export function useLinkedInAuth() {
     [exchangeCodeForToken, storeAccessToken]
   );
 
-  const login = useCallback(async () => {
-    setState((prev) => ({ ...prev, isLoading: true, error: null }));
-
-    try {
-      const state = generateState();
-      const authUrl = buildAuthUrl(state);
-
-      const result = await WebBrowser.openAuthSessionAsync(
-        authUrl,
-        LINKEDIN_REDIRECT_URI
-      );
-
-      if (result.type === 'success' && result.url) {
-        await handleCallback(result.url, state);
-      }
-
-      setState((prev) => ({ ...prev, isLoading: false }));
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        isLoading: false,
-        error: error as Error,
-      }));
-      throw error;
-    }
-  }, [generateState, buildAuthUrl, handleCallback]);
-
   const getProfile = useCallback(async (): Promise<LinkedInProfile | null> => {
     const { data: session } = await supabase.auth.getSession();
     if (!session.session) return null;
@@ -147,6 +120,36 @@ export function useLinkedInAuth() {
       return null;
     }
   }, []);
+
+  const login = useCallback(async () => {
+    setState((prev) => ({ ...prev, isLoading: true, error: null }));
+
+    try {
+      const state = generateState();
+      const authUrl = buildAuthUrl(state);
+
+      const result = await WebBrowser.openAuthSessionAsync(
+        authUrl,
+        LINKEDIN_REDIRECT_URI
+      );
+
+      if (result.type === 'success' && result.url) {
+        await handleCallback(result.url, state);
+
+        const profile = await getProfile();
+        setState((prev) => ({ ...prev, isLoading: false, profile }));
+      } else {
+        setState((prev) => ({ ...prev, isLoading: false }));
+      }
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: error as Error,
+      }));
+      throw error;
+    }
+  }, [generateState, buildAuthUrl, handleCallback, getProfile]);
 
   return {
     login,
