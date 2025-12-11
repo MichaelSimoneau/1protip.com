@@ -1,11 +1,95 @@
-import { View, Text, StyleSheet, FlatList, RefreshControl, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, RefreshControl, Image, Pressable, Alert, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFeed } from '@/features/feed/hooks/useFeed';
 import { LoadingSpinner } from '@/shared/components/LoadingSpinner';
-import { Rss, User } from 'lucide-react-native';
+import { Rss, User, ThumbsUp, MessageCircle, Repeat2, ExternalLink } from 'lucide-react-native';
+import { useState } from 'react';
+import { likePost, commentOnPost, repostPost } from '@/services/linkedin/socialActions';
 
 export default function FeedTab() {
   const { posts, isLoading, error, refreshFeed } = useFeed();
+  const [actionInProgress, setActionInProgress] = useState<string | null>(null);
+
+  const handleLike = async (postId: string) => {
+    setActionInProgress(postId);
+    try {
+      const result = await likePost(postId);
+      if (result.success) {
+        Alert.alert('Success', 'Post liked on LinkedIn!');
+      } else {
+        Alert.alert('Error', result.error || 'Failed to like post');
+      }
+    } catch (err) {
+      Alert.alert('Error', 'An error occurred');
+    } finally {
+      setActionInProgress(null);
+    }
+  };
+
+  const handleComment = async (postId: string) => {
+    Alert.alert(
+      'Add Comment',
+      'Enter your comment:',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Post',
+          onPress: async () => {
+            setActionInProgress(postId);
+            try {
+              const result = await commentOnPost(postId, 'Great tip!');
+              if (result.success) {
+                Alert.alert('Success', 'Comment posted on LinkedIn!');
+              } else {
+                Alert.alert('Error', result.error || 'Failed to comment');
+              }
+            } catch (err) {
+              Alert.alert('Error', 'An error occurred');
+            } finally {
+              setActionInProgress(null);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleRepost = async (postId: string) => {
+    Alert.alert(
+      'Repost to LinkedIn',
+      'Share this post to your LinkedIn feed?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Repost',
+          onPress: async () => {
+            setActionInProgress(postId);
+            try {
+              const result = await repostPost(postId);
+              if (result.success) {
+                Alert.alert('Success', 'Post shared to your LinkedIn!');
+              } else {
+                Alert.alert('Error', result.error || 'Failed to repost');
+              }
+            } catch (err) {
+              Alert.alert('Error', 'An error occurred');
+            } finally {
+              setActionInProgress(null);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleOpenLinkedIn = async (linkedinUrl?: string) => {
+    if (linkedinUrl) {
+      const canOpen = await Linking.canOpenURL(linkedinUrl);
+      if (canOpen) {
+        await Linking.openURL(linkedinUrl);
+      }
+    }
+  };
 
   if (isLoading && posts.length === 0) {
     return <LoadingSpinner message="Loading your feed..." />;
@@ -45,7 +129,7 @@ export default function FeedTab() {
             <Rss size={64} color="#cccccc" />
             <Text style={styles.placeholderTitle}>No posts yet</Text>
             <Text style={styles.placeholderText}>
-              Posts with #1ProTip hashtag will appear here
+              Connect your LinkedIn and posts with #1ProTip will appear here
             </Text>
           </View>
         )}
@@ -73,6 +157,40 @@ export default function FeedTab() {
               </View>
             </View>
             <Text style={styles.postContent}>{item.content}</Text>
+
+            <View style={styles.actionsBar}>
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => handleLike(item.linkedin_post_id || item.id)}
+              >
+                <ThumbsUp size={20} color="#666666" />
+                <Text style={styles.actionText}>Like</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => handleComment(item.linkedin_post_id || item.id)}
+              >
+                <MessageCircle size={20} color="#666666" />
+                <Text style={styles.actionText}>Comment</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => handleRepost(item.linkedin_post_id || item.id)}
+              >
+                <Repeat2 size={20} color="#666666" />
+                <Text style={styles.actionText}>Repost</Text>
+              </Pressable>
+
+              <Pressable
+                style={styles.actionButton}
+                onPress={() => handleOpenLinkedIn(item.linkedin_url)}
+              >
+                <ExternalLink size={20} color="#0066cc" />
+                <Text style={[styles.actionText, styles.actionTextPrimary]}>View</Text>
+              </Pressable>
+            </View>
           </View>
         )}
       />
@@ -174,10 +292,35 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     color: '#1a1a1a',
+    marginBottom: 16,
   },
   postDate: {
     fontSize: 12,
     color: '#999999',
+  },
+  actionsBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  actionText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666666',
+  },
+  actionTextPrimary: {
+    color: '#0066cc',
   },
   errorContainer: {
     flex: 1,

@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Hash, Settings } from 'lucide-react-native';
+import { Hash, User } from 'lucide-react-native';
 import { Text } from 'react-native';
 
 export default function TabLayout() {
@@ -10,24 +10,28 @@ export default function TabLayout() {
         headerShown: false,
         tabBarActiveTintColor: '#0066cc',
         tabBarInactiveTintColor: '#666666',
+        tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: '#ffffff',
           borderTopWidth: 1,
           borderTopColor: '#e0e0e0',
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
         },
       }}
     >
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ size, color }) => <Settings size={size} color={color} />,
+          title: 'Account',
+          tabBarIcon: ({ size, color }) => <User size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="feed"
         options={{
-          title: '#',
+          title: 'Feed',
           tabBarIcon: ({ size, color }) => <Hash size={size} color={color} />,
         }}
       />

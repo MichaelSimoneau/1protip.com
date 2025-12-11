@@ -34,6 +34,7 @@ export type Profile = {
   avatar_url?: string;
   linkedin_access_token?: string;
   linkedin_profile_id?: string;
+  hashtag_preferences?: string[];
   created_at: string;
   updated_at: string;
 };
