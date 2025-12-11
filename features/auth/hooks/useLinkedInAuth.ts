@@ -44,7 +44,7 @@ export function useLinkedInAuth() {
       client_id: LINKEDIN_CLIENT_ID,
       redirect_uri: LINKEDIN_REDIRECT_URI,
       state,
-      scope: 'r_liteprofile r_emailaddress',
+      scope: 'r_liteprofile r_emailaddress w_member_social',
     });
 
     return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;

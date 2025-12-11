@@ -10,4 +10,5 @@
 - Security/status: current `npm audit` reports 4 vulnerabilities (2 moderate, 2 high); not yet fixed.
 - New directive: treat `docs/overloard/*.md` (typoed path) as law per `.cursorrules`, but fallback to `docs/overlord/*.md` as active source.
 - Bug fix mandate: resolve hook rule violation in `shared/components/TunnelSplash.tsx` by removing hook usage inside per-ring factory; ensure hooks stay at stable call sites.
+- LinkedIn feed directive: retain `EXPO_SECRET_LINKEDIN_CLIENT_SECRET`; add `LINKEDIN_SERVICE_*` secrets for a shared LinkedIn access token/profile so `linkedin-get-posts` can sync posts without a Supabase session; feed hook now always invokes the function to allow public syncing.
 

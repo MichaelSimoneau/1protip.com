@@ -17,9 +17,6 @@ export function useFeed() {
 
   const syncLinkedInPosts = useCallback(async () => {
     try {
-      const { data: session } = await supabase.auth.getSession();
-      if (!session.session) return;
-
       await supabase.functions.invoke('linkedin-get-posts', {
         body: {},
       });

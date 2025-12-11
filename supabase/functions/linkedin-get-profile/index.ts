@@ -12,7 +12,12 @@ interface LinkedInProfileResponse {
   localizedFirstName: string;
   localizedLastName: string;
   profilePicture?: {
-    displayImage: string;
+    displayImage?: string;
+    "displayImage~"?: {
+      elements?: {
+        identifiers?: { identifier?: string }[];
+      }[];
+    };
   };
 }
 
@@ -70,12 +75,15 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const profileResponse = await fetch("https://api.linkedin.com/v2/me", {
+    const profileResponse = await fetch(
+      "https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~:playableStreams))",
+      {
       headers: {
         "Authorization": `Bearer ${profile.linkedin_access_token}`,
         "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     if (!profileResponse.ok) {
       return new Response(
@@ -89,12 +97,16 @@ Deno.serve(async (req: Request) => {
 
     const linkedInProfile: LinkedInProfileResponse = await profileResponse.json();
 
+    const profilePictureUrl =
+      linkedInProfile.profilePicture?.["displayImage~"]?.elements?.[0]?.identifiers?.[0]?.identifier ??
+      linkedInProfile.profilePicture?.displayImage;
+
     await supabase
       .from("profiles")
       .update({
         linkedin_profile_id: linkedInProfile.id,
         full_name: `${linkedInProfile.localizedFirstName} ${linkedInProfile.localizedLastName}`,
-        avatar_url: linkedInProfile.profilePicture?.displayImage,
+        avatar_url: profilePictureUrl,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);
@@ -104,7 +116,7 @@ Deno.serve(async (req: Request) => {
         id: linkedInProfile.id,
         firstName: linkedInProfile.localizedFirstName,
         lastName: linkedInProfile.localizedLastName,
-        profilePicture: linkedInProfile.profilePicture?.displayImage,
+        profilePicture: profilePictureUrl,
       }),
       {
         status: 200,
