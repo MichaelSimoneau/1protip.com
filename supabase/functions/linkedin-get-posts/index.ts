@@ -23,6 +23,15 @@ interface LinkedInPostsResponse {
   elements: LinkedInPost[];
 }
 
+interface LinkedInProfile {
+  id: string;
+  localizedFirstName?: string;
+  localizedLastName?: string;
+  profilePicture?: {
+    displayImage?: string;
+  };
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response(null, {
@@ -63,18 +72,37 @@ Deno.serve(async (req: Request) => {
 
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
-      .select("linkedin_access_token, linkedin_profile_id")
+      .select("linkedin_access_token, linkedin_profile_id, full_name, hashtag_preferences")
       .eq("id", user.id)
       .maybeSingle();
 
     if (profileError || !profile?.linkedin_access_token) {
       return new Response(
-        JSON.stringify({ error: "LinkedIn not connected" }),
+        JSON.stringify({ error: "LinkedIn not connected", synced: 0 }),
         {
-          status: 404,
+          status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         }
       );
+    }
+
+    const hashtags = profile.hashtag_preferences || ["#1protip"];
+
+    const profileUrl = `https://api.linkedin.com/v2/me`;
+
+    const profileResponse = await fetch(profileUrl, {
+      headers: {
+        "Authorization": `Bearer ${profile.linkedin_access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    let authorName = profile.full_name || "LinkedIn User";
+    let authorAvatarUrl = null;
+
+    if (profileResponse.ok) {
+      const profileData: LinkedInProfile = await profileResponse.json();
+      authorName = `${profileData.localizedFirstName || ""} ${profileData.localizedLastName || ""}`.trim() || authorName;
     }
 
     const postsUrl = `https://api.linkedin.com/v2/ugcPosts?q=authors&authors=List(urn:li:person:${profile.linkedin_profile_id})&count=50`;
@@ -91,9 +119,9 @@ Deno.serve(async (req: Request) => {
       const errorText = await postsResponse.text();
       console.error("Failed to fetch LinkedIn posts:", errorText);
       return new Response(
-        JSON.stringify({ error: "Failed to fetch LinkedIn posts" }),
+        JSON.stringify({ error: "Failed to fetch LinkedIn posts", synced: 0 }),
         {
-          status: 400,
+          status: 200,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         }
       );
@@ -104,13 +132,16 @@ Deno.serve(async (req: Request) => {
     const posts = postsData.elements
       .filter(post => {
         const text = post.text?.text || post.commentary || "";
-        return text.toLowerCase().includes("#1protip");
+        return hashtags.some(tag => text.toLowerCase().includes(tag.toLowerCase()));
       })
       .map(post => ({
         id: post.id,
         content: post.text?.text || post.commentary || "",
         created_at: new Date(post.created.time).toISOString(),
         linkedin_post_id: post.id,
+        author_name: authorName,
+        author_avatar_url: authorAvatarUrl,
+        is_owner: true,
       }));
 
     for (const post of posts) {
@@ -129,12 +160,15 @@ Deno.serve(async (req: Request) => {
             user_id: user.id,
             published: true,
             created_at: post.created_at,
+            author_name: post.author_name,
+            author_avatar_url: post.author_avatar_url,
+            is_owner: post.is_owner,
           });
       }
     }
 
     return new Response(
-      JSON.stringify({ posts, synced: posts.length }),
+      JSON.stringify({ message: "LinkedIn posts synced successfully", synced: posts.length }),
       {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
