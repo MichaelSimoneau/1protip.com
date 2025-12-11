@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
   "scripts": {
     "dev": "EXPO_NO_TELEMETRY=1 expo start",
     "build": "npm run build:web",
@@ -20,7 +21,7 @@
     "update:preview": "eas update --branch preview --message \"preview update\"",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test:selenium": "npm run build:web && node --test tests/selenium/smoke.test.js"
+    "test:selenium": "npm run build:web && node --test tests/selenium/*.test.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -62,7 +63,6 @@
     "typescript": "~5.9.2",
     "geckodriver": "^4.4.0",
     "http-server": "^14.1.1",
-    "selenium-webdriver": "^4.26.0",
-    "ts-node": "^10.9.2"
+    "selenium-webdriver": "^4.26.0"
   }
 }
