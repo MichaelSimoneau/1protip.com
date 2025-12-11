@@ -5,18 +5,15 @@ import { LoadingSpinner } from '@/shared/components/LoadingSpinner';
 import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye } from 'lucide-react-native';
 import { useState } from 'react';
 import { supabase } from '@/services/supabase/client';
-import { CommentModal } from '@/features/feed/components/CommentModal';
 import { router } from 'expo-router';
 import type { Tip } from '@/services/supabase/types';
+import { useTabPanel } from '@/shared/contexts/TabPanelContext';
 
 export default function FeedTab() {
   const { posts, isLoading, error, refreshFeed } = useFeed();
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
-  const [commentModal, setCommentModal] = useState<{ visible: boolean; post: Tip | null }>({
-    visible: false,
-    post: null,
-  });
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const { openCommentPanel } = useTabPanel();
 
   const showFeedback = (message: string) => {
     setFeedbackMessage(message);
@@ -86,40 +83,7 @@ export default function FeedTab() {
       return;
     }
 
-    setCommentModal({ visible: true, post });
-  };
-
-  const handleCommentSubmit = async (commentText: string) => {
-    if (!commentModal.post || actionInProgress) return;
-
-    const postUrn = commentModal.post.linkedin_post_id || commentModal.post.id;
-    setActionInProgress(postUrn);
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const response = await supabase.functions.invoke('linkedin-comment-post', {
-        body: { postUrn, commentText },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (response.error) throw response.error;
-      if (response.data?.needsAuth) {
-        setCommentModal({ visible: false, post: null });
-        redirectToSettings();
-        return;
-      }
-
-      if (response.data?.success) {
-        showFeedback('Comment posted on LinkedIn!');
-        setCommentModal({ visible: false, post: null });
-      }
-    } catch (err) {
-      showFeedback('Failed to post comment');
-    } finally {
-      setActionInProgress(null);
-    }
+    openCommentPanel(post);
   };
 
   const handleRepost = async (postUrn: string) => {
@@ -275,13 +239,6 @@ export default function FeedTab() {
             </View>
           </View>
         )}
-      />
-
-      <CommentModal
-        visible={commentModal.visible}
-        onClose={() => setCommentModal({ visible: false, post: null })}
-        onSubmit={handleCommentSubmit}
-        authorName={commentModal.post?.author_name}
       />
     </SafeAreaView>
   );

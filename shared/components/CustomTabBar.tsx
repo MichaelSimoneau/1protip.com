@@ -1,18 +1,25 @@
-import { View, Text, Pressable, StyleSheet, Animated } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Animated, TextInput, ActivityIndicator } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useState, useRef, useEffect } from 'react';
+import { useTabPanel } from '@/shared/contexts/TabPanelContext';
+import { X, Send } from 'lucide-react-native';
+import { supabase } from '@/services/supabase/client';
 
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const [showPanel, setShowPanel] = useState<number | null>(null);
   const panelHeight = useRef(new Animated.Value(0)).current;
+  const { panelType, activePost, closePanel } = useTabPanel();
+  const [commentText, setCommentText] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    const shouldShow = panelType !== null || showPanel !== null;
     Animated.timing(panelHeight, {
-      toValue: showPanel !== null ? 300 : 0,
+      toValue: shouldShow ? 300 : 0,
       duration: 300,
       useNativeDriver: false,
     }).start();
-  }, [showPanel]);
+  }, [showPanel, panelType]);
 
   const handleTabPress = (index: number) => {
     const isFocused = state.index === index;
@@ -37,7 +44,78 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
     }
   };
 
+  const handleCommentSubmit = async () => {
+    if (!commentText.trim() || !activePost || isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      const postUrn = activePost.linkedin_post_id || activePost.id;
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const response = await supabase.functions.invoke('linkedin-comment-post', {
+        body: { postUrn, commentText: commentText.trim() },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      if (response.error) throw response.error;
+
+      if (response.data?.success) {
+        setCommentText('');
+        closePanel();
+      }
+    } catch (err) {
+      console.error('Failed to post comment:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderCommentPanel = () => {
+    if (!activePost) return null;
+
+    return (
+      <View style={styles.panelContent}>
+        <View style={styles.commentHeader}>
+          <Text style={styles.panelTitle}>Comment on {activePost.author_name}'s post</Text>
+          <Pressable onPress={closePanel} style={styles.closeButton}>
+            <X size={24} color="#666666" />
+          </Pressable>
+        </View>
+
+        <View style={styles.commentInputContainer}>
+          <TextInput
+            style={styles.commentInput}
+            placeholder="Write your comment..."
+            placeholderTextColor="#999999"
+            value={commentText}
+            onChangeText={setCommentText}
+            multiline
+            numberOfLines={3}
+            editable={!isSubmitting}
+          />
+          <Pressable
+            style={[styles.sendButton, (!commentText.trim() || isSubmitting) && styles.sendButtonDisabled]}
+            onPress={handleCommentSubmit}
+            disabled={!commentText.trim() || isSubmitting}
+          >
+            {isSubmitting ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Send size={20} color="#ffffff" />
+            )}
+          </Pressable>
+        </View>
+      </View>
+    );
+  };
+
   const renderPanel = (routeName: string) => {
+    if (panelType === 'comment') {
+      return renderCommentPanel();
+    }
+
     switch (routeName) {
       case 'settings':
         return (
@@ -65,19 +143,25 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
     }
   };
 
+  const tabOrder = ['settings', 'feed', 'ms'];
+  const orderedRoutes = tabOrder
+    .map(name => {
+      const index = state.routes.findIndex(r => r.name === name);
+      return index >= 0 ? { route: state.routes[index], index } : null;
+    })
+    .filter(Boolean) as Array<{ route: typeof state.routes[0]; index: number }>;
+
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.panel, { height: panelHeight }]}>
-        {showPanel !== null && renderPanel(state.routes[showPanel].name)}
+        {panelType !== null ? renderPanel('') : (showPanel !== null && renderPanel(state.routes[showPanel].name))}
       </Animated.View>
 
       <View style={styles.tabBar}>
-        {state.routes.map((route, index) => {
-          if (route.name === 'index') return null;
-
+        {orderedRoutes.map(({ route, index }) => {
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
-          const isPanelOpen = showPanel === index;
+          const isPanelOpen = showPanel === index || panelType !== null;
 
           return (
             <Pressable
@@ -86,7 +170,7 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
               style={[
                 styles.tab,
                 isFocused && styles.tabActive,
-                isPanelOpen && styles.tabWithPanel,
+                isPanelOpen && isFocused && styles.tabWithPanel,
               ]}
             >
               {options.tabBarIcon &&
@@ -149,5 +233,43 @@ const styles = StyleSheet.create({
   },
   tabWithPanel: {
     backgroundColor: '#0052a3',
+  },
+  commentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  closeButton: {
+    padding: 4,
+  },
+  commentInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 12,
+  },
+  commentInput: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+    padding: 12,
+    fontSize: 16,
+    color: '#1a1a1a',
+    minHeight: 80,
+    maxHeight: 120,
+    textAlignVertical: 'top',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+  },
+  sendButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#0066cc',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendButtonDisabled: {
+    backgroundColor: '#cccccc',
   },
 });
