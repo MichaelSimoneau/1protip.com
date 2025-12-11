@@ -1,12 +1,12 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import type { Tip } from '@/services/supabase/types';
+import type { FeedPost } from '@/services/linkedin/feed';
 
 type PanelType = 'comment' | 'tiles' | null;
 
 interface TabPanelContextValue {
   panelType: PanelType;
-  activePost: Tip | null;
-  openCommentPanel: (post: Tip) => void;
+  activePost: FeedPost | null;
+  openCommentPanel: (post: FeedPost) => void;
   openTilesPanel: () => void;
   closePanel: () => void;
 }
@@ -15,9 +15,9 @@ const TabPanelContext = createContext<TabPanelContextValue | null>(null);
 
 export function TabPanelProvider({ children }: { children: ReactNode }) {
   const [panelType, setPanelType] = useState<PanelType>(null);
-  const [activePost, setActivePost] = useState<Tip | null>(null);
+  const [activePost, setActivePost] = useState<FeedPost | null>(null);
 
-  const openCommentPanel = (post: Tip) => {
+  const openCommentPanel = (post: FeedPost) => {
     setActivePost(post);
     setPanelType('comment');
   };

@@ -3,15 +3,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { useState, useEffect } from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import { supabase } from '@/services/supabase/client';
-import type { Tip } from '@/services/supabase/types';
+import { fetchHashtagFeed, type FeedPost } from '@/services/linkedin/feed';
 import { User, ArrowLeft } from 'lucide-react-native';
 import { router } from 'expo-router';
 
 export default function MSTab() {
   const [loading, setLoading] = useState(true);
   const { postId } = useLocalSearchParams<{ postId?: string }>();
-  const [post, setPost] = useState<Tip | null>(null);
+  const [post, setPost] = useState<FeedPost | null>(null);
 
   useEffect(() => {
     if (postId) {
@@ -21,16 +20,13 @@ export default function MSTab() {
 
   const loadPost = async (id: string) => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('tips')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle();
-
-    if (!error && data) {
-      setPost(data);
+    try {
+      const posts = await fetchHashtagFeed();
+      const match = posts.find((p) => p.id === id || p.linkedin_post_id === id) || null;
+      setPost(match);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleBack = () => {

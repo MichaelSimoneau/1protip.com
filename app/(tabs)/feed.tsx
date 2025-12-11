@@ -4,10 +4,14 @@ import { useFeed } from '@/features/feed/hooks/useFeed';
 import { LoadingSpinner } from '@/shared/components/LoadingSpinner';
 import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye } from 'lucide-react-native';
 import { useState } from 'react';
-import { supabase } from '@/services/supabase/client';
 import { router } from 'expo-router';
-import type { Tip } from '@/services/supabase/types';
 import { useTabPanel } from '@/shared/contexts/TabPanelContext';
+import type { FeedPost } from '@/services/linkedin/feed';
+import {
+  likePost as likeWithService,
+  commentOnPost as commentWithService,
+  repostPost as repostWithService,
+} from '@/services/linkedin/socialActions';
 
 export default function FeedTab() {
   const { posts, isLoading, error, refreshFeed } = useFeed();
@@ -20,55 +24,13 @@ export default function FeedTab() {
     setTimeout(() => setFeedbackMessage(null), 3000);
   };
 
-  const checkLinkedInConnection = async (): Promise<boolean> => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return false;
-
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('linkedin_access_token')
-      .eq('id', user.id)
-      .maybeSingle();
-
-    return !!profile?.linkedin_access_token;
-  };
-
-  const redirectToSettings = () => {
-    router.push({
-      pathname: '/(tabs)/settings',
-      params: { highlight: 'connect' },
-    });
-    showFeedback('Connect your LinkedIn account to interact with posts');
-  };
-
   const handleLike = async (postUrn: string) => {
     if (actionInProgress) return;
 
-    const isConnected = await checkLinkedInConnection();
-    if (!isConnected) {
-      redirectToSettings();
-      return;
-    }
-
     setActionInProgress(postUrn);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const response = await supabase.functions.invoke('linkedin-like-post', {
-        body: { postUrn },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (response.error) throw response.error;
-      if (response.data?.needsAuth) {
-        redirectToSettings();
-        return;
-      }
-
-      if (response.data?.success) {
-        showFeedback('Liked on LinkedIn!');
-      }
+      await likeWithService(postUrn);
+      showFeedback('Liked on LinkedIn!');
     } catch (err) {
       showFeedback('Failed to like post');
     } finally {
@@ -76,44 +38,17 @@ export default function FeedTab() {
     }
   };
 
-  const handleCommentOpen = async (post: Tip) => {
-    const isConnected = await checkLinkedInConnection();
-    if (!isConnected) {
-      redirectToSettings();
-      return;
-    }
-
+  const handleCommentOpen = async (post: FeedPost) => {
     openCommentPanel(post);
   };
 
   const handleRepost = async (postUrn: string) => {
     if (actionInProgress) return;
 
-    const isConnected = await checkLinkedInConnection();
-    if (!isConnected) {
-      redirectToSettings();
-      return;
-    }
-
     setActionInProgress(postUrn);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const response = await supabase.functions.invoke('linkedin-repost-post', {
-        body: { postUrn },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (response.error) throw response.error;
-      if (response.data?.needsAuth) {
-        redirectToSettings();
-        return;
-      }
-
-      if (response.data?.success) {
-        showFeedback('Reposted to your LinkedIn!');
-      }
+      await repostWithService(postUrn);
+      showFeedback('Reposted to LinkedIn!');
     } catch (err) {
       showFeedback('Failed to repost');
     } finally {
@@ -121,7 +56,7 @@ export default function FeedTab() {
     }
   };
 
-  const handleView = (post: Tip) => {
+  const handleView = (post: FeedPost) => {
     router.push({
       pathname: '/(tabs)/ms',
       params: { postId: post.id },

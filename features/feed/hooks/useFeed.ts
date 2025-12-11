@@ -1,9 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
-import { supabase } from '@/services/supabase/client';
-import type { Tip } from '@/services/supabase/types';
+import { fetchHashtagFeed, type FeedPost } from '@/services/linkedin/feed';
 
 interface FeedState {
-  posts: Tip[];
+  posts: FeedPost[];
   isLoading: boolean;
   error: Error | null;
 }
@@ -15,32 +14,14 @@ export function useFeed() {
     error: null,
   });
 
-  const syncLinkedInPosts = useCallback(async () => {
-    try {
-      await supabase.functions.invoke('linkedin-get-posts', {
-        body: {},
-      });
-    } catch (error) {
-      console.log('LinkedIn sync skipped:', error);
-    }
-  }, []);
-
   const fetchPublishedTips = useCallback(async () => {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      await syncLinkedInPosts();
-
-      const { data, error } = await supabase
-        .from('tips')
-        .select('*')
-        .eq('published', true)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const posts = await fetchHashtagFeed();
 
       setState({
-        posts: data || [],
+        posts,
         isLoading: false,
         error: null,
       });
@@ -51,7 +32,7 @@ export function useFeed() {
         error: error as Error,
       }));
     }
-  }, [syncLinkedInPosts]);
+  }, []);
 
   const refreshFeed = useCallback(async () => {
     await fetchPublishedTips();

@@ -3,7 +3,7 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useState, useRef, useEffect } from 'react';
 import { useTabPanel } from '@/shared/contexts/TabPanelContext';
 import { X, Send } from 'lucide-react-native';
-import { supabase } from '@/services/supabase/client';
+import { commentOnPost as commentWithService } from '@/services/linkedin/socialActions';
 
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const [showPanel, setShowPanel] = useState<number | null>(null);
@@ -50,21 +50,9 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
     setIsSubmitting(true);
     try {
       const postUrn = activePost.linkedin_post_id || activePost.id;
-      const { data: { session } } = await supabase.auth.getSession();
-
-      const response = await supabase.functions.invoke('linkedin-comment-post', {
-        body: { postUrn, commentText: commentText.trim() },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
-
-      if (response.error) throw response.error;
-
-      if (response.data?.success) {
-        setCommentText('');
-        closePanel();
-      }
+      await commentWithService(postUrn, commentText.trim());
+      setCommentText('');
+      closePanel();
     } catch (err) {
       console.error('Failed to post comment:', err);
     } finally {
