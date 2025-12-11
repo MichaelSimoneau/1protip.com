@@ -6,7 +6,7 @@ import { TunnelSplash } from '@/shared/components/TunnelSplash';
 export default function HomeTab() {
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace('/(tabs)/feed');
+      router.replace('/feed');
     }, 2500);
 
     return () => clearTimeout(timer);

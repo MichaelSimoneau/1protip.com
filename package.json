@@ -19,7 +19,8 @@
     "update:prod": "eas update --branch production --message \"production update\"",
     "update:preview": "eas update --branch preview --message \"preview update\"",
     "lint": "expo lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:selenium": "npm run build:web && node --test tests/selenium/smoke.test.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -58,6 +59,10 @@
     "@babel/core": "^7.25.2",
     "@types/react": "~19.1.10",
     "babel-plugin-module-resolver": "^5.0.2",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "geckodriver": "^4.4.0",
+    "http-server": "^14.1.1",
+    "selenium-webdriver": "^4.26.0",
+    "ts-node": "^10.9.2"
   }
 }
