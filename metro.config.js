@@ -5,11 +5,19 @@ const config = getDefaultConfig(__dirname);
 config.resolver.sourceExts.push('jsx', 'js', 'ts', 'tsx', 'json');
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
-  if (moduleName === 'react-native/jsx-runtime' && platform === 'web') {
-    return {
-      filePath: require.resolve('react/jsx-runtime'),
-      type: 'sourceFile',
-    };
+  if (platform === 'web') {
+    if (moduleName === 'react-native/jsx-runtime') {
+      return {
+        filePath: require.resolve('react/jsx-runtime'),
+        type: 'sourceFile',
+      };
+    }
+    if (moduleName === 'react-native/jsx-dev-runtime') {
+      return {
+        filePath: require.resolve('react/jsx-dev-runtime'),
+        type: 'sourceFile',
+      };
+    }
   }
 
   return context.resolveRequest(context, moduleName, platform);
