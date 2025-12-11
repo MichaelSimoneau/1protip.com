@@ -1,94 +1,167 @@
-import { View, Text, StyleSheet, FlatList, RefreshControl, Image, Pressable, Alert, Linking } from 'react-native';
+import { View, Text, StyleSheet, FlatList, RefreshControl, Image, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFeed } from '@/features/feed/hooks/useFeed';
 import { LoadingSpinner } from '@/shared/components/LoadingSpinner';
-import { Rss, User, ThumbsUp, MessageCircle, Repeat2, ExternalLink } from 'lucide-react-native';
+import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye } from 'lucide-react-native';
 import { useState } from 'react';
-import { likePost, commentOnPost, repostPost } from '@/services/linkedin/socialActions';
+import { supabase } from '@/services/supabase/client';
+import { CommentModal } from '@/features/feed/components/CommentModal';
+import { router } from 'expo-router';
+import type { Tip } from '@/services/supabase/types';
 
 export default function FeedTab() {
   const { posts, isLoading, error, refreshFeed } = useFeed();
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
+  const [commentModal, setCommentModal] = useState<{ visible: boolean; post: Tip | null }>({
+    visible: false,
+    post: null,
+  });
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
-  const handleLike = async (postId: string) => {
-    setActionInProgress(postId);
+  const showFeedback = (message: string) => {
+    setFeedbackMessage(message);
+    setTimeout(() => setFeedbackMessage(null), 3000);
+  };
+
+  const checkLinkedInConnection = async (): Promise<boolean> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return false;
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('linkedin_access_token')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    return !!profile?.linkedin_access_token;
+  };
+
+  const redirectToSettings = () => {
+    router.push({
+      pathname: '/(tabs)/settings',
+      params: { highlight: 'connect' },
+    });
+    showFeedback('Connect your LinkedIn account to interact with posts');
+  };
+
+  const handleLike = async (postUrn: string) => {
+    if (actionInProgress) return;
+
+    const isConnected = await checkLinkedInConnection();
+    if (!isConnected) {
+      redirectToSettings();
+      return;
+    }
+
+    setActionInProgress(postUrn);
     try {
-      const result = await likePost(postId);
-      if (result.success) {
-        Alert.alert('Success', 'Post liked on LinkedIn!');
-      } else {
-        Alert.alert('Error', result.error || 'Failed to like post');
+      const { data: { session } } = await supabase.auth.getSession();
+      const response = await supabase.functions.invoke('linkedin-like-post', {
+        body: { postUrn },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      if (response.error) throw response.error;
+      if (response.data?.needsAuth) {
+        redirectToSettings();
+        return;
+      }
+
+      if (response.data?.success) {
+        showFeedback('Liked on LinkedIn!');
       }
     } catch (err) {
-      Alert.alert('Error', 'An error occurred');
+      showFeedback('Failed to like post');
     } finally {
       setActionInProgress(null);
     }
   };
 
-  const handleComment = async (postId: string) => {
-    Alert.alert(
-      'Add Comment',
-      'Enter your comment:',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Post',
-          onPress: async () => {
-            setActionInProgress(postId);
-            try {
-              const result = await commentOnPost(postId, 'Great tip!');
-              if (result.success) {
-                Alert.alert('Success', 'Comment posted on LinkedIn!');
-              } else {
-                Alert.alert('Error', result.error || 'Failed to comment');
-              }
-            } catch (err) {
-              Alert.alert('Error', 'An error occurred');
-            } finally {
-              setActionInProgress(null);
-            }
-          },
-        },
-      ]
-    );
-  };
-
-  const handleRepost = async (postId: string) => {
-    Alert.alert(
-      'Repost to LinkedIn',
-      'Share this post to your LinkedIn feed?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Repost',
-          onPress: async () => {
-            setActionInProgress(postId);
-            try {
-              const result = await repostPost(postId);
-              if (result.success) {
-                Alert.alert('Success', 'Post shared to your LinkedIn!');
-              } else {
-                Alert.alert('Error', result.error || 'Failed to repost');
-              }
-            } catch (err) {
-              Alert.alert('Error', 'An error occurred');
-            } finally {
-              setActionInProgress(null);
-            }
-          },
-        },
-      ]
-    );
-  };
-
-  const handleOpenLinkedIn = async (linkedinUrl?: string) => {
-    if (linkedinUrl) {
-      const canOpen = await Linking.canOpenURL(linkedinUrl);
-      if (canOpen) {
-        await Linking.openURL(linkedinUrl);
-      }
+  const handleCommentOpen = async (post: Tip) => {
+    const isConnected = await checkLinkedInConnection();
+    if (!isConnected) {
+      redirectToSettings();
+      return;
     }
+
+    setCommentModal({ visible: true, post });
+  };
+
+  const handleCommentSubmit = async (commentText: string) => {
+    if (!commentModal.post || actionInProgress) return;
+
+    const postUrn = commentModal.post.linkedin_post_id || commentModal.post.id;
+    setActionInProgress(postUrn);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const response = await supabase.functions.invoke('linkedin-comment-post', {
+        body: { postUrn, commentText },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      if (response.error) throw response.error;
+      if (response.data?.needsAuth) {
+        setCommentModal({ visible: false, post: null });
+        redirectToSettings();
+        return;
+      }
+
+      if (response.data?.success) {
+        showFeedback('Comment posted on LinkedIn!');
+        setCommentModal({ visible: false, post: null });
+      }
+    } catch (err) {
+      showFeedback('Failed to post comment');
+    } finally {
+      setActionInProgress(null);
+    }
+  };
+
+  const handleRepost = async (postUrn: string) => {
+    if (actionInProgress) return;
+
+    const isConnected = await checkLinkedInConnection();
+    if (!isConnected) {
+      redirectToSettings();
+      return;
+    }
+
+    setActionInProgress(postUrn);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const response = await supabase.functions.invoke('linkedin-repost-post', {
+        body: { postUrn },
+        headers: {
+          Authorization: `Bearer ${session?.access_token}`,
+        },
+      });
+
+      if (response.error) throw response.error;
+      if (response.data?.needsAuth) {
+        redirectToSettings();
+        return;
+      }
+
+      if (response.data?.success) {
+        showFeedback('Reposted to your LinkedIn!');
+      }
+    } catch (err) {
+      showFeedback('Failed to repost');
+    } finally {
+      setActionInProgress(null);
+    }
+  };
+
+  const handleView = (post: Tip) => {
+    router.push({
+      pathname: '/(tabs)/ms',
+      params: { postId: post.id },
+    });
   };
 
   if (isLoading && posts.length === 0) {
@@ -116,6 +189,12 @@ export default function FeedTab() {
         <Text style={styles.title}>#1ProTip</Text>
         <Text style={styles.subtitle}>Professional tips from the LinkedIn community</Text>
       </View>
+
+      {feedbackMessage && (
+        <View style={styles.feedback}>
+          <Text style={styles.feedbackText}>{feedbackMessage}</Text>
+        </View>
+      )}
 
       <FlatList
         data={posts}
@@ -162,6 +241,7 @@ export default function FeedTab() {
               <Pressable
                 style={styles.actionButton}
                 onPress={() => handleLike(item.linkedin_post_id || item.id)}
+                disabled={!!actionInProgress}
               >
                 <ThumbsUp size={20} color="#666666" />
                 <Text style={styles.actionText}>Like</Text>
@@ -169,7 +249,8 @@ export default function FeedTab() {
 
               <Pressable
                 style={styles.actionButton}
-                onPress={() => handleComment(item.linkedin_post_id || item.id)}
+                onPress={() => handleCommentOpen(item)}
+                disabled={!!actionInProgress}
               >
                 <MessageCircle size={20} color="#666666" />
                 <Text style={styles.actionText}>Comment</Text>
@@ -178,6 +259,7 @@ export default function FeedTab() {
               <Pressable
                 style={styles.actionButton}
                 onPress={() => handleRepost(item.linkedin_post_id || item.id)}
+                disabled={!!actionInProgress}
               >
                 <Repeat2 size={20} color="#666666" />
                 <Text style={styles.actionText}>Repost</Text>
@@ -185,14 +267,21 @@ export default function FeedTab() {
 
               <Pressable
                 style={styles.actionButton}
-                onPress={() => handleOpenLinkedIn(item.linkedin_url)}
+                onPress={() => handleView(item)}
               >
-                <ExternalLink size={20} color="#0066cc" />
+                <Eye size={20} color="#0066cc" />
                 <Text style={[styles.actionText, styles.actionTextPrimary]}>View</Text>
               </Pressable>
             </View>
           </View>
         )}
+      />
+
+      <CommentModal
+        visible={commentModal.visible}
+        onClose={() => setCommentModal({ visible: false, post: null })}
+        onSubmit={handleCommentSubmit}
+        authorName={commentModal.post?.author_name}
       />
     </SafeAreaView>
   );
@@ -218,6 +307,19 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: '#666666',
+  },
+  feedback: {
+    backgroundColor: '#0066cc',
+    padding: 16,
+    marginHorizontal: 16,
+    marginTop: 8,
+    borderRadius: 12,
+  },
+  feedbackText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#ffffff',
+    textAlign: 'center',
   },
   listContent: {
     padding: 16,

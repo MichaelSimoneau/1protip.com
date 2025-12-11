@@ -1,18 +1,49 @@
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView, TextInput, Linking, Alert } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView, TextInput, Linking, Alert, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link2, UserPlus, Hash, X, Plus } from 'lucide-react-native';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { useHashtagPreferences } from '@/features/settings/hooks/useHashtagPreferences';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function SettingsTab() {
   const { login, profile, isLoading, error, getProfile } = useLinkedInAuth();
   const { hashtags, isLoading: hashtagsLoading, addHashtag, removeHashtag } = useHashtagPreferences();
   const [newHashtag, setNewHashtag] = useState('');
+  const { highlight } = useLocalSearchParams<{ highlight?: string }>();
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     getProfile();
   }, [getProfile]);
+
+  useEffect(() => {
+    if (highlight === 'connect' && !profile) {
+      const pulse = Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.05,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1.05,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]);
+      pulse.start();
+    }
+  }, [highlight, profile]);
 
   const handleLinkedInConnect = async () => {
     try {
@@ -63,11 +94,12 @@ export default function SettingsTab() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>LinkedIn Account</Text>
 
-          <Pressable
-            style={styles.settingCard}
-            onPress={handleLinkedInConnect}
-            disabled={isLoading}
-          >
+          <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+            <Pressable
+              style={styles.settingCard}
+              onPress={handleLinkedInConnect}
+              disabled={isLoading}
+            >
             <View style={styles.settingIcon}>
               {isLoading ? (
                 <ActivityIndicator size="small" color="#0066cc" />
@@ -88,7 +120,8 @@ export default function SettingsTab() {
             ) : (
               <Text style={styles.settingBadge}>Tap to Connect</Text>
             )}
-          </Pressable>
+            </Pressable>
+          </Animated.View>
 
           <Pressable
             style={[styles.settingCard, styles.connectCard]}
