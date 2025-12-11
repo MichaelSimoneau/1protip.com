@@ -7,6 +7,11 @@ export type Tip = {
   updated_at: string;
   published: boolean;
   user_id: string;
+  author_name?: string;
+  author_linkedin_id?: string;
+  author_avatar_url?: string;
+  author_profile_url?: string;
+  is_owner?: boolean;
 };
 
 export type BlogPost = {

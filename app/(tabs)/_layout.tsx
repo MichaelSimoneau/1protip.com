@@ -1,9 +1,11 @@
 import { Tabs } from 'expo-router';
-import { Home, Rss, Settings } from 'lucide-react-native';
+import { Hash, Settings } from 'lucide-react-native';
+import { Text } from 'react-native';
 
 export default function TabLayout() {
   return (
     <Tabs
+      initialRouteName="feed"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: '#0066cc',
@@ -16,24 +18,32 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="settings"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ size, color }) => <Home size={size} color={color} />,
+          title: 'Settings',
+          tabBarIcon: ({ size, color }) => <Settings size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="feed"
         options={{
-          title: 'Feed',
-          tabBarIcon: ({ size, color }) => <Rss size={size} color={color} />,
+          title: '#',
+          tabBarIcon: ({ size, color }) => <Hash size={size} color={color} />,
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="ms"
         options={{
-          title: 'Settings',
-          tabBarIcon: ({ size, color }) => <Settings size={size} color={color} />,
+          title: 'MS',
+          tabBarIcon: ({ size, color }) => (
+            <Text style={{ fontSize: size * 0.7, fontWeight: '700', color }}>MS</Text>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="index"
+        options={{
+          href: null,
         }}
       />
     </Tabs>
