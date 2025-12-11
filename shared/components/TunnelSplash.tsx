@@ -1,31 +1,14 @@
 import React, { useEffect, type ReactNode } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Platform, ViewStyle } from 'react-native';
 
 // Lazily require reanimated so a native/JS mismatch falls back safely.
-let Animated: typeof import('react-native-reanimated') | null = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  Animated = require('react-native-reanimated');
-} catch (error) {
-  console.warn('TunnelSplash: reanimated not available, using static fallback.', error);
-}
+import Animated, { Easing, useSharedValue, withTiming, withRepeat, withSequence, useAnimatedStyle, SharedValue } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('window');
 const RING_COUNT = 8;
 
 function Ring({ index }: { index: number }) {
-  if (!Animated) {
-    return null;
-  }
-
-  const {
-    useSharedValue,
-    useAnimatedStyle,
-    withRepeat,
-    withTiming,
-    Easing,
-    withSequence,
-  } = Animated;
+  if (!Animated) return null;
 
   const size = width * 0.3 + index * 60;
   const delay = index * 100;
@@ -61,15 +44,16 @@ function Ring({ index }: { index: number }) {
     borderWidth: 3,
     borderColor: '#0066cc',
     position: 'absolute',
-    transform: [{ scale: ringScale.value }],
-    opacity: ringOpacity.value,
+    transform: [{ scale: ringScale.value as number }],
+    opacity: ringOpacity.value as number,
   }));
 
   return <Animated.View style={style} />;
 }
 
 export function TunnelSplash() {
-  if (!Animated) {
+  // On web, avoid Reanimated entirely and render a static fallback.
+  if (Platform.OS === 'web') {
     return (
       <View style={[styles.container, styles.fallback]}>
         <View style={styles.fallbackMark} />
@@ -77,14 +61,13 @@ export function TunnelSplash() {
     );
   }
 
-  const {
-    useSharedValue,
-    useAnimatedStyle,
-    withRepeat,
-    withTiming,
-    Easing,
-    withSequence,
-  } = Animated;
+  if (!Animated) {
+    return (
+      <View style={[styles.container, styles.fallback]}>
+        <View style={styles.fallbackMark} />
+      </View>
+    );
+  }
 
   const rotation = useSharedValue(0);
   const scale = useSharedValue(0.8);
@@ -119,11 +102,8 @@ export function TunnelSplash() {
   }, [opacity, rotation, scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { rotate: `${rotation.value}deg` },
-      { scale: scale.value },
-    ],
-    opacity: opacity.value,
+    transform: [{ rotate: `${rotation.value as number}deg` }, { scale: scale.value as number }],
+    opacity: opacity.value as number,
   }));
 
   return (

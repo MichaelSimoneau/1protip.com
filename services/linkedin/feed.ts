@@ -157,6 +157,12 @@ function sortPosts(posts: FeedPost[]): FeedPost[] {
 }
 
 export async function fetchHashtagFeed(hashtag = DEFAULT_HASHTAG): Promise<FeedPost[]> {
+  // On web we cannot safely expose the client secret; skip and return an empty feed.
+  if (Platform.OS === 'web') {
+    console.warn('LinkedIn hashtag feed disabled on web (requires client secret).');
+    return [];
+  }
+
   const token = await getAppAccessToken();
   const searchUrl = `https://api.linkedin.com/rest/posts?q=search&keywords=${encodeURIComponent(
     hashtag
