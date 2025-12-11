@@ -1,18 +1,32 @@
-import { useEffect } from 'react';
+import React, { useEffect, type ReactNode } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  Easing,
-  withSequence,
-} from 'react-native-reanimated';
+
+// Lazily require reanimated so a native/JS mismatch falls back safely.
+let Animated: typeof import('react-native-reanimated') | null = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  Animated = require('react-native-reanimated');
+} catch (error) {
+  console.warn('TunnelSplash: reanimated not available, using static fallback.', error);
+}
 
 const { width } = Dimensions.get('window');
 const RING_COUNT = 8;
 
 function Ring({ index }: { index: number }) {
+  if (!Animated) {
+    return null;
+  }
+
+  const {
+    useSharedValue,
+    useAnimatedStyle,
+    withRepeat,
+    withTiming,
+    Easing,
+    withSequence,
+  } = Animated;
+
   const size = width * 0.3 + index * 60;
   const delay = index * 100;
   const ringOpacity = useSharedValue(0);
@@ -55,6 +69,23 @@ function Ring({ index }: { index: number }) {
 }
 
 export function TunnelSplash() {
+  if (!Animated) {
+    return (
+      <View style={[styles.container, styles.fallback]}>
+        <View style={styles.fallbackMark} />
+      </View>
+    );
+  }
+
+  const {
+    useSharedValue,
+    useAnimatedStyle,
+    withRepeat,
+    withTiming,
+    Easing,
+    withSequence,
+  } = Animated;
+
   const rotation = useSharedValue(0);
   const scale = useSharedValue(0.8);
   const opacity = useSharedValue(0);
@@ -125,6 +156,41 @@ export function TunnelSplash() {
   );
 }
 
+class SplashErrorBoundary extends React.Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.error('TunnelSplash crashed, showing fallback:', error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <View style={[styles.container, styles.fallback]}>
+          <View style={styles.fallbackMark} />
+        </View>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
+export function SafeTunnelSplash() {
+  return (
+    <SplashErrorBoundary>
+      <TunnelSplash />
+    </SplashErrorBoundary>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -176,5 +242,18 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 1,
     shadowRadius: 10,
+  },
+  fallback: {
+    backgroundColor: '#000814',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fallbackMark: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: '#0066cc',
+    borderWidth: 4,
+    borderColor: '#00ccff',
   },
 });

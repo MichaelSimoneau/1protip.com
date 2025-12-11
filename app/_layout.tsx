@@ -13,7 +13,6 @@ export default function RootLayout() {
       <Suspense fallback={<LoadingSpinner message="Loading..." />}>
         <Stack
           screenOptions={{ headerShown: false }}
-          initialRouteName="(tabs)"
         >
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="+not-found" />

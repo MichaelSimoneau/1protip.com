@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import { TunnelSplash } from '@/shared/components/TunnelSplash';
+import { SafeTunnelSplash } from '@/shared/components/TunnelSplash';
 
 export default function HomeTab() {
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function HomeTab() {
 
   return (
     <View style={styles.container}>
-      <TunnelSplash />
+      <SafeTunnelSplash />
     </View>
   );
 }
