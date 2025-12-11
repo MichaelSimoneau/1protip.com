@@ -2,18 +2,20 @@ import { Tabs } from 'expo-router';
 import { Hash, User } from 'lucide-react-native';
 import { Text } from 'react-native';
 import { CustomTabBar } from '@/shared/components/CustomTabBar';
+import { TabPanelProvider } from '@/shared/contexts/TabPanelContext';
 
 export default function TabLayout() {
   return (
-    <Tabs
-      initialRouteName="feed"
-      tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#0066cc',
-        tabBarInactiveTintColor: '#666666',
-      }}
-    >
+    <TabPanelProvider>
+      <Tabs
+        initialRouteName="feed"
+        tabBar={(props) => <CustomTabBar {...props} />}
+        screenOptions={{
+          headerShown: false,
+          tabBarActiveTintColor: '#0066cc',
+          tabBarInactiveTintColor: '#666666',
+        }}
+      >
       <Tabs.Screen
         name="settings"
         options={{
@@ -43,6 +45,7 @@ export default function TabLayout() {
           href: null,
         }}
       />
-    </Tabs>
+      </Tabs>
+    </TabPanelProvider>
   );
 }
