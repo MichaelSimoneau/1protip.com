@@ -22,4 +22,6 @@ jobs:
         run: npm run lint
       - name: Typecheck
         run: npm run typecheck
+      - name: Selenium smoke tests (web)
+        run: npm run test:selenium
 
