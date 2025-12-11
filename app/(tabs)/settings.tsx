@@ -1,8 +1,19 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link2, Database, Shield } from 'lucide-react-native';
+import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 
 export default function SettingsTab() {
+  const { login, profile, isLoading, error } = useLinkedInAuth();
+
+  const handleLinkedInConnect = async () => {
+    try {
+      await login();
+    } catch (err) {
+      console.error('LinkedIn connection failed:', err);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
@@ -10,19 +21,35 @@ export default function SettingsTab() {
         <Text style={styles.subtitle}>Configure your 1ProTip platform</Text>
       </View>
 
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Integrations</Text>
 
-          <Pressable style={styles.settingCard}>
+          <Pressable
+            style={styles.settingCard}
+            onPress={handleLinkedInConnect}
+            disabled={isLoading}
+          >
             <View style={styles.settingIcon}>
-              <Link2 size={24} color="#0066cc" />
+              {isLoading ? (
+                <ActivityIndicator size="small" color="#0066cc" />
+              ) : (
+                <Link2 size={24} color="#0066cc" />
+              )}
             </View>
             <View style={styles.settingContent}>
               <Text style={styles.settingTitle}>LinkedIn Connection</Text>
-              <Text style={styles.settingDescription}>Not connected</Text>
+              <Text style={styles.settingDescription}>
+                {profile ? `Connected as ${profile.firstName}` : 'Not connected'}
+              </Text>
             </View>
-            <Text style={styles.settingBadge}>Setup Required</Text>
+            {profile ? (
+              <Text style={[styles.settingBadge, styles.settingBadgeSuccess]}>
+                Connected
+              </Text>
+            ) : (
+              <Text style={styles.settingBadge}>Tap to Connect</Text>
+            )}
           </Pressable>
 
           <Pressable style={styles.settingCard}>
@@ -67,7 +94,7 @@ export default function SettingsTab() {
             3. Add credentials to environment variables
           </Text>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

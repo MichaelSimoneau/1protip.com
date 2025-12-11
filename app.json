@@ -1,15 +1,43 @@
 {
   "expo": {
-    "name": "bolt-expo-nativewind",
+    "name": "1ProTip",
     "slug": "1protip",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "oneprotip",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0066cc"
+    },
+    "assetBundlePatterns": [
+      "assets/**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.michaelsimoneau.oneprotip",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to capture photos for your posts.",
+        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to select images for your posts."
+      }
+    },
+    "android": {
+      "package": "com.michaelsimoneau.oneprotip",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#0066cc"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -19,7 +47,13 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow 1ProTip to access your camera to capture photos for posts."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
@@ -30,6 +64,9 @@
         "projectId": "0ce2f32f-83bf-4499-8fe6-631239bc2b10"
       }
     },
-    "owner": "michael-simoneau"
+    "owner": "michael-simoneau",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
   }
 }
