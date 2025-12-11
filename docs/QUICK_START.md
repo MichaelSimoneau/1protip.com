@@ -61,7 +61,7 @@ EXPO_PUBLIC_LINKEDIN_REDIRECT_URI=exp://localhost:8081/--/auth/linkedin/callback
 
 # Supabase (already configured - verify these exist)
 EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+EXPO_SECRET_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### Step 4: Deploy Edge Functions
@@ -157,7 +157,7 @@ LinkedIn API does NOT provide:
 
 ### Database Connection Issues
 - Verify `EXPO_PUBLIC_SUPABASE_URL` in `.env`
-- Check `EXPO_PUBLIC_SUPABASE_ANON_KEY` in `.env`
+- Check `EXPO_SECRET_SUPABASE_ANON_KEY` in `.env`
 - Test connection in Supabase dashboard
 
 ## Project Structure

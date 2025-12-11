@@ -101,7 +101,7 @@ EXPO_PUBLIC_LINKEDIN_REDIRECT_URI=exp://localhost:8081/--/auth/linkedin/callback
 
 # Supabase (already configured)
 EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+EXPO_SECRET_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### 4.2 Store Credentials Securely

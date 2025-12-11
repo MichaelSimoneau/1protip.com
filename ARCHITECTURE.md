@@ -155,7 +155,7 @@ npm run build:prod:android  # Android only
 
 Required variables in `.env`:
 - `EXPO_PUBLIC_SUPABASE_URL`
-- `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+- `EXPO_SECRET_SUPABASE_ANON_KEY`
 - `EXPO_PUBLIC_LINKEDIN_CLIENT_ID` (optional)
 - `EXPO_PUBLIC_LINKEDIN_REDIRECT_URI` (optional)
 

@@ -115,7 +115,7 @@ Create `.env`:
 EXPO_PUBLIC_LINKEDIN_CLIENT_ID=your_client_id
 LINKEDIN_CLIENT_SECRET=your_client_secret
 EXPO_PUBLIC_SUPABASE_URL=your_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_key
+EXPO_SECRET_SUPABASE_ANON_KEY=your_key
 ```
 
 ## Deployment

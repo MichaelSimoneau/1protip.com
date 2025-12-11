@@ -16,6 +16,8 @@
     "build:prod": "eas build --profile production --platform all",
     "build:prod:ios": "eas build --profile production --platform ios",
     "build:prod:android": "eas build --profile production --platform android",
+    "update:prod": "eas update --branch production --message \"production update\"",
+    "update:preview": "eas update --branch preview --message \"preview update\"",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit"
   },

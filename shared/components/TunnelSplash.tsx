@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -10,6 +10,49 @@ import Animated, {
 } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('window');
+const RING_COUNT = 8;
+
+function Ring({ index }: { index: number }) {
+  const size = width * 0.3 + index * 60;
+  const delay = index * 100;
+  const ringOpacity = useSharedValue(0);
+  const ringScale = useSharedValue(0.5);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ringOpacity.value = withTiming(0.7 - index * 0.1, { duration: 1000 });
+      ringScale.value = withRepeat(
+        withSequence(
+          withTiming(1.1, {
+            duration: 2000 + index * 200,
+            easing: Easing.inOut(Easing.ease),
+          }),
+          withTiming(0.9, {
+            duration: 2000 + index * 200,
+            easing: Easing.inOut(Easing.ease),
+          })
+        ),
+        -1,
+        true
+      );
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [delay, index, ringOpacity, ringScale]);
+
+  const style = useAnimatedStyle(() => ({
+    width: size,
+    height: size,
+    borderRadius: size / 2,
+    borderWidth: 3,
+    borderColor: '#0066cc',
+    position: 'absolute',
+    transform: [{ scale: ringScale.value }],
+    opacity: ringOpacity.value,
+  }));
+
+  return <Animated.View style={style} />;
+}
 
 export function TunnelSplash() {
   const rotation = useSharedValue(0);
@@ -42,7 +85,7 @@ export function TunnelSplash() {
       -1,
       true
     );
-  }, []);
+  }, [opacity, rotation, scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -52,55 +95,11 @@ export function TunnelSplash() {
     opacity: opacity.value,
   }));
 
-  const createRingStyle = (index: number) => {
-    const size = (width * 0.3) + (index * 60);
-    const delay = index * 100;
-    const ringOpacity = useSharedValue(0);
-    const ringScale = useSharedValue(0.5);
-
-    useEffect(() => {
-      setTimeout(() => {
-        ringOpacity.value = withTiming(0.7 - (index * 0.1), { duration: 1000 });
-        ringScale.value = withRepeat(
-          withSequence(
-            withTiming(1.1, {
-              duration: 2000 + (index * 200),
-              easing: Easing.inOut(Easing.ease),
-            }),
-            withTiming(0.9, {
-              duration: 2000 + (index * 200),
-              easing: Easing.inOut(Easing.ease),
-            })
-          ),
-          -1,
-          true
-        );
-      }, delay);
-    }, []);
-
-    return useAnimatedStyle(() => ({
-      width: size,
-      height: size,
-      borderRadius: size / 2,
-      borderWidth: 3,
-      borderColor: '#0066cc',
-      position: 'absolute',
-      transform: [{ scale: ringScale.value }],
-      opacity: ringOpacity.value,
-    }));
-  };
-
-  const rings = Array.from({ length: 8 }, (_, i) => i);
-  const ringStyles = rings.map(i => createRingStyle(i));
-
   return (
     <View style={styles.container}>
       <View style={styles.tunnelContainer}>
-        {rings.map((index) => (
-          <Animated.View
-            key={index}
-            style={ringStyles[index]}
-          />
+        {Array.from({ length: RING_COUNT }, (_, index) => (
+          <Ring key={index} index={index} />
         ))}
       </View>
 
