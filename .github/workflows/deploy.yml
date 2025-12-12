@@ -29,10 +29,10 @@ jobs:
         run: pnpm install
 
       - name: Run Jest Tests
-        run: pnpm --filter @1protip/dotcom test
+        run: pnpm --filter @1protip/free test
 
       - name: Build Web App
-        run: pnpm --filter @1protip/dotcom build:web
+        run: pnpm --filter @1protip/free build:web
 
       - name: Deploy to Firebase Hosting (Preview)
         if: github.event_name == 'pull_request'

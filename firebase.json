@@ -21,7 +21,7 @@
     "site": "hashtag-1-pro-tip",
     "public": "apps/free/dist",
     "predeploy": [
-      "pnpm --filter @1protip/dotcom build:web"
+      "pnpm --filter @1protip/free build:web"
     ],
     "ignore": [
       "firebase.json",

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "#1ProTip",
   "scripts": {
-    "dotcom": "pnpm --filter @1protip/dotcom",
+    "dotcom": "pnpm --filter @1protip/free",
     "shared": "pnpm --filter @1protip/shared",
     "functions": "pnpm --filter @1protip/functions",
     ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::": "",
