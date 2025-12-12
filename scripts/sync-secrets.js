@@ -13,6 +13,11 @@ const TARGET_KEYS = [
   'EXPO_PUBLIC_LINKEDIN_REDIRECT_URI'
 ];
 
+const KEY_ALIASES = {
+  EXPO_PUBLIC_CLIENT_ID: 'EXPO_PUBLIC_LINKEDIN_CLIENT_ID',
+  EXPO_SECRET_CLIENT_SECRET: 'EXPO_SECRET_LINKEDIN_CLIENT_SECRET',
+};
+
 function parseEnv(filePath) {
   if (!fs.existsSync(filePath)) return {};
   const content = fs.readFileSync(filePath, 'utf8');
@@ -47,8 +52,9 @@ function syncSecrets() {
     console.log(`Reading ${file}...`);
     const env = parseEnv(file);
     Object.keys(env).forEach(key => {
-      if (TARGET_KEYS.includes(key)) {
-        secrets[key] = env[key];
+      const canonicalKey = KEY_ALIASES[key] || key;
+      if (TARGET_KEYS.includes(canonicalKey)) {
+        secrets[canonicalKey] = env[key];
       }
     });
   });

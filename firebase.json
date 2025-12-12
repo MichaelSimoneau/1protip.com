@@ -30,6 +30,10 @@
     ],
     "rewrites": [
       {
+        "source": "/logo.png",
+        "destination": "/assets/images/icon.png"
+      },
+      {
         "source": "/api/feed",
         "function": {
           "functionId": "feed",

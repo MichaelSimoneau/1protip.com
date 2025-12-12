@@ -8,8 +8,12 @@
  */
 
 import { setGlobalOptions } from "firebase-functions";
-import { onRequest } from "firebase-functions/https";
+import { onRequest, onCall, HttpsError } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
+import * as admin from "firebase-admin";
+
+admin.initializeApp();
+const db = admin.firestore();
 
 setGlobalOptions({
   region: "us-central1",
@@ -266,6 +270,140 @@ async function fetchLinkedInSearchPage(
   const data = (await response.json()) as {elements?: LinkedInPostElement[]};
   return data.elements ?? [];
 }
+
+interface LinkedInProfileResponse {
+  id: string;
+  localizedFirstName: string;
+  localizedLastName: string;
+  profilePicture?: {
+    displayImage?: string;
+    "displayImage~"?: {
+      elements?: {
+        identifiers?: { identifier?: string }[];
+      }[];
+    };
+  };
+}
+
+export const linkedinSignIn = onCall(async (request) => {
+  const { code, redirect_uri } = request.data;
+  if (!code || !redirect_uri) {
+    throw new HttpsError('invalid-argument', 'Missing code or redirect_uri.');
+  }
+
+  if (!CLIENT_ID || !CLIENT_SECRET) {
+    throw new HttpsError('failed-precondition', 'LinkedIn credentials not configured.');
+  }
+
+  try {
+    // 1. Exchange code for access token
+    const tokenUrl = "https://www.linkedin.com/oauth/v2/accessToken";
+    const params = new URLSearchParams({
+      grant_type: "authorization_code",
+      code,
+      redirect_uri,
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+    });
+
+    const tokenResponse = await fetch(tokenUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    });
+
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text();
+      logger.error("LinkedIn token exchange failed", { error: errorText });
+      throw new HttpsError('aborted', 'Failed to exchange code for token.');
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // 2. Fetch User Profile
+    const profileResponse = await fetch(
+      "https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~:playableStreams))",
+      {
+        headers: {
+          "Authorization": `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!profileResponse.ok) {
+      logger.error("LinkedIn profile fetch failed", { status: profileResponse.status });
+      throw new HttpsError('aborted', 'Failed to fetch LinkedIn profile.');
+    }
+
+    const linkedInProfile: LinkedInProfileResponse = await profileResponse.json();
+
+    const profilePictureUrl =
+      linkedInProfile.profilePicture?.["displayImage~"]?.elements?.[0]?.identifiers?.[0]?.identifier ??
+      linkedInProfile.profilePicture?.displayImage;
+    
+    // 3. Create or Get Firebase User
+    const uid = `linkedin:${linkedInProfile.id}`;
+    const fullName = `${linkedInProfile.localizedFirstName} ${linkedInProfile.localizedLastName}`;
+    
+    try {
+      await admin.auth().getUser(uid);
+      // User exists, update info if needed
+      await admin.auth().updateUser(uid, {
+        displayName: fullName,
+        photoURL: profilePictureUrl,
+      });
+    } catch (e) {
+      // User doesn't exist, create
+      await admin.auth().createUser({
+        uid,
+        displayName: fullName,
+        photoURL: profilePictureUrl,
+      });
+    }
+
+    // 4. Create Custom Token
+    const customToken = await admin.auth().createCustomToken(uid, {
+      linkedin_id: linkedInProfile.id
+    });
+
+    // 5. Save to Firestore
+    const profileData = {
+      linkedin_access_token: accessToken,
+      linkedin_profile_id: linkedInProfile.id,
+      firstName: linkedInProfile.localizedFirstName,
+      lastName: linkedInProfile.localizedLastName,
+      full_name: fullName,
+      avatar_url: profilePictureUrl,
+      updated_at: admin.firestore.FieldValue.serverTimestamp(),
+      has_connected_with_owner: false, // Default
+    };
+
+    // Use set with merge to preserve existing data (like has_connected_with_owner if true)
+    await db.collection('profiles').doc(uid).set(profileData, { merge: true });
+    
+    // Fetch latest to get persisted has_connected_with_owner
+    const savedDoc = await db.collection('profiles').doc(uid).get();
+    const savedData = savedDoc.data();
+
+    return {
+      token: customToken,
+      profile: {
+        id: uid,
+        firstName: linkedInProfile.localizedFirstName,
+        lastName: linkedInProfile.localizedLastName,
+        profilePicture: profilePictureUrl,
+        has_connected_with_owner: savedData?.has_connected_with_owner ?? false,
+      }
+    };
+
+  } catch (error) {
+    logger.error("linkedinSignIn error", error);
+    if (error instanceof HttpsError) throw error;
+    throw new HttpsError('internal', 'Internal server error.');
+  }
+});
 
 export const feed = onRequest(
   { cors: true },

@@ -1,34 +1,21 @@
 # Environment Configuration
 
-Set the following environment variables for all builds (local and EAS):
+Set the following LinkedIn environment variables for all builds:
 
-- `EXPO_PUBLIC_SUPABASE_URL`
-- `EXPO_SECRET_SUPABASE_ANON_KEY`
 - `EXPO_PUBLIC_LINKEDIN_CLIENT_ID`
-- `EXPO_PUBLIC_LINKEDIN_REDIRECT_URI`
-- `EXPO_SECRET_LINKEDIN_CLIENT_SECRET` (for Expo build tooling; do not ship to client)
+- `EXPO_SECRET_LINKEDIN_CLIENT_SECRET` (do not bundle in client)
+- `EXPO_PUBLIC_LINKEDIN_REDIRECT_URI` (must match a LinkedIn-registered redirect)
 
-Supabase Edge Function secrets (configure in Supabase dashboard, not in the app bundle):
+Supported redirect values (pick one per environment):
+- Web/local: `http://localhost:8081/auth/linkedin/callback`
+- Expo Go / simulator: `exp://localhost:8081/--/auth/linkedin/callback`
+- Production web: `https://1protip.com/auth/linkedin/callback` (or `https://app.1protip.com/auth/linkedin/callback`)
 
-- `LINKEDIN_CLIENT_ID`
-- `LINKEDIN_CLIENT_SECRET`
-- `LINKEDIN_SERVICE_ACCESS_TOKEN` (service token to fetch posts without user session)
-- `LINKEDIN_SERVICE_PROFILE_ID` (URN or numeric id used for service fetch)
-- `LINKEDIN_SERVICE_AUTHOR_NAME` (optional display name for service fetch)
-- `LINKEDIN_SERVICE_AVATAR_URL` (optional avatar URL for service fetch)
-- `LINKEDIN_SERVICE_HASHTAGS` (optional comma-separated hashtags; defaults to #1protip)
+Aliases `EXPO_PUBLIC_CLIENT_ID` and `EXPO_SECRET_CLIENT_SECRET` are accepted by `scripts/sync-secrets.js` but prefer the canonical keys above.
 
-For EAS, create secrets (example):
+GitHub/Firebase secrets:
+- Use `scripts/sync-secrets.js` to push `EXPO_PUBLIC_LINKEDIN_CLIENT_ID`, `EXPO_SECRET_LINKEDIN_CLIENT_SECRET`, and `EXPO_PUBLIC_LINKEDIN_REDIRECT_URI` to GitHub and Firebase Functions secrets.
+- `.github/workflows/deploy.yml` expects these secrets to be defined in the repository.
 
-- `eas secret:create --scope project --name EXPO_PUBLIC_SUPABASE_URL --value <value>`
-- `eas secret:create --scope project --name EXPO_SECRET_SUPABASE_ANON_KEY --value <value>`
-- `eas secret:create --scope project --name EXPO_PUBLIC_LINKEDIN_CLIENT_ID --value <value>`
-- `eas secret:create --scope project --name EXPO_PUBLIC_LINKEDIN_REDIRECT_URI --value <value>`
-- `eas secret:create --scope project --name EXPO_SECRET_LINKEDIN_CLIENT_SECRET --value <value>`
-
-Configure Supabase Edge secrets via the Supabase dashboard (or `supabase secrets set`) using `LINKEDIN_CLIENT_ID` and `LINKEDIN_CLIENT_SECRET`.
-
-For unauthenticated LinkedIn feed syncing, also set `LINKEDIN_SERVICE_*` secrets in Supabase so `linkedin-get-posts` can run without a logged-in user.
-
-For local development, copy `env.example` to `.env` and fill the values.
+For local development, copy `env.example` to `.env` (or app-specific `.env`) and fill the values before running.
 

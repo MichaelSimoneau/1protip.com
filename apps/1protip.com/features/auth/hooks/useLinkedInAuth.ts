@@ -5,7 +5,7 @@ import { supabase } from '@/services/supabase/client';
 
 WebBrowser.maybeCompleteAuthSession();
 
-const LINKEDIN_CLIENT_ID = process.env.EXPO_PUBLIC_LINKEDIN_CLIENT_ID || '';
+const LINKEDIN_CLIENT_ID = process.env.EXPO_PUBLIC_LINKEDIN_CLIENT_ID;
 const LINKEDIN_REDIRECT_URI =
   process.env.EXPO_PUBLIC_LINKEDIN_REDIRECT_URI ||
   Linking.createURL('/auth/linkedin/callback');
@@ -175,6 +175,10 @@ export function useLinkedInAuth() {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
     try {
+      if (!LINKEDIN_CLIENT_ID) {
+        throw new Error('LinkedIn Client ID is missing. Please check your .env file.');
+      }
+
       const state = generateState();
       const authUrl = buildAuthUrl(state);
 
