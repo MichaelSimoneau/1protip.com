@@ -1,5 +1,9 @@
 ---
 name: Public LinkedIn Feed Access Plan
+overview: '**DEPRECATED:** This plan is obsolete. See `deprecate-public-feed-plan_e1a2b3c4.plan.md`.'
+---
+---
+name: Public LinkedIn Feed Access Plan
 overview: Enable LinkedIn post syncing without Supabase login by using a single app-level LinkedIn credential/secret while keeping per-user auth flow intact for signed-in use.
 todos:
   - id: secret-docs

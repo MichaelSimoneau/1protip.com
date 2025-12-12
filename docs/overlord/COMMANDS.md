@@ -21,4 +21,5 @@
 - New directive (2025-12-12): Update app code to call backend via `/api/*` URLs (e.g., feed default `/api/feed`).
 - New directive (2025-12-12): Do not keep env vars for endpoints already hardcoded in `firebase.json`; hardcode app usage to `/api/*` instead of env.
 - New directive (2025-12-12): Feed function forces hashtag `#1ProTip`, uses LinkedIn client credentials, pins latest 10 owner (Michael Simoneau) posts to the top, paginates the remainder, and app shows a single-card reanimated rolodex that phases in other users after the pinned posts.
+- New directive (2025-12-11): App entry flow starts with tunnel splash effect displaying a large embossed LinkedIn logo (rounded square, blue #0077b5) that pulses when idle (scale, size, saturation animation). Tapping the logo triggers LinkedIn OAuth; if a valid cached token/session exists and can re-auth, skip OAuth and navigate directly to feed. After successful OAuth, navigate to feed automatically. Removed timer-based redirect from index.tsx.
 

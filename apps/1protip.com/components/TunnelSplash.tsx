@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, type ReactNode } from 'react';
-import { View, StyleSheet, Dimensions, Platform, type ViewStyle } from 'react-native';
+import { View, StyleSheet, Dimensions, Platform, Text } from 'react-native';
+import { LinkedInLogoButton } from './LinkedInLogoButton';
 
 // Lazily require reanimated so a native/JS mismatch falls back safely.
 let Animated: typeof import('react-native-reanimated').default;
@@ -33,59 +34,173 @@ try {
   useAnimatedStyle = undefined as never;
 }
 
-const { width } = Dimensions.get('window');
-const RING_COUNT = 8;
+const { width, height } = Dimensions.get('window');
+const SQUARE_COUNT = 9; // 8 border squares + 1 filled logo square
+const LINKEDIN_BLUE = '#0077b5';
+const INITIAL_SIZE = 40;
+const FINAL_SIZE = Math.max(width, height) * 1.5; // Larger than screen
+const LOGO_FINAL_SIZE = 160; // Final size for the logo square
+const ANIMATION_DURATION = 1500; // 1.5 seconds per square
+const DELAY_BETWEEN_SQUARES = 375; // ~3 seconds total for 8 squares
 
-function Ring({ index }: { index: number }) {
+type TunnelSplashProps = {
+  onLogoPress?: () => void;
+  logoLoading?: boolean;
+  logoDisabled?: boolean;
+  brandText?: ReactNode;
+};
+
+type RoundedSquareProps = {
+  index: number;
+  isFilled?: boolean;
+  showLogoText?: boolean;
+  onPress?: () => void;
+  isLoading?: boolean;
+  disabled?: boolean;
+};
+
+function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress, isLoading = false, disabled = false }: RoundedSquareProps) {
   if (!Animated) return null;
 
-  const size = width * 0.3 + index * 60;
-  const delay = index * 100;
-  const ringOpacity = useSharedValue(0);
-  const ringScale = useSharedValue(0.5);
+  const squareSize = useSharedValue(INITIAL_SIZE);
+  const squareOpacity = useSharedValue(0);
+  const startDelay = index * DELAY_BETWEEN_SQUARES;
+  const isLogoSquare = isFilled && showLogoText;
+  const targetSize = isLogoSquare ? LOGO_FINAL_SIZE : FINAL_SIZE;
+  const shouldFadeOut = !isLogoSquare;
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      ringOpacity.value = withTiming(0.7 - index * 0.1, { duration: 1000 });
-      ringScale.value = withRepeat(
-        withSequence(
-          withTiming(1.1, {
-            duration: 2000 + index * 200,
-            easing: Easing.inOut(Easing.ease),
-          }),
-          withTiming(0.9, {
-            duration: 2000 + index * 200,
-            easing: Easing.inOut(Easing.ease),
-          })
-        ),
-        -1,
-        true
+      // Fade in quickly
+      squareOpacity.value = withTiming(0.8, { duration: 200 });
+      
+      // Expand
+      squareSize.value = withTiming(
+        targetSize,
+        {
+          duration: ANIMATION_DURATION,
+          easing: Easing?.out(Easing.ease) || undefined,
+        },
+        () => {
+          // Fade out as it expands (only for border squares)
+          if (shouldFadeOut) {
+            squareOpacity.value = withTiming(0, { duration: ANIMATION_DURATION * 0.6 });
+          } else {
+            // Logo square stays visible at full opacity
+            squareOpacity.value = withTiming(1, { duration: 200 });
+          }
+        }
       );
-    }, delay);
+    }, startDelay);
 
     return () => clearTimeout(timer);
-  }, [delay, index, ringOpacity, ringScale]);
+  }, [startDelay, squareSize, squareOpacity, targetSize, shouldFadeOut]);
 
   const style = useAnimatedStyle(() => ({
-    width: size,
-    height: size,
-    borderRadius: size / 2,
-    borderWidth: 3,
-    borderColor: '#0066cc',
+    width: squareSize.value as number,
+    height: squareSize.value as number,
+    borderRadius: (squareSize.value as number) * 0.15, // Rounded square like LinkedIn logo
+    borderWidth: isFilled ? 2 : 3,
+    borderColor: LINKEDIN_BLUE,
+    backgroundColor: isFilled ? LINKEDIN_BLUE : 'transparent',
     position: 'absolute',
-    transform: [{ scale: ringScale.value as number }],
-    opacity: ringOpacity.value as number,
+    opacity: squareOpacity.value as number,
+    justifyContent: 'center',
+    alignItems: 'center',
   }));
+
+  // For logo square, we need to show text and make it pressable
+  if (isLogoSquare) {
+    const textSize = useSharedValue(0);
+    const [isReady, setIsReady] = React.useState(false);
+    
+    useEffect(() => {
+      // Show text when square reaches final size
+      const textTimer = setTimeout(() => {
+        textSize.value = withTiming(LOGO_FINAL_SIZE * 0.4, {
+          duration: 300,
+          easing: Easing?.out(Easing.ease) || undefined,
+        });
+        // Enable interactivity after text appears
+        setIsReady(true);
+      }, startDelay + ANIMATION_DURATION);
+
+      return () => clearTimeout(textTimer);
+    }, [startDelay, textSize]);
+
+    const textStyle = useAnimatedStyle(() => ({
+      fontSize: textSize.value as number,
+      opacity: squareOpacity.value as number,
+    }));
+
+    return (
+      <Animated.View style={style}>
+        <Animated.View
+          style={[
+            StyleSheet.absoluteFill,
+            { justifyContent: 'center', alignItems: 'center' },
+          ]}
+        >
+          {isReady && (
+            <Pressable
+              onPress={onPress}
+              disabled={disabled || isLoading}
+              style={StyleSheet.absoluteFill}
+            >
+              <Animated.Text
+                style={[
+                  {
+                    color: '#ffffff',
+                    fontWeight: '700',
+                    textAlign: 'center',
+                    includeFontPadding: false,
+                  },
+                  textStyle,
+                ]}
+              >
+                in
+              </Animated.Text>
+              {isLoading && (
+                <View style={StyleSheet.absoluteFill}>
+                  <ActivityIndicator size="large" color="#ffffff" style={{ flex: 1 }} />
+                </View>
+              )}
+            </Pressable>
+          )}
+        </Animated.View>
+      </Animated.View>
+    );
+  }
 
   return <Animated.View style={style} />;
 }
 
-export function TunnelSplash() {
+export function TunnelSplash({
+  onLogoPress,
+  logoLoading = false,
+  logoDisabled = false,
+  brandText,
+}: TunnelSplashProps) {
+  // Calculate safe text position to avoid logo overlap
+  // Logo final size is 160px, positioned at center
+  // We position text at top 15-20% to ensure it never overlaps, even during expansion
+  // Account for text height (~48px) and add margin
+  const logoCenterY = height / 2;
+  const logoRadius = LOGO_FINAL_SIZE / 2;
+  const textHeight = 60; // Approximate text height with margin
+  const safeTopPosition = Math.max(20, logoCenterY - logoRadius - textHeight - 20);
+  const textTopPosition = Math.min(safeTopPosition, height * 0.2);
+
   // On web, avoid Reanimated entirely and render a static fallback.
   if (Platform.OS === 'web') {
     return (
       <View style={[styles.container, styles.fallback]}>
-        <View style={styles.fallbackMark} />
+        {brandText ? (
+          <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
+        ) : null}
+        <View style={[styles.fallbackLogo, { width: LOGO_FINAL_SIZE, height: LOGO_FINAL_SIZE, borderRadius: LOGO_FINAL_SIZE * 0.15 }]}>
+          <Text style={[styles.fallbackLogoText, { fontSize: LOGO_FINAL_SIZE * 0.4 }]}>in</Text>
+        </View>
       </View>
     );
   }
@@ -93,74 +208,39 @@ export function TunnelSplash() {
   if (!Animated) {
     return (
       <View style={[styles.container, styles.fallback]}>
-        <View style={styles.fallbackMark} />
+        {brandText ? (
+          <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
+        ) : null}
+        <View style={[styles.fallbackLogo, { width: LOGO_FINAL_SIZE, height: LOGO_FINAL_SIZE, borderRadius: LOGO_FINAL_SIZE * 0.15 }]}>
+          <Text style={[styles.fallbackLogoText, { fontSize: LOGO_FINAL_SIZE * 0.4 }]}>in</Text>
+        </View>
       </View>
     );
   }
 
-  const rotation = useSharedValue(0);
-  const scale = useSharedValue(0.8);
-  const opacity = useSharedValue(0);
-
-  useEffect(() => {
-    opacity.value = withTiming(1, { duration: 800 });
-
-    rotation.value = withRepeat(
-      withTiming(360, {
-        duration: 20000,
-        easing: Easing.linear,
-      }),
-      -1,
-      false
-    );
-
-    scale.value = withRepeat(
-      withSequence(
-        withTiming(1.2, {
-          duration: 2000,
-          easing: Easing.inOut(Easing.ease),
-        }),
-        withTiming(0.8, {
-          duration: 2000,
-          easing: Easing.inOut(Easing.ease),
-        })
-      ),
-      -1,
-      true
-    );
-  }, [opacity, rotation, scale]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotation.value as number}deg` }, { scale: scale.value as number }],
-    opacity: opacity.value as number,
-  }));
-
   return (
     <View style={styles.container}>
       <View style={styles.tunnelContainer}>
-        {[...Array(RING_COUNT)].map((_, index) => (
-          <Ring key={index} index={index} />
+        {/* First 8 squares: border-only, expand and fade out */}
+        {[...Array(8)].map((_, index) => (
+          <RoundedSquare key={index} index={index} />
         ))}
+        {/* 9th square: filled LinkedIn logo, expands to final size and stays */}
+        <RoundedSquare
+          key={8}
+          index={8}
+          isFilled={true}
+          showLogoText={true}
+          onPress={onLogoPress}
+          isLoading={logoLoading}
+          disabled={logoDisabled}
+        />
       </View>
 
-      <Animated.View style={[styles.centerLogo, animatedStyle]}>
-        <View style={styles.logoCircle}>
-          <View style={styles.logoInner} />
-        </View>
-      </Animated.View>
-
-      <Animated.View style={[styles.particle, { top: '20%', left: '10%' }]}>
-        <View style={styles.particleDot} />
-      </Animated.View>
-      <Animated.View style={[styles.particle, { top: '60%', right: '15%' }]}>
-        <View style={styles.particleDot} />
-      </Animated.View>
-      <Animated.View style={[styles.particle, { bottom: '30%', left: '20%' }]}>
-        <View style={styles.particleDot} />
-      </Animated.View>
-      <Animated.View style={[styles.particle, { top: '40%', right: '25%' }]}>
-        <View style={styles.particleDot} />
-      </Animated.View>
+      {/* Brand text overlay - positioned dynamically to avoid overlap */}
+      {brandText ? (
+        <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
+      ) : null}
     </View>
   );
 }
@@ -183,7 +263,9 @@ class SplashErrorBoundary extends React.Component<{ children: ReactNode }, { has
     if (this.state.hasError) {
       return (
         <View style={[styles.container, styles.fallback]}>
-          <View style={styles.fallbackMark} />
+          <View style={[styles.fallbackLogo, { width: 160, height: 160, borderRadius: 24 }]}>
+            <Text style={[styles.fallbackLogoText, { fontSize: 64 }]}>in</Text>
+          </View>
         </View>
       );
     }
@@ -192,10 +274,10 @@ class SplashErrorBoundary extends React.Component<{ children: ReactNode }, { has
   }
 }
 
-export function SafeTunnelSplash() {
+export function SafeTunnelSplash(props: TunnelSplashProps) {
   return (
     <SplashErrorBoundary>
-      <TunnelSplash />
+      <TunnelSplash {...props} />
     </SplashErrorBoundary>
   );
 }
@@ -213,56 +295,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  centerLogo: {
-    zIndex: 10,
-  },
-  logoCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#0066cc',
+  logoContainer: {
+    position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#0066cc',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 30,
-    elevation: 10,
+    zIndex: 10,
   },
-  logoInner: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#000814',
-    borderWidth: 4,
-    borderColor: '#00ccff',
-  },
-  particle: {
+  brandTextContainer: {
     position: 'absolute',
-    width: 20,
-    height: 20,
-  },
-  particleDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#00ccff',
-    shadowColor: '#00ccff',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 10,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 15,
   },
   fallback: {
     backgroundColor: '#000814',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  fallbackMark: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: '#0066cc',
-    borderWidth: 4,
-    borderColor: '#00ccff',
+  fallbackLogo: {
+    backgroundColor: LINKEDIN_BLUE,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 20,
+    elevation: 12,
+    borderWidth: 2,
+    borderTopColor: 'rgba(255, 255, 255, 0.3)',
+    borderLeftColor: 'rgba(255, 255, 255, 0.3)',
+    borderRightColor: 'rgba(0, 0, 0, 0.2)',
+    borderBottomColor: 'rgba(0, 0, 0, 0.2)',
+  },
+  fallbackLogoText: {
+    color: '#ffffff',
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });

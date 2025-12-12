@@ -10,13 +10,13 @@ todos:
     status: pending
   - id: auth-trigger
     content: Wire tap to use useLinkedInAuth login and handle states
-    status: pending
+    status: completed
   - id: token-skip
     content: Skip OAuth when cached token is valid
-    status: pending
+    status: completed
   - id: nav-feed
     content: Route to /feed after auth; remove timer redirect
-    status: pending
+    status: completed
   - id: doc-overlord
     content: Log directive in docs/overlord/COMMANDS.md
     status: pending
