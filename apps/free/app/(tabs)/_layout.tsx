@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { TabPanelProvider } from '@/contexts/TabPanelContext';
 import { CustomTabBar } from '@/components/CustomTabBar';
@@ -15,17 +15,19 @@ import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 export default function PagerLayout() {
   const pagerRef = useRef<PagerView>(null);
   const [pageIndex, setPageIndex] = useState(2); // Start at Feed (index 2)
-  const { profile } = useLinkedInAuth();
-  
+  useLinkedInAuth();
+  const tabBarOffset = useRef(new Animated.Value(0)).current;
+  const TAB_BAR_HEIGHT = 150;
+
   // Custom navigation object to pass to CustomTabBar
   // This mocks the necessary parts of the navigation prop
   const navigation = {
     navigate: (screenName: string) => {
       // Map screen names to page indices
       const map: Record<string, number> = {
-        'settings': 1,
-        'feed': 2,
-        'ms': 3,
+        settings: 1,
+        feed: 2,
+        ms: 3,
       };
       const index = map[screenName];
       if (index !== undefined) {
@@ -36,8 +38,9 @@ export default function PagerLayout() {
   };
 
   // Mock state and descriptors for CustomTabBar
+  const activeTabIndex = Math.max(0, Math.min(pageIndex - 1, 2));
   const state = {
-    index: pageIndex === 0 ? -1 : pageIndex === 4 ? -1 : pageIndex - 1, // Map 1->0, 2->1, 3->2 for the visible tabs
+    index: activeTabIndex,
     routes: [
       { key: 'settings', name: 'settings' },
       { key: 'feed', name: 'feed' },
@@ -46,10 +49,19 @@ export default function PagerLayout() {
   };
 
   const descriptors = {
-    'settings': { options: { tabBarIcon: () => null } },
-    'feed': { options: { tabBarIcon: () => null } },
-    'ms': { options: { tabBarIcon: () => null } },
+    settings: { options: { tabBarIcon: () => null } },
+    feed: { options: { tabBarIcon: () => null } },
+    ms: { options: { tabBarIcon: () => null } },
   };
+
+  useEffect(() => {
+    const isHiddenPage = pageIndex === 0 || pageIndex === 4;
+    Animated.timing(tabBarOffset, {
+      toValue: isHiddenPage ? TAB_BAR_HEIGHT : 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+  }, [pageIndex, tabBarOffset]);
 
   return (
     <TabPanelProvider>
@@ -78,16 +90,22 @@ export default function PagerLayout() {
         </PagerView>
 
         {/* Overlay Tab Bar */}
-        <View style={styles.tabBarContainer}>
+        <Animated.View
+          style={[
+            styles.tabBarContainer,
+            { transform: [{ translateY: tabBarOffset }] },
+          ]}
+        >
           <CustomTabBar
             state={state as any}
             descriptors={descriptors as any}
             navigation={navigation as any}
             // Pass extra prop to handle manual page setting
-            onTabPress={(index) => pagerRef.current?.setPage(index + 1)} 
+            onTabPress={(index) => pagerRef.current?.setPage(index + 1)}
             // Correct index mapping: Tab 0 -> Page 1, Tab 1 -> Page 2, Tab 2 -> Page 3
+            visible={pageIndex !== 0 && pageIndex !== 4}
           />
-        </View>
+        </Animated.View>
       </View>
     </TabPanelProvider>
   );

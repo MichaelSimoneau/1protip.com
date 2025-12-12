@@ -1,48 +1,60 @@
-import {
-  commentOnPost as commentWithAppToken,
-  likePost as likeWithAppToken,
-  repostPost as repostWithAppToken,
-} from './feed';
-
 interface LinkedInSocialActionResponse {
   success: boolean;
   error?: string;
 }
 
-export async function likePost(postUrn: string): Promise<LinkedInSocialActionResponse> {
+type SocialAction = 'like' | 'comment' | 'repost';
+
+const SOCIAL_ACTION_URL = '/api/socialActions';
+
+const sendSocialAction = async (
+  action: SocialAction,
+  body: Record<string, unknown>,
+): Promise<LinkedInSocialActionResponse> => {
   try {
-    await likeWithAppToken(postUrn);
+    const response = await fetch(SOCIAL_ACTION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action, ...body }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(text || 'Request failed');
+    }
+
+    const data = await response.json().catch(() => null);
+    if (data && typeof data.success === 'boolean') {
+      return data as LinkedInSocialActionResponse;
+    }
+
     return { success: true };
   } catch (error) {
-    console.error('Error liking post:', error);
-    return { success: false, error: 'Failed to like post' };
+    console.error(`Error performing ${action}:`, error);
+    return { success: false, error: `Failed to ${action} post` };
   }
+};
+
+export async function likePost(
+  postUrn: string,
+): Promise<LinkedInSocialActionResponse> {
+  return sendSocialAction('like', { postUrn });
 }
 
 export async function commentOnPost(
   postUrn: string,
-  commentText: string
+  commentText: string,
 ): Promise<LinkedInSocialActionResponse> {
-  try {
-    await commentWithAppToken(postUrn, commentText);
-    return { success: true };
-  } catch (error) {
-    console.error('Error commenting on post:', error);
-    return { success: false, error: 'Failed to comment on post' };
-  }
+  return sendSocialAction('comment', { postUrn, commentText });
 }
 
 export async function repostPost(
   postUrn: string,
-  commentary?: string
+  commentary?: string,
 ): Promise<LinkedInSocialActionResponse> {
-  try {
-    await repostWithAppToken(postUrn, commentary);
-    return { success: true };
-  } catch (error) {
-    console.error('Error reposting:', error);
-    return { success: false, error: 'Failed to repost' };
-  }
+  return sendSocialAction('repost', { postUrn, commentary });
 }
 
 export async function openLinkedInPost(postUrl: string): Promise<void> {

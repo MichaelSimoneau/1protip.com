@@ -4,7 +4,7 @@
     "strict": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -21,8 +21,5 @@
     "expo-env.d.ts",
     "nativewind-env.d.ts"
   ],
-  "exclude": [
-    "supabase/functions",
-    "node_modules"
-  ]
+  "exclude": ["supabase/functions", "node_modules"]
 }

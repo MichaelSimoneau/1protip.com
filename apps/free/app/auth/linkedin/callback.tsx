@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Text, View, ActivityIndicator, StyleSheet } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 
 export default function LinkedInCallback() {
@@ -20,21 +19,20 @@ export default function LinkedInCallback() {
 
     // After signaling completion, we should probably redirect the user back to the main app flow
     // if the WebBrowser doesn't close the window automatically (which it often doesn't on web mobile).
-    // However, on desktop web, openAuthSessionAsync usually opens a popup. 
+    // However, on desktop web, openAuthSessionAsync usually opens a popup.
     // If it was a redirect (not popup), we need to manually navigate back.
-    
+
     // Check if we are inside a popup or separate window
     if (typeof window !== 'undefined' && window.opener) {
-       // We are likely in a popup, do nothing and let maybeCompleteAuthSession close it (if configured)
-       // or let the parent window handle the result.
+      // We are likely in a popup, do nothing and let maybeCompleteAuthSession close it (if configured)
+      // or let the parent window handle the result.
     } else {
-       // We might be in the main window (redirect flow).
-       // Give maybeCompleteAuthSession a moment to work, then redirect home or to settings.
-       setTimeout(() => {
-         router.replace('/(tabs)/settings'); 
-       }, 1500);
+      // We might be in the main window (redirect flow).
+      // Give maybeCompleteAuthSession a moment to work, then redirect home or to settings.
+      setTimeout(() => {
+        router.replace('/(tabs)/settings');
+      }, 1500);
     }
-
   }, [router]);
 
   return (

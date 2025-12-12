@@ -1,19 +1,36 @@
-import { View, Text, Pressable, StyleSheet, Animated, TextInput, ActivityIndicator, PanResponder } from 'react-native';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  Animated,
+  TextInput,
+  ActivityIndicator,
+  PanResponder,
+} from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useState, useRef, useEffect } from 'react';
 import { useTabPanel } from '@/contexts/TabPanelContext';
-import { X, Send, Lock, Unlock } from 'lucide-react-native';
+import { FileText, Settings, UserCircle2, X, Send } from 'lucide-react-native';
 import { commentOnPost as commentWithService } from '@/services/linkedin/socialActions';
 import { createAppPost } from '@/services/linkedin/feed';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 
 interface CustomTabBarProps extends Partial<BottomTabBarProps> {
   onTabPress?: (index: number) => void;
+  visible?: boolean;
 }
 
-export function CustomTabBar({ state, descriptors, navigation, onTabPress }: CustomTabBarProps) {
+export function CustomTabBar({
+  state,
+  descriptors,
+  navigation,
+  onTabPress,
+  visible = true,
+}: CustomTabBarProps) {
   const [showPanel, setShowPanel] = useState<number | null>(null);
   const panelHeight = useRef(new Animated.Value(0)).current;
+  const tabBarTranslate = useRef(new Animated.Value(0)).current;
   const { panelType, activePost, closePanel, onPostCreated } = useTabPanel();
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,9 +50,8 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
         if (gestureState.dy < -50) {
           // Swipe Up - Show Panel if active tab allows
           if (state && state.index !== undefined) {
-             const activeRouteName = state.routes[state.index].name;
-             // Only allow swipe up on certain tabs if needed, currently all
-             setShowPanel(state.index);
+            // Only allow swipe up on certain tabs if needed, currently all
+            setShowPanel(state.index);
           }
         } else if (gestureState.dy > 50) {
           // Swipe Down - Hide Panel
@@ -43,13 +59,13 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
           closePanel();
         }
       },
-    })
+    }),
   ).current;
 
   const handleMsDonate = () => {
     setShowPanel(null);
     if (navigation) {
-        navigation.navigate('ms'); // This might need parameters if we can pass them
+      navigation.navigate('ms'); // This might need parameters if we can pass them
     }
   };
 
@@ -65,10 +81,24 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
       duration: 300,
       useNativeDriver: false,
     }).start();
-  }, [showPanel, panelType]);
+  }, [panelHeight, showPanel, panelType]);
+
+  useEffect(() => {
+    Animated.spring(tabBarTranslate, {
+      toValue: visible ? 0 : 160,
+      useNativeDriver: true,
+      damping: 18,
+      stiffness: 120,
+    }).start();
+
+    if (!visible) {
+      setShowPanel(null);
+      closePanel();
+    }
+  }, [visible, closePanel, tabBarTranslate]);
 
   const handleTabPress = (index: number) => {
-    // If locked (Feed tab logic handled in FeedTab itself via TunnelSplash), 
+    // If locked (Feed tab logic handled in FeedTab itself via TunnelSplash),
     // but here we just handle navigation.
     // If user is on a tab and taps it again, toggle panel
     const isFocused = state?.index === index;
@@ -81,19 +111,19 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
       }
     } else {
       setShowPanel(null);
-      
+
       if (onTabPress) {
         onTabPress(index);
       } else if (navigation && state) {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: state.routes[index].key,
-            canPreventDefault: true,
-          });
+        const event = navigation.emit({
+          type: 'tabPress',
+          target: state.routes[index].key,
+          canPreventDefault: true,
+        });
 
-          if (!event.defaultPrevented) {
-            navigation.navigate(state.routes[index].name);
-          }
+        if (!event.defaultPrevented) {
+          navigation.navigate(state.routes[index].name);
+        }
       }
     }
   };
@@ -136,7 +166,9 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
     return (
       <View style={styles.panelContent}>
         <View style={styles.commentHeader}>
-          <Text style={styles.panelTitle}>Comment on {activePost.author_name}'s post</Text>
+          <Text style={styles.panelTitle}>
+            Comment on {activePost.author_name}'s post
+          </Text>
           <Pressable onPress={closePanel} style={styles.closeButton}>
             <X size={24} color="#666666" />
           </Pressable>
@@ -154,7 +186,11 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
             editable={!isSubmitting}
           />
           <Pressable
-            style={[styles.sendButton, (!commentText.trim() || isSubmitting) && styles.sendButtonDisabled]}
+            style={[
+              styles.sendButton,
+              (!commentText.trim() || isSubmitting) &&
+                styles.sendButtonDisabled,
+            ]}
             onPress={handleCommentSubmit}
             disabled={!commentText.trim() || isSubmitting}
           >
@@ -179,11 +215,19 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
         return (
           <View style={styles.panelContent}>
             <Text style={styles.panelTitle}>Account Actions</Text>
-            <Text style={styles.panelText}>Quick settings and account options</Text>
+            <Text style={styles.panelText}>
+              Quick settings and account options
+            </Text>
             {isAuthenticated && (
-                <Pressable style={[styles.primaryActionButton, { backgroundColor: '#cc0000', marginTop: 16 }]} onPress={handleLogout}>
-                    <Text style={styles.primaryActionText}>Logout</Text>
-                </Pressable>
+              <Pressable
+                style={[
+                  styles.primaryActionButton,
+                  { backgroundColor: '#cc0000', marginTop: 16 },
+                ]}
+                onPress={handleLogout}
+              >
+                <Text style={styles.primaryActionText}>Logout</Text>
+              </Pressable>
             )}
           </View>
         );
@@ -192,14 +236,17 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
           <View style={styles.panelContent}>
             <View style={styles.commentHeader}>
               <Text style={styles.panelTitle}>Share a ProTip</Text>
-              <Pressable onPress={() => setShowPanel(null)} style={styles.closeButton}>
+              <Pressable
+                onPress={() => setShowPanel(null)}
+                style={styles.closeButton}
+              >
                 <X size={24} color="#666666" />
               </Pressable>
             </View>
             <Text style={[styles.panelText, { marginBottom: 16 }]}>
               Post to the #1ProTip community
             </Text>
-            
+
             <View style={styles.commentInputContainer}>
               <TextInput
                 style={styles.commentInput}
@@ -233,9 +280,14 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
           <View style={styles.panelContent}>
             <Text style={styles.panelTitle}>MS Actions</Text>
             <Text style={styles.panelText}>Michael Simoneau quick actions</Text>
-            <Pressable style={styles.primaryActionButton} onPress={handleMsDonate}>
+            <Pressable
+              style={styles.primaryActionButton}
+              onPress={handleMsDonate}
+            >
               <Text style={styles.primaryActionText}>Donate via PayPal</Text>
-              <Text style={styles.primaryActionSubtext}>Supports @michaelsimoneau</Text>
+              <Text style={styles.primaryActionSubtext}>
+                Supports @michaelsimoneau
+              </Text>
             </Pressable>
           </View>
         );
@@ -245,33 +297,55 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
   };
 
   const tabOrder = ['settings', 'feed', 'ms'];
-  const orderedRoutes = state ? tabOrder
-    .map(name => {
-      const index = state.routes.findIndex(r => r.name === name);
-      return index >= 0 ? { route: state.routes[index], index } : null;
-    })
-    .filter(Boolean) as Array<{ route: typeof state.routes[0]; index: number }> : [];
+  const orderedRoutes = state
+    ? (tabOrder
+        .map((name) => {
+          const index = state.routes.findIndex((r) => r.name === name);
+          return index >= 0 ? { route: state.routes[index], index } : null;
+        })
+        .filter(Boolean) as {
+        route: (typeof state.routes)[0];
+        index: number;
+      }[])
+    : [];
+
+  const tabLabels: Record<string, string> = {
+    settings: 'Settings',
+    feed: '#1ProTip',
+    ms: 'MS',
+  };
+
+  const tabIcons: Record<string, any> = {
+    settings: Settings,
+    feed: FileText,
+    ms: UserCircle2,
+  };
 
   return (
-    <View style={styles.container} {...panResponder.panHandlers}>
+    <Animated.View
+      style={[
+        styles.container,
+        { transform: [{ translateY: tabBarTranslate }] },
+      ]}
+      {...panResponder.panHandlers}
+    >
       <Animated.View style={[styles.panel, { height: panelHeight }]}>
-        {panelType !== null ? renderPanel('') : (showPanel !== null && state ? renderPanel(state.routes[showPanel].name) : null)}
+        {panelType !== null
+          ? renderPanel('')
+          : showPanel !== null && state
+            ? renderPanel(state.routes[showPanel].name)
+            : null}
       </Animated.View>
 
       <View style={styles.tabBar}>
         {orderedRoutes.map(({ route, index }) => {
-          const { options } = descriptors[route.key];
-          const isFocused = state.index === index;
-          const isPanelOpen = showPanel === index || panelType !== null;
+          const currentStateIndex = state?.index ?? 0;
+          const isFocused = currentStateIndex === index;
+          const isPanelOpen =
+            (showPanel === index || panelType !== null) && isFocused;
 
-          // Dynamic Icon for Feed
-          let icon = options.tabBarIcon;
-          if (route.name === 'feed' && !isAuthenticated) {
-             // We can optionally show a Lock icon here if we want to reflect the locked state in the tab bar too
-             // For now, we stick to the plan: Feed Tab is the Lock screen content, but icon transforms.
-             // Since we don't have easy access to the animation value here without context,
-             // we keep the static icon or update based on auth.
-          }
+          const IconComponent = tabIcons[route.name];
+          const label = tabLabels[route.name] ?? route.name;
 
           return (
             <Pressable
@@ -283,17 +357,35 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
                 isPanelOpen && isFocused && styles.tabWithPanel,
               ]}
             >
-              {icon &&
-                icon({
-                  focused: isFocused,
-                  color: isFocused ? '#ffffff' : '#666666',
-                  size: 32,
-                })}
+              <View
+                style={[
+                  styles.iconWrapper,
+                  isFocused
+                    ? styles.iconWrapperActive
+                    : styles.iconWrapperInactive,
+                ]}
+              >
+                {IconComponent && (
+                  <IconComponent
+                    size={28}
+                    color={isFocused ? '#ffffff' : '#0b2d52'}
+                    strokeWidth={isFocused ? 2.4 : 2}
+                  />
+                )}
+              </View>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  isFocused ? styles.tabLabelActive : styles.tabLabelInactive,
+                ]}
+              >
+                {label}
+              </Text>
             </Pressable>
           );
         })}
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -327,22 +419,61 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: 'row',
     height: 120,
-    paddingBottom: 16,
-    paddingTop: 16,
+    paddingBottom: 18,
+    paddingTop: 12,
+    gap: 12,
+    paddingHorizontal: 12,
   },
   tab: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffffff',
-    borderRadius: 16,
-    marginHorizontal: 8,
+    borderRadius: 20,
+    paddingVertical: 8,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: '#e6eef8',
+    shadowColor: '#001f4d',
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 2 },
   },
   tabActive: {
     backgroundColor: '#0066cc',
+    borderColor: '#0066cc',
+    shadowOpacity: 0.12,
   },
   tabWithPanel: {
     backgroundColor: '#0052a3',
+    borderColor: '#0052a3',
+  },
+  iconWrapper: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f0f5fb',
+  },
+  iconWrapperActive: {
+    backgroundColor: 'rgba(255, 255, 255, 0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.28)',
+  },
+  iconWrapperInactive: {
+    borderWidth: 1,
+    borderColor: '#d8e2f2',
+  },
+  tabLabel: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  tabLabelActive: {
+    color: '#ffffff',
+  },
+  tabLabelInactive: {
+    color: '#0b2d52',
   },
   commentHeader: {
     flexDirection: 'row',

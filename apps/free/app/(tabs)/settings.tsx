@@ -1,21 +1,29 @@
-import { View, Text, StyleSheet, Pressable, ScrollView, Image, Linking, ActivityIndicator, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link2, UserPlus, Check, ExternalLink, MessageCircle, Hash, LogOut } from 'lucide-react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  ScrollView,
+  Image,
+  Linking,
+  ActivityIndicator,
+} from 'react-native';
+import { UserPlus, Check, ExternalLink, Hash } from 'lucide-react-native';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from 'react';
 import { useHashtagPreferences } from '@/features/settings/hooks/useHashtagPreferences';
 
 const MICHAEL_PROFILE_URL = 'https://linkedin.com/in/michaelsimoneau';
-// Placeholder for Michael's profile picture if not dynamically fetched (which implies web scraping). 
-// I'll use a generic or empty one, or a specific asset if I had it. 
+// Placeholder for Michael's profile picture if not dynamically fetched (which implies web scraping).
+// I'll use a generic or empty one, or a specific asset if I had it.
 // For now, I'll use a high-quality placeholder or the app icon as a fallback if I can't find a better one.
-const MICHAEL_AVATAR_URI = 'https://media.licdn.com/dms/image/v2/D5603AQF7iI1f9tqD0g/profile-displayphoto-shrink_400_400/0/1708538666324?e=1741824000&v=beta&t=example'; // I shouldn't guess the URL.
-// I'll use a standard placeholder.
-const PLACEHOLDER_AVATAR = 'https://ui-avatars.com/api/?name=Michael+Simoneau&background=0066cc&color=fff&size=200';
+const PLACEHOLDER_AVATAR =
+  'https://ui-avatars.com/api/?name=Michael+Simoneau&background=0066cc&color=fff&size=200';
 
 export default function AccountScreen() {
-  const { login, profile, isLoading, error, getProfile, updateConnectionStatus } = useLinkedInAuth();
+  const { login, profile, isLoading, getProfile, updateConnectionStatus } =
+    useLinkedInAuth();
   const { hashtags } = useHashtagPreferences();
 
   useEffect(() => {
@@ -55,34 +63,50 @@ export default function AccountScreen() {
           />
           <View style={styles.profileHeader}>
             <Image
-              source={{ uri: PLACEHOLDER_AVATAR }} 
+              source={{ uri: PLACEHOLDER_AVATAR }}
               style={styles.profileImage}
             />
             <View style={styles.profileInfo}>
               <Text style={styles.name}>Michael Simoneau</Text>
-              <Text style={styles.headline}>Enterprise Architect & Technology Leader | Creator of 1ProTip</Text>
+              <Text style={styles.headline}>
+                Enterprise Architect & Technology Leader | Creator of 1ProTip
+              </Text>
               <Text style={styles.location}>San Francisco Bay Area</Text>
-              
+
               <View style={styles.statsRow}>
-                <Text style={styles.statText}><Text style={styles.statBold}>500+</Text> connections</Text>
+                <Text style={styles.statText}>
+                  <Text style={styles.statBold}>500+</Text> connections
+                </Text>
               </View>
 
               <View style={styles.actionButtons}>
                 {isConnectedToMichael ? (
                   <Pressable style={[styles.button, styles.buttonSecondary]}>
                     <Check size={20} color="#666" />
-                    <Text style={[styles.buttonText, styles.buttonTextSecondary]}>Pending</Text>
+                    <Text
+                      style={[styles.buttonText, styles.buttonTextSecondary]}
+                    >
+                      Pending
+                    </Text>
                   </Pressable>
                 ) : (
-                  <Pressable style={[styles.button, styles.buttonPrimary]} onPress={handleConnectWithMichael}>
+                  <Pressable
+                    style={[styles.button, styles.buttonPrimary]}
+                    onPress={handleConnectWithMichael}
+                  >
                     <UserPlus size={20} color="#fff" />
                     <Text style={styles.buttonText}>Connect</Text>
                   </Pressable>
                 )}
-                
-                <Pressable style={[styles.button, styles.buttonOutline]} onPress={() => Linking.openURL(MICHAEL_PROFILE_URL)}>
+
+                <Pressable
+                  style={[styles.button, styles.buttonOutline]}
+                  onPress={() => Linking.openURL(MICHAEL_PROFILE_URL)}
+                >
                   <ExternalLink size={20} color="#0077b5" />
-                  <Text style={[styles.buttonText, styles.buttonTextOutline]}>View Profile</Text>
+                  <Text style={[styles.buttonText, styles.buttonTextOutline]}>
+                    View Profile
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -99,19 +123,29 @@ export default function AccountScreen() {
               </View>
               <View style={styles.highlightContent}>
                 <Text style={styles.highlightTitle}>Common Interests</Text>
-                <Text style={styles.highlightText}>You both follow <Text style={styles.highlightBold}>#1protip</Text></Text>
+                <Text style={styles.highlightText}>
+                  You both follow{' '}
+                  <Text style={styles.highlightBold}>#1protip</Text>
+                </Text>
               </View>
             </View>
-            
+
             {profile && (
               <View style={[styles.highlightItem, { marginTop: 16 }]}>
                 <View style={styles.highlightIconContainer}>
-                   <Image source={{ uri: profile.profilePicture || PLACEHOLDER_AVATAR }} style={{ width: 24, height: 24, borderRadius: 12 }} />
+                  <Image
+                    source={{
+                      uri: profile.profilePicture || PLACEHOLDER_AVATAR,
+                    }}
+                    style={{ width: 24, height: 24, borderRadius: 12 }}
+                  />
                 </View>
-                 <View style={styles.highlightContent}>
+                <View style={styles.highlightContent}>
                   <Text style={styles.highlightTitle}>You know Michael</Text>
                   <Text style={styles.highlightText}>
-                    {isConnectedToMichael ? 'You connected with Michael via 1ProTip' : 'Connect to expand your network'}
+                    {isConnectedToMichael
+                      ? 'You connected with Michael via 1ProTip'
+                      : 'Connect to expand your network'}
                   </Text>
                 </View>
               </View>
@@ -125,37 +159,54 @@ export default function AccountScreen() {
           <View style={styles.card}>
             {profile ? (
               <View style={styles.accountRow}>
-                <Image source={{ uri: profile.profilePicture }} style={styles.userAvatar} />
+                <Image
+                  source={{ uri: profile.profilePicture }}
+                  style={styles.userAvatar}
+                />
                 <View style={styles.userInfo}>
-                  <Text style={styles.userName}>{profile.firstName} {profile.lastName}</Text>
+                  <Text style={styles.userName}>
+                    {profile.firstName} {profile.lastName}
+                  </Text>
                   <Text style={styles.userStatus}>Connected via LinkedIn</Text>
                 </View>
                 {/* Logout or Manage could go here */}
               </View>
             ) : (
               <View style={styles.connectPrompt}>
-                <Text style={styles.connectPromptText}>Connect your LinkedIn to see mutual connections and manage your profile.</Text>
-                <Pressable style={styles.signInButton} onPress={handleLogin} disabled={isLoading}>
-                   {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.signInButtonText}>Sign in with LinkedIn</Text>}
+                <Text style={styles.connectPromptText}>
+                  Connect your LinkedIn to see mutual connections and manage
+                  your profile.
+                </Text>
+                <Pressable
+                  style={styles.signInButton}
+                  onPress={handleLogin}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={styles.signInButtonText}>
+                      Sign in with LinkedIn
+                    </Text>
+                  )}
                 </Pressable>
               </View>
             )}
           </View>
-          
+
           {profile && (
             <View style={[styles.card, { marginTop: 16 }]}>
-                <Text style={styles.cardLabel}>Hashtags you follow</Text>
-                <View style={styles.tagsContainer}>
-                    {hashtags.map(tag => (
-                        <View key={tag} style={styles.tagChip}>
-                            <Text style={styles.tagText}>{tag}</Text>
-                        </View>
-                    ))}
-                </View>
+              <Text style={styles.cardLabel}>Hashtags you follow</Text>
+              <View style={styles.tagsContainer}>
+                {hashtags.map((tag) => (
+                  <View key={tag} style={styles.tagChip}>
+                    <Text style={styles.tagText}>{tag}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
           )}
         </View>
-
       </ScrollView>
     </View>
   );
@@ -360,27 +411,27 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   cardLabel: {
-      fontSize: 14,
-      fontWeight: '600',
-      marginBottom: 12,
-      color: 'rgba(0,0,0,0.7)',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 12,
+    color: 'rgba(0,0,0,0.7)',
   },
   tagsContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      gap: 8,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
   },
   tagChip: {
-      backgroundColor: '#f3f2ef',
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: '#f3f2ef',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)',
   },
   tagText: {
-      fontSize: 14,
-      color: 'rgba(0,0,0,0.7)',
-      fontWeight: '600',
-  }
+    fontSize: 14,
+    color: 'rgba(0,0,0,0.7)',
+    fontWeight: '600',
+  },
 });

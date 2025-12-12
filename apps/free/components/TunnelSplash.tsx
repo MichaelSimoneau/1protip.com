@@ -1,40 +1,22 @@
 import * as React from 'react';
 import { useEffect, type ReactNode } from 'react';
-import { View, StyleSheet, Platform, Text, Pressable, ActivityIndicator, useWindowDimensions } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Text,
+  Pressable,
+  ActivityIndicator,
+  useWindowDimensions,
+} from 'react-native';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { LinkedInLogoButton } from './LinkedInLogoButton';
 
-// Lazily require reanimated so a native/JS mismatch falls back safely.
-let Animated: typeof import('react-native-reanimated').default;
-let Easing: typeof import('react-native-reanimated').Easing;
-let useSharedValue: typeof import('react-native-reanimated').useSharedValue;
-let withTiming: typeof import('react-native-reanimated').withTiming;
-let withRepeat: typeof import('react-native-reanimated').withRepeat;
-let withSequence: typeof import('react-native-reanimated').withSequence;
-let useAnimatedStyle: typeof import('react-native-reanimated').useAnimatedStyle;
-
-try {
-  // Reanimated may not be available in some environments (like web)
-  // so we use a try-catch to avoid crashes.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const reanimated = require('react-native-reanimated');
-  Animated = reanimated.default;
-  Easing = reanimated.Easing;
-  useSharedValue = reanimated.useSharedValue;
-  withTiming = reanimated.withTiming;
-  withRepeat = reanimated.withRepeat;
-  withSequence = reanimated.withSequence;
-  useAnimatedStyle = reanimated.useAnimatedStyle;
-} catch (e) {
-  Animated = undefined as never;
-  Easing = undefined as never;
-  useSharedValue = undefined as never;
-  withTiming = undefined as never;
-  withRepeat = undefined as never;
-  withSequence = undefined as never;
-  useAnimatedStyle = undefined as never;
-}
-
-const SQUARE_COUNT = 9; // 8 border squares + 1 filled logo square
 const LINKEDIN_BLUE = '#0077b5';
 const INITIAL_SIZE = 40;
 const LOGO_FINAL_SIZE = 160; // Final size for the logo square
@@ -59,7 +41,15 @@ type RoundedSquareProps = {
   finalSize: number;
 };
 
-function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress, isLoading = false, disabled = false, finalSize }: RoundedSquareProps) {
+function RoundedSquare({
+  index,
+  isFilled = false,
+  showLogoText = false,
+  onPress,
+  isLoading = false,
+  disabled = false,
+  finalSize,
+}: RoundedSquareProps) {
   const squareSize = useSharedValue(INITIAL_SIZE);
   const squareOpacity = useSharedValue(0);
   const textSize = useSharedValue(0);
@@ -77,7 +67,7 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
     const timer = setTimeout(() => {
       // Fade in quickly
       squareOpacity.value = withTiming(0.8, { duration: 200 });
-      
+
       // Expand
       squareSize.value = withTiming(
         targetSize,
@@ -88,12 +78,14 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
         () => {
           // Fade out as it expands (only for border squares)
           if (shouldFadeOut) {
-            squareOpacity.value = withTiming(0, { duration: ANIMATION_DURATION * 0.6 });
+            squareOpacity.value = withTiming(0, {
+              duration: ANIMATION_DURATION * 0.6,
+            });
           } else {
             // Logo square stays visible at full opacity
             squareOpacity.value = withTiming(1, { duration: 200 });
           }
-        }
+        },
       );
     }, startDelay);
 
@@ -161,7 +153,13 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
               disabled={disabled || isLoading}
               style={StyleSheet.absoluteFill}
             >
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <Animated.Text
                   style={[
                     {
@@ -177,8 +175,15 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
                   in
                 </Animated.Text>
               </View>
-              
-              <View style={{ position: 'absolute', bottom: '15%', width: '100%', alignItems: 'center' }}>
+
+              <View
+                style={{
+                  position: 'absolute',
+                  bottom: '15%',
+                  width: '100%',
+                  alignItems: 'center',
+                }}
+              >
                 <Animated.Text
                   style={[
                     {
@@ -196,7 +201,11 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
 
               {isLoading && (
                 <View style={StyleSheet.absoluteFill}>
-                  <ActivityIndicator size="large" color="#ffffff" style={{ flex: 1 }} />
+                  <ActivityIndicator
+                    size="large"
+                    color="#ffffff"
+                    style={{ flex: 1 }}
+                  />
                 </View>
               )}
             </Pressable>
@@ -232,9 +241,12 @@ export function TunnelSplash({
   const logoCenterY = height / 2;
   const logoRadius = LOGO_FINAL_SIZE / 2;
   const textHeight = 60; // Approximate text height with margin
-  const safeTopPosition = Math.max(20, logoCenterY - logoRadius - textHeight - 20);
+  const safeTopPosition = Math.max(
+    20,
+    logoCenterY - logoRadius - textHeight - 20,
+  );
   const textTopPosition = Math.min(safeTopPosition, height * 0.2);
-  
+
   // Calculate skip button position (below logo)
   const skipButtonTop = logoCenterY + logoRadius + 60;
 
@@ -251,7 +263,9 @@ export function TunnelSplash({
     return (
       <View style={[styles.container, styles.fallback]}>
         {brandText && mounted ? (
-          <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
+          <View style={[styles.brandTextContainer, { top: textTopPosition }]}>
+            {brandText}
+          </View>
         ) : null}
         <LinkedInLogoButton
           onPress={onLogoPress || (() => {})}
@@ -292,7 +306,9 @@ export function TunnelSplash({
 
       {/* Brand text overlay - positioned dynamically to avoid overlap */}
       {brandText && mounted ? (
-        <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
+        <View style={[styles.brandTextContainer, { top: textTopPosition }]}>
+          {brandText}
+        </View>
       ) : null}
 
       {/* Skip Login Button */}
@@ -307,7 +323,10 @@ export function TunnelSplash({
   );
 }
 
-class SplashErrorBoundary extends React.Component<{ children: ReactNode }, { hasError: boolean }> {
+class SplashErrorBoundary extends React.Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
   constructor(props: { children: ReactNode }) {
     super(props);
     this.state = { hasError: false };
@@ -325,7 +344,12 @@ class SplashErrorBoundary extends React.Component<{ children: ReactNode }, { has
     if (this.state.hasError) {
       return (
         <View style={[styles.container, styles.fallback]}>
-          <View style={[styles.fallbackLogo, { width: 160, height: 160, borderRadius: 24 }]}>
+          <View
+            style={[
+              styles.fallbackLogo,
+              { width: 160, height: 160, borderRadius: 24 },
+            ]}
+          >
             <Text style={[styles.fallbackLogoText, { fontSize: 64 }]}>in</Text>
           </View>
         </View>

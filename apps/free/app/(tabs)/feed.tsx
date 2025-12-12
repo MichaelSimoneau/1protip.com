@@ -1,4 +1,13 @@
-import { View, Text, StyleSheet, RefreshControl, Image, Pressable, Dimensions, FlatList } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  RefreshControl,
+  Image,
+  Pressable,
+  Dimensions,
+  FlatList,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, {
   Extrapolate,
@@ -8,12 +17,21 @@ import Animated, {
   useSharedValue,
   withTiming,
   Easing,
+  type SharedValue,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useFeed } from '@/features/feed/hooks/useFeed';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye, Lock, Hash } from 'lucide-react-native';
+import {
+  Rss,
+  User,
+  ThumbsUp,
+  MessageCircle,
+  Repeat2,
+  Eye,
+  Hash,
+} from 'lucide-react-native';
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { router } from 'expo-router';
 import { useTabPanel } from '@/contexts/TabPanelContext';
@@ -21,7 +39,6 @@ import { TunnelSplash } from '@/components/TunnelSplash';
 import type { FeedPost } from '@/services/linkedin/feed';
 import {
   likePost as likeWithService,
-  commentOnPost as commentWithService,
   repostPost as repostWithService,
 } from '@/services/linkedin/socialActions';
 
@@ -33,7 +50,7 @@ const CARD_TOTAL = CARD_HEIGHT + CARD_SPACING;
 type CardProps = {
   item: FeedPost;
   index: number;
-  scrollY: Animated.SharedValue<number>;
+  scrollY: SharedValue<number>;
   onLike: (postUrn: string) => void;
   onComment: (post: FeedPost) => void;
   onRepost: (postUrn: string) => void;
@@ -59,21 +76,21 @@ const RolodexCard = ({
       diff,
       [-CARD_TOTAL * 1.5, 0, CARD_TOTAL * 1.5],
       [12, 0, -12],
-      Extrapolate.CLAMP
+      Extrapolate.CLAMP,
     );
 
     const translateY = interpolate(
       diff,
       [-CARD_TOTAL * 1.5, 0, CARD_TOTAL * 1.5],
       [-28, 0, 36],
-      Extrapolate.CLAMP
+      Extrapolate.CLAMP,
     );
 
     const scale = interpolate(
       diff,
       [-CARD_TOTAL * 2, 0, CARD_TOTAL * 2],
       [0.9, 1, 0.9],
-      Extrapolate.CLAMP
+      Extrapolate.CLAMP,
     );
 
     return {
@@ -88,7 +105,7 @@ const RolodexCard = ({
         diff,
         [-CARD_TOTAL * 2, 0, CARD_TOTAL * 2],
         [0.2, 1, 0.2],
-        Extrapolate.CLAMP
+        Extrapolate.CLAMP,
       ),
     };
   }, [index, scrollY]);
@@ -147,22 +164,30 @@ const RolodexCard = ({
           <Text style={styles.actionText}>Repost</Text>
         </Pressable>
 
-        <Pressable
-          style={styles.actionButton}
-          onPress={() => onView(item)}
-        >
+        <Pressable style={styles.actionButton} onPress={() => onView(item)}>
           <Eye size={20} color="#0066cc" />
-          <Text style={[styles.actionText, styles.actionTextPrimary]}>View</Text>
+          <Text style={[styles.actionText, styles.actionTextPrimary]}>
+            View
+          </Text>
         </Pressable>
       </View>
     </Animated.View>
   );
 };
 
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList as any);
+const AnimatedFlatList: any = Animated.createAnimatedComponent(FlatList as any);
 
 export default function FeedTab() {
-  const { posts, isLoading, isLoadingMore, error, hasMore, refreshFeed, loadMore, prependPost } = useFeed();
+  const {
+    posts,
+    isLoading,
+    isLoadingMore,
+    error,
+    hasMore,
+    refreshFeed,
+    loadMore,
+    prependPost,
+  } = useFeed();
   const { profile, login } = useLinkedInAuth();
   const isAuthenticated = !!profile;
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
@@ -173,22 +198,26 @@ export default function FeedTab() {
   const listRef = useRef<FlatList<FeedPost>>(null);
 
   // Lock State
-  const [isLocked, setIsLocked] = useState(true);
   const lockOpacity = useSharedValue(1);
   const feedOpacity = useSharedValue(0);
+
+  const handleUnlock = useCallback(() => {
+    lockOpacity.value = withTiming(0, {
+      duration: 500,
+      easing: Easing.out(Easing.ease),
+    });
+    feedOpacity.value = withTiming(1, {
+      duration: 500,
+      easing: Easing.in(Easing.ease),
+    });
+  }, [feedOpacity, lockOpacity]);
 
   useEffect(() => {
     // If authenticated on mount, unlock immediately
     if (isAuthenticated) {
       handleUnlock();
     }
-  }, [isAuthenticated]);
-
-  const handleUnlock = () => {
-    setIsLocked(false);
-    lockOpacity.value = withTiming(0, { duration: 500, easing: Easing.out(Easing.ease) });
-    feedOpacity.value = withTiming(1, { duration: 500, easing: Easing.in(Easing.ease) });
-  };
+  }, [isAuthenticated, handleUnlock]);
 
   const handleSkipLogin = () => {
     handleUnlock();
@@ -226,17 +255,21 @@ export default function FeedTab() {
       offset: CARD_TOTAL * index,
       index,
     }),
-    []
+    [],
   );
 
   const panGesture = Gesture.Pan()
     .activeOffsetY([-20, 20])
     .onEnd((event) => {
-      const direction = event.translationY < -40 ? 1 : event.translationY > 40 ? -1 : 0;
+      const direction =
+        event.translationY < -40 ? 1 : event.translationY > 40 ? -1 : 0;
       if (!direction) return;
       const nextIndex = Math.max(
         0,
-        Math.min(Math.round(currentIndex.value) + direction, Math.max(posts.length - 1, 0))
+        Math.min(
+          Math.round(currentIndex.value) + direction,
+          Math.max(posts.length - 1, 0),
+        ),
       );
       currentIndex.value = nextIndex;
       const offset = nextIndex * CARD_TOTAL;
@@ -259,7 +292,7 @@ export default function FeedTab() {
     try {
       await likeWithService(postUrn);
       showFeedback('Liked on LinkedIn!');
-    } catch (err) {
+    } catch {
       showFeedback('Failed to like post');
     } finally {
       setActionInProgress(null);
@@ -285,7 +318,7 @@ export default function FeedTab() {
     try {
       await repostWithService(postUrn);
       showFeedback('Reposted to LinkedIn!');
-    } catch (err) {
+    } catch {
       showFeedback('Failed to repost');
     } finally {
       setActionInProgress(null);
@@ -328,7 +361,9 @@ export default function FeedTab() {
             <View style={styles.headerRow}>
               <View>
                 <Text style={styles.title}>#1ProTip</Text>
-                <Text style={styles.subtitle}>Professional tips from the LinkedIn community</Text>
+                <Text style={styles.subtitle}>
+                  Professional tips from the LinkedIn community
+                </Text>
               </View>
               {/* Dynamic Icon Animation could go here */}
               <Hash size={32} color="#0066cc" />
@@ -352,12 +387,15 @@ export default function FeedTab() {
             <AnimatedFlatList
               ref={listRef}
               data={posts}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item: FeedPost) => item.id}
               contentContainerStyle={styles.listContent}
               scrollEventThrottle={16}
               onScroll={onScroll}
               refreshControl={
-                <RefreshControl refreshing={isLoading} onRefresh={refreshFeed} />
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={refreshFeed}
+                />
               }
               onEndReached={handleEndReached}
               onEndReachedThreshold={0.65}
@@ -375,7 +413,8 @@ export default function FeedTab() {
                   <Rss size={64} color="#cccccc" />
                   <Text style={styles.placeholderTitle}>No posts yet</Text>
                   <Text style={styles.placeholderText}>
-                    Connect your LinkedIn and posts with #1ProTip will appear here
+                    Connect your LinkedIn and posts with #1ProTip will appear
+                    here
                   </Text>
                 </View>
               )}
@@ -386,7 +425,13 @@ export default function FeedTab() {
                   </View>
                 ) : null
               }
-              renderItem={({ item, index }: { item: FeedPost; index: number }) => (
+              renderItem={({
+                item,
+                index,
+              }: {
+                item: FeedPost;
+                index: number;
+              }) => (
                 <RolodexCard
                   item={item}
                   index={index}

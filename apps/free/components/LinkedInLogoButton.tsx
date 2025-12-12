@@ -1,36 +1,22 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Pressable, Text, ActivityIndicator, Platform } from 'react-native';
-
-// Lazily require reanimated for safe fallback
-let Animated: typeof import('react-native-reanimated').default;
-let useSharedValue: typeof import('react-native-reanimated').useSharedValue;
-let withTiming: typeof import('react-native-reanimated').withTiming;
-let withRepeat: typeof import('react-native-reanimated').withRepeat;
-let withSequence: typeof import('react-native-reanimated').withSequence;
-let useAnimatedStyle: typeof import('react-native-reanimated').useAnimatedStyle;
-let Easing: typeof import('react-native-reanimated').Easing;
-
-try {
-  const reanimated = require('react-native-reanimated');
-  Animated = reanimated.default;
-  useSharedValue = reanimated.useSharedValue;
-  withTiming = reanimated.withTiming;
-  withRepeat = reanimated.withRepeat;
-  withSequence = reanimated.withSequence;
-  useAnimatedStyle = reanimated.useAnimatedStyle;
-  Easing = reanimated.Easing;
-} catch (e) {
-  Animated = undefined as never;
-  useSharedValue = undefined as never;
-  withTiming = undefined as never;
-  withRepeat = undefined as never;
-  withSequence = undefined as never;
-  useAnimatedStyle = undefined as never;
-  Easing = undefined as never;
-}
+import {
+  View,
+  StyleSheet,
+  Pressable,
+  Text,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 
 const LINKEDIN_BLUE = '#0077b5';
-const LINKEDIN_BLUE_DARK = '#005885';
 
 interface LinkedInLogoButtonProps {
   onPress: () => void;
@@ -73,10 +59,10 @@ export function LinkedInLogoButton({
         withTiming(1, {
           duration: 1200,
           easing: Easing?.inOut(Easing.ease) || undefined,
-        })
+        }),
       ),
       -1,
-      true
+      true,
     );
 
     // Shadow opacity - dramatic range (0.4 to 1.3)
@@ -89,10 +75,10 @@ export function LinkedInLogoButton({
         withTiming(0.4, {
           duration: 1400,
           easing: Easing?.inOut(Easing.ease) || undefined,
-        })
+        }),
       ),
       -1,
-      true
+      true,
     );
 
     // Brightness/opacity overlay effect (glimmer)
@@ -105,10 +91,10 @@ export function LinkedInLogoButton({
         withTiming(0.9, {
           duration: 1000,
           easing: Easing?.inOut(Easing.ease) || undefined,
-        })
+        }),
       ),
       -1,
-      true
+      true,
     );
 
     // Glow intensity - offset timing for layered effect
@@ -121,12 +107,19 @@ export function LinkedInLogoButton({
         withTiming(0.5, {
           duration: 1100,
           easing: Easing?.inOut(Easing.ease) || undefined,
-        })
+        }),
       ),
       -1,
-      true
+      true,
     );
-  }, [isLoading, disabled, pulseScale, shadowOpacity, brightness, glowIntensity]);
+  }, [
+    isLoading,
+    disabled,
+    pulseScale,
+    shadowOpacity,
+    brightness,
+    glowIntensity,
+  ]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulseScale.value as number }],
@@ -180,10 +173,7 @@ export function LinkedInLogoButton({
       <Pressable
         onPress={onPress}
         disabled={disabled || isLoading}
-        style={({ pressed }) => [
-          styles.pressable,
-          pressed && styles.pressed,
-        ]}
+        style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}
       >
         {/* Glow layer for glimmer effect */}
         <Animated.View

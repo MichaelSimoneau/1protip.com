@@ -1,4 +1,13 @@
-import { View, Text, StyleSheet, ActivityIndicator, Platform, ScrollView, Image, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Platform,
+  ScrollView,
+  Image,
+  Pressable,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { useState, useEffect } from 'react';
@@ -15,15 +24,20 @@ export default function MSTab() {
     slug?: string | string[];
   }>();
 
-  const normalizeParam = (value?: string | string[]) => (Array.isArray(value) ? value[0] : value);
+  const normalizeParam = (value?: string | string[]) =>
+    Array.isArray(value) ? value[0] : value;
 
   const postId = normalizeParam(rawParams.postId);
   const action = normalizeParam(rawParams.action);
   const slug = normalizeParam(rawParams.slug) || 'michaelsimoneau';
 
   const defaultProfileUrl = `https://${slug}.com`;
-  const targetUrl = action === 'donate' ? 'https://donate.1protip.com' : defaultProfileUrl;
-  const webTitle = action === 'donate' ? 'Donate to Michael Simoneau' : 'Michael Simoneau Website';
+  const targetUrl =
+    action === 'donate' ? 'https://donate.1protip.com' : defaultProfileUrl;
+  const webTitle =
+    action === 'donate'
+      ? 'Donate to Michael Simoneau'
+      : 'Michael Simoneau Website';
   const [post, setPost] = useState<FeedPost | null>(null);
 
   useEffect(() => {
@@ -41,8 +55,11 @@ export default function MSTab() {
   const loadPost = async (id: string) => {
     setLoading(true);
     try {
-      const posts = await fetchHashtagFeed();
-      const match = posts.find((p) => p.id === id || p.linkedin_post_id === id) || null;
+      const response = await fetchHashtagFeed();
+      const match =
+        response.posts.find(
+          (p: FeedPost) => p.id === id || p.linkedin_post_id === id,
+        ) || null;
       setPost(match);
     } finally {
       setLoading(false);
@@ -79,7 +96,9 @@ export default function MSTab() {
               <View style={styles.authorInfo}>
                 <Text style={styles.authorName}>
                   {post.author_name || 'Anonymous'}
-                  {post.is_owner && <Text style={styles.ownerBadge}> (You)</Text>}
+                  {post.is_owner && (
+                    <Text style={styles.ownerBadge}> (You)</Text>
+                  )}
                 </Text>
                 <Text style={styles.postDate}>
                   {new Date(post.created_at).toLocaleDateString('en-US', {

@@ -15,12 +15,18 @@ const getRedirectUri = () => {
     // using the same build if possible, OR rely on environment variable that strictly matches the registered URI.
     // However, LinkedIn requires an EXACT match.
     // If we are in production (window.location.hostname !== 'localhost'), we should use the prod URI.
-    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-       return 'https://free/auth/linkedin/callback';
+    if (
+      typeof window !== 'undefined' &&
+      window.location.hostname !== 'localhost'
+    ) {
+      return 'https://free/auth/linkedin/callback';
     }
   }
   // Default fallback or local dev
-  return process.env.EXPO_PUBLIC_LINKEDIN_REDIRECT_URI || Linking.createURL('/auth/linkedin/callback');
+  return (
+    process.env.EXPO_PUBLIC_LINKEDIN_REDIRECT_URI ||
+    Linking.createURL('/auth/linkedin/callback')
+  );
 };
 
 const LINKEDIN_REDIRECT_URI = getRedirectUri();
@@ -60,7 +66,7 @@ export function useLinkedInAuth() {
   // No, expo-web-browser usually tries to use a popup or an iframe.
   // If it's a full redirect (e.g. mobile safari), we might lose state if not stored in AsyncStorage/localStorage.
   // But for now, let's assume the standard flow keeps the JS environment alive or rehydrates correctly.
-  
+
   // The user reported "No authorization code received".
   // This means the URL parsing logic failed to find 'code'.
   // OR the state mismatch error happened.
@@ -81,7 +87,7 @@ export function useLinkedInAuth() {
     // and manually appended to the string.
     // The issue might be double encoding or improper inclusion if params.toString() already encodes spaces/symbols.
     // Let's rely entirely on URLSearchParams to construct the query string safely.
-    
+
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: LINKEDIN_CLIENT_ID || '',
@@ -93,18 +99,21 @@ export function useLinkedInAuth() {
     return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
   }, []);
 
-  const exchangeCodeForToken = useCallback(async (code: string): Promise<string> => {
-    const { data, error } = await supabase.functions.invoke(
-      'linkedin-oauth-exchange',
-      {
-        body: { code, redirect_uri: LINKEDIN_REDIRECT_URI },
-      }
-    );
+  const exchangeCodeForToken = useCallback(
+    async (code: string): Promise<string> => {
+      const { data, error } = await supabase.functions.invoke(
+        'linkedin-oauth-exchange',
+        {
+          body: { code, redirect_uri: LINKEDIN_REDIRECT_URI },
+        },
+      );
 
-    if (error) throw error;
+      if (error) throw error;
 
-    return data.access_token;
-  }, []);
+      return data.access_token;
+    },
+    [],
+  );
 
   const storeAccessToken = useCallback(async (token: string): Promise<void> => {
     const { data: session } = await supabase.auth.getSession();
@@ -135,25 +144,28 @@ export function useLinkedInAuth() {
 
       // Fallback: Manually parse if Linking failed or returned empty
       if (!code && typeof window !== 'undefined') {
-          // If the 'url' passed is just the path or partial, we might want to check window.location
-          // But 'result.url' from openAuthSessionAsync should be the full return URL.
-          // Let's try to parse the 'url' argument as a URL object first.
-          try {
-             const urlObj = new URL(url);
-             const params = new URLSearchParams(urlObj.search);
-             code = params.get('code');
-             returnedState = params.get('state');
-          } catch (e) {
-             // If url argument is not a valid full URL, fallback to window.location
-             // This happens if the redirect came back to the app root and we are reading current location
-             const params = new URLSearchParams(window.location.search);
-             code = params.get('code');
-             returnedState = params.get('state');
-          }
+        // If the 'url' passed is just the path or partial, we might want to check window.location
+        // But 'result.url' from openAuthSessionAsync should be the full return URL.
+        // Let's try to parse the 'url' argument as a URL object first.
+        try {
+          const urlObj = new URL(url);
+          const params = new URLSearchParams(urlObj.search);
+          code = params.get('code');
+          returnedState = params.get('state');
+        } catch (e) {
+          // If url argument is not a valid full URL, fallback to window.location
+          // This happens if the redirect came back to the app root and we are reading current location
+          const params = new URLSearchParams(window.location.search);
+          code = params.get('code');
+          returnedState = params.get('state');
+        }
       }
 
       if (returnedState !== expectedState) {
-        console.error('State mismatch', { expected: expectedState, received: returnedState });
+        console.error('State mismatch', {
+          expected: expectedState,
+          received: returnedState,
+        });
         throw new Error('State mismatch - possible CSRF attack');
       }
 
@@ -164,7 +176,7 @@ export function useLinkedInAuth() {
       const token = await exchangeCodeForToken(code);
       await storeAccessToken(token);
     },
-    [exchangeCodeForToken, storeAccessToken]
+    [exchangeCodeForToken, storeAccessToken],
   );
 
   const updateConnectionStatus = useCallback(async (status: boolean) => {
@@ -174,14 +186,16 @@ export function useLinkedInAuth() {
     // Optimistic update
     setState((prev) => ({
       ...prev,
-      profile: prev.profile ? { ...prev.profile, has_connected_with_owner: status } : null,
+      profile: prev.profile
+        ? { ...prev.profile, has_connected_with_owner: status }
+        : null,
     }));
 
     const { error } = await supabase
       .from('profiles')
       .update({ has_connected_with_owner: status })
       .eq('id', session.session.user.id);
-      
+
     if (error) {
       console.error('Error updating connection status:', error);
     }
@@ -193,12 +207,10 @@ export function useLinkedInAuth() {
 
     try {
       // Fetch fresh LinkedIn data from the edge function
-      const { data: linkedInData, error: linkedInError } = await supabase.functions.invoke(
-        'linkedin-get-profile',
-        {
+      const { data: linkedInData, error: linkedInError } =
+        await supabase.functions.invoke('linkedin-get-profile', {
           body: {},
-        }
-      );
+        });
 
       if (linkedInError) {
         console.error('Error fetching LinkedIn profile:', linkedInError);
@@ -212,7 +224,7 @@ export function useLinkedInAuth() {
         .single();
 
       if (profileError) {
-         console.error('Error fetching local profile:', profileError);
+        console.error('Error fetching local profile:', profileError);
       }
 
       let combinedProfile: LinkedInProfile | null = null;
@@ -220,17 +232,19 @@ export function useLinkedInAuth() {
       if (linkedInData) {
         combinedProfile = {
           ...linkedInData,
-          has_connected_with_owner: profileData?.has_connected_with_owner ?? false,
+          has_connected_with_owner:
+            profileData?.has_connected_with_owner ?? false,
         };
       } else if (profileData) {
-         const nameParts = (profileData.full_name || '').split(' ');
-         combinedProfile = {
-            id: session.session.user.id,
-            firstName: nameParts[0] || '',
-            lastName: nameParts.slice(1).join(' ') || '',
-            profilePicture: profileData.avatar_url,
-            has_connected_with_owner: profileData?.has_connected_with_owner ?? false,
-         }
+        const nameParts = (profileData.full_name || '').split(' ');
+        combinedProfile = {
+          id: session.session.user.id,
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' ') || '',
+          profilePicture: profileData.avatar_url,
+          has_connected_with_owner:
+            profileData?.has_connected_with_owner ?? false,
+        };
       }
 
       setState((prev) => ({ ...prev, profile: combinedProfile }));
@@ -246,7 +260,9 @@ export function useLinkedInAuth() {
 
     try {
       if (!LINKEDIN_CLIENT_ID) {
-        throw new Error('LinkedIn Client ID is missing. Please check your .env file.');
+        throw new Error(
+          'LinkedIn Client ID is missing. Please check your .env file.',
+        );
       }
 
       const state = generateState();
@@ -254,7 +270,7 @@ export function useLinkedInAuth() {
 
       const result = await WebBrowser.openAuthSessionAsync(
         authUrl,
-        LINKEDIN_REDIRECT_URI
+        LINKEDIN_REDIRECT_URI,
       );
 
       if (result.type === 'success' && result.url) {
@@ -276,10 +292,25 @@ export function useLinkedInAuth() {
     }
   }, [generateState, buildAuthUrl, handleCallback, getProfile]);
 
+  const logout = useCallback(async () => {
+    setState((prev) => ({ ...prev, isLoading: true }));
+    try {
+      await supabase.auth.signOut();
+      setState({ isLoading: false, error: null, profile: null });
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        isLoading: false,
+        error: error as Error,
+      }));
+    }
+  }, []);
+
   return {
     login,
     getProfile,
     updateConnectionStatus,
+    logout,
     isLoading: state.isLoading,
     error: state.error,
     profile: state.profile,
