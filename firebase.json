@@ -31,7 +31,7 @@
     "rewrites": [
       {
         "source": "/logo.png",
-        "destination": "/assets/images/icon.png"
+        "destination": "/assets/images/logo.png"
       },
       {
         "source": "/api/feed",

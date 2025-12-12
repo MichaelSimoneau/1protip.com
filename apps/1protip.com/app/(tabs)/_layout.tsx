@@ -58,7 +58,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="MichaelSimoneau"
         options={{
-          title: 'MS',
+          title: 'MichaelSimoneau',
           tabBarIcon: ({ size, color }: { size: number; color: string }) => (
             <Text style={{ fontSize: size * 0.7, fontWeight: '700', color }}>MS</Text>
           ),
