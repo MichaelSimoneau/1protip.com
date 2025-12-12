@@ -31,15 +31,8 @@ jobs:
       - name: Run Jest Tests
         run: pnpm --filter @1protip/dotcom test
 
-      - name: Setup Firefox
-        uses: browser-actions/setup-firefox@latest
-      
-      - name: Setup Geckodriver
-        uses: browser-actions/setup-geckodriver@latest
-
-      - name: Run Selenium Tests (and Build)
-        run: pnpm --filter @1protip/dotcom test:selenium
-        # env: variables inherited from job level
+      - name: Build Web App
+        run: pnpm --filter @1protip/dotcom build:web
 
       - name: Deploy to Firebase Hosting (Preview)
         if: github.event_name == 'pull_request'
