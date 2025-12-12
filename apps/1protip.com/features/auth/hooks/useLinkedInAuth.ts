@@ -2,13 +2,28 @@ import { useState, useCallback } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import { supabase } from '@/services/supabase/client';
+import { Platform } from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const LINKEDIN_CLIENT_ID = process.env.EXPO_PUBLIC_LINKEDIN_CLIENT_ID;
-const LINKEDIN_REDIRECT_URI =
-  process.env.EXPO_PUBLIC_LINKEDIN_REDIRECT_URI ||
-  Linking.createURL('/auth/linkedin/callback');
+
+// Helper to determine the correct redirect URI based on platform and environment
+const getRedirectUri = () => {
+  if (Platform.OS === 'web') {
+    // For web, we MUST use the window location to support both dev (localhost) and prod (1protip.com)
+    // using the same build if possible, OR rely on environment variable that strictly matches the registered URI.
+    // However, LinkedIn requires an EXACT match.
+    // If we are in production (window.location.hostname !== 'localhost'), we should use the prod URI.
+    if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+       return 'https://1protip.com/auth/linkedin/callback';
+    }
+  }
+  // Default fallback or local dev
+  return process.env.EXPO_PUBLIC_LINKEDIN_REDIRECT_URI || Linking.createURL('/auth/linkedin/callback');
+};
+
+const LINKEDIN_REDIRECT_URI = getRedirectUri();
 
 export interface LinkedInProfile {
   id: string;
@@ -42,7 +57,7 @@ export function useLinkedInAuth() {
   const buildAuthUrl = useCallback((state: string): string => {
     const params = new URLSearchParams({
       response_type: 'code',
-      client_id: LINKEDIN_CLIENT_ID,
+      client_id: LINKEDIN_CLIENT_ID || '',
       redirect_uri: LINKEDIN_REDIRECT_URI,
       state,
       scope: 'r_liteprofile r_emailaddress w_member_social',
@@ -80,10 +95,22 @@ export function useLinkedInAuth() {
   const handleCallback = useCallback(
     async (url: string, expectedState: string): Promise<void> => {
       const parsed = Linking.parse(url);
-      const code = parsed.queryParams?.code as string;
-      const state = parsed.queryParams?.state as string;
+      
+      // On web, the code might be in the hash or query params depending on how the auth provider redirects.
+      // LinkedIn usually returns code as a query param.
+      // However, Linking.parse might behave differently on web vs mobile.
+      // Let's robustly check both locations.
+      let code = parsed.queryParams?.code as string;
+      let returnedState = parsed.queryParams?.state as string;
 
-      if (state !== expectedState) {
+      // Fallback: Manually parse window.location if we are on web and code is missing
+      if (Platform.OS === 'web' && !code && typeof window !== 'undefined') {
+          const urlParams = new URLSearchParams(window.location.search);
+          code = urlParams.get('code') || '';
+          returnedState = urlParams.get('state') || '';
+      }
+
+      if (returnedState !== expectedState) {
         throw new Error('State mismatch - possible CSRF attack');
       }
 
@@ -193,6 +220,7 @@ export function useLinkedInAuth() {
         const profile = await getProfile();
         setState((prev) => ({ ...prev, isLoading: false, profile }));
       } else {
+        // If the user cancelled or closed the window, we might just stop loading
         setState((prev) => ({ ...prev, isLoading: false }));
       }
     } catch (error) {
