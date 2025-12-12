@@ -1,5 +1,9 @@
 ---
 name: LinkedIn hashtag feed
+overview: '**SUPERSEDED:** This plan is obsolete. See `unify-backend-feed-strategy_9f8e7d6c.plan.md`.'
+---
+---
+name: LinkedIn hashtag feed
 overview: Replace feed loading with direct LinkedIn API hashtag search using service token, prioritize michaelsimoneau posts first, and remove Supabase reliance for feed data.
 todos:
   - id: inspect-feed

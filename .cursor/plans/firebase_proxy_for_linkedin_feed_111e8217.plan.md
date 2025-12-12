@@ -1,5 +1,9 @@
 ---
 name: Firebase proxy for LinkedIn feed
+overview: '**SUPERSEDED:** This plan is obsolete. The backend proxy strategy is now defined in `unify-backend-feed-strategy_9f8e7d6c.plan.md`, which recommends using Supabase Functions for architectural consistency.'
+---
+---
+name: Firebase proxy for LinkedIn feed
 overview: Initialize Firebase with Functions+Hosting, add a Cloud Function to proxy the LinkedIn hashtag feed using server-side secrets, and point the app feed to that endpoint.
 todos:
   - id: init-firebase
