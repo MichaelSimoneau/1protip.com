@@ -155,3 +155,125 @@ Issues? Report them at https://github.com/firebase/firebase-tools/issues and att
 [info] i  hosting: 127.0.0.1 - - [12/Dec/2025:08:33:28 +0000] "GET /_expo/static/js/web/entry-d41d8cd98f00b204e9800998ecf8427e.js HTTP/1.1" 200 - "http://localhost:3333/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:08:33:28 +0000] \"GET /_expo/static/js/web/entry-d41d8cd98f00b204e9800998ecf8427e.js HTTP/1.1\" 200 - \"http://localhost:3333/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
 [info] i  hosting: 127.0.0.1 - - [12/Dec/2025:08:33:29 +0000] "GET /hot HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:08:33:29 +0000] \"GET /hot HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
 [info] i  hosting: 127.0.0.1 - - [12/Dec/2025:08:33:29 +0000] "GET /message HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:08:33:29 +0000] \"GET /message HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[debug] [2025-12-12T09:02:33.237Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T09:02:33.239Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[debug] [2025-12-12T09:02:33.249Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.249Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.249Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.250Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.250Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.252Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.252Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.252Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.252Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.253Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.253Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.253Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.253Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.253Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.253Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.254Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.254Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.254Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.254Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.254Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.259Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.259Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.259Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.260Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.260Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.260Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T09:02:33.261Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[debug] [2025-12-12T09:02:33.261Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.261Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.261Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.261Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.261Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.262Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.262Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.262Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.262Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.262Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.263Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.263Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.263Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.263Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.263Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.264Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.264Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.264Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.265Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.265Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.266Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.266Z] Checked if tokens are valid: false, expires at: 1765530797753
+[debug] [2025-12-12T09:02:33.266Z] > refreshing access token with scopes: []
+[debug] [2025-12-12T09:02:33.266Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-12-12T09:02:33.266Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.463Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.463Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.481Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.481Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.481Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.481Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.493Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.493Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.498Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.498Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.510Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.510Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.511Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.511Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.522Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.522Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.523Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.523Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.538Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.538Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.539Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.539Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.553Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.553Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.554Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.554Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.567Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.567Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.568Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.568Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.581Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com [none]
+[debug] [2025-12-12T09:02:33.581Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.582Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.582Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.594Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com [none]
+[debug] [2025-12-12T09:02:33.594Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.596Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2025-12-12T09:02:33.596Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-12-12T09:02:33.608Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com [none]
+[debug] [2025-12-12T09:02:33.608Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-12T09:02:33.914Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com 403
+[debug] [2025-12-12T09:02:33.915Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com [omitted]
+[debug] [2025-12-12T09:02:33.933Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com 200
+[debug] [2025-12-12T09:02:33.933Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:33.958Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com 200
+[debug] [2025-12-12T09:02:33.958Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:33.998Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com 200
+[debug] [2025-12-12T09:02:33.998Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:34.004Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com 200
+[debug] [2025-12-12T09:02:34.004Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:34.043Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com 403
+[debug] [2025-12-12T09:02:34.043Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebaseio.com [omitted]
+[debug] [2025-12-12T09:02:34.200Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com 200
+[debug] [2025-12-12T09:02:34.200Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:34.210Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com 200
+[debug] [2025-12-12T09:02:34.210Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/fcm.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:34.216Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com 200
+[debug] [2025-12-12T09:02:34.216Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/identitytoolkit.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:34.224Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com 200
+[debug] [2025-12-12T09:02:34.224Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/hashtag-1-pro-tip/services/storage.googleapis.com [omitted]
+[debug] [2025-12-12T09:02:34.302Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T09:02:34.302Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[debug] [2025-12-12T09:02:34.303Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T09:02:34.303Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[debug] [2025-12-12T09:02:34.366Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T09:02:34.366Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[debug] [2025-12-12T09:02:34.367Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T09:02:34.367Z] > authorizing via signed-in user (super.user@enigma.com.co)
