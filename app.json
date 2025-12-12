@@ -22,7 +22,8 @@
       "buildNumber": "2",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to capture photos for your posts.",
-        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to select images for your posts."
+        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to select images for your posts.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -34,7 +35,8 @@
       },
       "permissions": [
         "android.permission.CAMERA",
-        "android.permission.READ_MEDIA_IMAGES"
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {

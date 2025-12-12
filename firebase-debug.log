@@ -1,0 +1,317 @@
+[debug] [2025-12-11T23:52:32.161Z] ----------------------------------------------------------------------
+[debug] [2025-12-11T23:52:32.166Z] Command:       /Users/devcoup/.nvm/versions/node/v22.14.0/bin/node /Users/devcoup/.nvm/versions/node/v20.18.1/bin/firebase init
+[debug] [2025-12-11T23:52:32.167Z] CLI Version:   14.24.1
+[debug] [2025-12-11T23:52:32.167Z] Platform:      darwin
+[debug] [2025-12-11T23:52:32.167Z] Node Version:  v22.14.0
+[debug] [2025-12-11T23:52:32.167Z] Time:          Thu Dec 11 2025 18:52:32 GMT-0500 (Eastern Standard Time)
+[debug] [2025-12-11T23:52:32.167Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/devcoup/Projects/1protip/1protip.com
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[debug] [2025-12-11T23:52:40.504Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (/Users/devcoup/.nvm/versions/node/v20.18.1/lib/node_modules/firebase-tools/node_modules/@inquirer/core/dist/commonjs/lib/create-prompt.js:101:37)
+    at Interface.emit (node:events:518:28)
+    at Interface.emit (node:domain:489:12)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1124:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:263:20)
+    at ReadStream.emit (node:events:530:35)
+    at ReadStream.emit (node:domain:489:12)
+    at emitKeys (node:internal/readline/utils:370:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-12-11T23:52:50.414Z] ----------------------------------------------------------------------
+[debug] [2025-12-11T23:52:50.415Z] Command:       /Users/devcoup/.nvm/versions/node/v22.14.0/bin/node /Users/devcoup/.nvm/versions/node/v20.18.1/bin/firebase init
+[debug] [2025-12-11T23:52:50.416Z] CLI Version:   14.24.1
+[debug] [2025-12-11T23:52:50.416Z] Platform:      darwin
+[debug] [2025-12-11T23:52:50.416Z] Node Version:  v22.14.0
+[debug] [2025-12-11T23:52:50.416Z] Time:          Thu Dec 11 2025 18:52:50 GMT-0500 (Eastern Standard Time)
+[debug] [2025-12-11T23:52:50.416Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/devcoup/Projects/1protip/1protip.com
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2025-12-11T23:52:56.917Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-11T23:52:56.917Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[debug] [2025-12-11T23:52:56.919Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:56.919Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:56.921Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip [none]
+[debug] [2025-12-11T23:52:57.293Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip 200
+[debug] [2025-12-11T23:52:57.293Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip {"projectId":"hashtag-1-pro-tip","projectNumber":"913396219284","displayName":"hashtag-1-pro-tip","name":"projects/hashtag-1-pro-tip","resources":{"hostingSite":"hashtag-1-pro-tip"},"state":"ACTIVE","etag":"1_2a8ce56b-c06d-4024-8a40-a966cd501a70"}
+[info] i  Using project hashtag-1-pro-tip (hashtag-1-pro-tip) . 
+[info] 
+=== App Hosting Setup
+[debug] [2025-12-11T23:52:57.323Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:57.323Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:57.323Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/hashtag-1-pro-tip/billingInfo [none]
+[debug] [2025-12-11T23:52:57.615Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/hashtag-1-pro-tip/billingInfo 200
+[debug] [2025-12-11T23:52:57.615Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/hashtag-1-pro-tip/billingInfo {"name":"projects/hashtag-1-pro-tip/billingInfo","projectId":"hashtag-1-pro-tip","billingAccountName":"billingAccounts/014C46-D4DCD3-B1D4A7","billingEnabled":true}
+[debug] [2025-12-11T23:52:57.616Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:57.616Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:57.616Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions [none]
+[debug] [2025-12-11T23:52:57.616Z] >>> [apiv2][(partial)header] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions x-goog-quota-user=projects/hashtag-1-pro-tip
+[debug] [2025-12-11T23:52:57.616Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2025-12-11T23:52:57.804Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions 200
+[debug] [2025-12-11T23:52:57.804Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2025-12-11T23:52:57.805Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:57.805Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:57.805Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts [none]
+[debug] [2025-12-11T23:52:57.805Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts {"accountId":"firebase-app-hosting-compute","serviceAccount":{"displayName":"Firebase App Hosting compute service account","description":"Default service account used to run builds and deploys for Firebase App Hosting"}}
+[debug] [2025-12-11T23:52:58.145Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts 409
+[debug] [2025-12-11T23:52:58.145Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts [omitted]
+[debug] [2025-12-11T23:52:58.146Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:58.146Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:58.146Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:getIamPolicy [none]
+[debug] [2025-12-11T23:52:58.517Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:getIamPolicy 200
+[debug] [2025-12-11T23:52:58.518Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:getIamPolicy {"version":1,"etag":"BwZFtcYeZBc=","bindings":[{"role":"roles/artifactregistry.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-artifactregistry.iam.gserviceaccount.com"]},{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:913396219284@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-913396219284@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-913396219284@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.readTokenAccessor","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:913396219284-compute@developer.gserviceaccount.com","serviceAccount:hashtag-1-pro-tip@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com","serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.computeRunner","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:super.user@enigma.com.co"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-913396219284@serverless-robot-prod.iam.gserviceaccount.com"]},{"role":"roles/secretmanager.admin_withcond_119f9eeba620cc161cb5","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/storage.objectViewer","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]}]}
+[debug] [2025-12-11T23:52:58.519Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:58.519Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:52:58.519Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy [none]
+[debug] [2025-12-11T23:52:58.519Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy {"policy":{"version":1,"etag":"BwZFtcYeZBc=","bindings":[{"role":"roles/artifactregistry.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-artifactregistry.iam.gserviceaccount.com"]},{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:913396219284@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-913396219284@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-913396219284@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.readTokenAccessor","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:913396219284-compute@developer.gserviceaccount.com","serviceAccount:hashtag-1-pro-tip@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com","serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.computeRunner","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:super.user@enigma.com.co"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-913396219284@serverless-robot-prod.iam.gserviceaccount.com"]},{"role":"roles/secretmanager.admin_withcond_119f9eeba620cc161cb5","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/storage.objectViewer","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]}]},"updateMask":"bindings"}
+[debug] [2025-12-11T23:52:59.612Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy 200
+[debug] [2025-12-11T23:52:59.612Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy {"version":1,"etag":"BwZFtdg+YcM=","bindings":[{"role":"roles/artifactregistry.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-artifactregistry.iam.gserviceaccount.com"]},{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:913396219284@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-913396219284@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-913396219284@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.readTokenAccessor","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:913396219284-compute@developer.gserviceaccount.com","serviceAccount:hashtag-1-pro-tip@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com","serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.computeRunner","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:super.user@enigma.com.co"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-913396219284@serverless-robot-prod.iam.gserviceaccount.com"]},{"role":"roles/secretmanager.admin_withcond_119f9eeba620cc161cb5","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/storage.objectViewer","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]}]}
+[info] i  This command links your local project to Firebase App Hosting. You will be able to deploy your web app with `firebase deploy` after setup. 
+[debug] [2025-12-11T23:53:01.543Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:53:01.543Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:53:01.543Z] >>> [apiv2][query] GET https://firebaseapphosting.googleapis.com/v1beta/projects/hashtag-1-pro-tip/locations/-/backends 
+[debug] [2025-12-11T23:53:02.062Z] <<< [apiv2][status] GET https://firebaseapphosting.googleapis.com/v1beta/projects/hashtag-1-pro-tip/locations/-/backends 200
+[debug] [2025-12-11T23:53:02.062Z] <<< [apiv2][body] GET https://firebaseapphosting.googleapis.com/v1beta/projects/hashtag-1-pro-tip/locations/-/backends {"backends":[{"name":"projects/hashtag-1-pro-tip/locations/us-central1/backends/hashtag1protip","createTime":"2025-12-11T23:46:27.256146431Z","updateTime":"2025-12-11T23:46:29.055027Z","uri":"hashtag1protip--hashtag-1-pro-tip.us-central1.hosted.app","codebase":{"repository":"projects/hashtag-1-pro-tip/locations/us-central1/connections/apphosting-github-conn-ylc4e2d/gitRepositoryLinks/MichaelSimoneau-1protip.com","rootDirectory":"/"},"uid":"17012fb3-1209-4ea1-8bb7-2c0155fcabc7","etag":"Xxom0-sGtsiB4CGiDGrFhhuQPSm2yM79OwagYj09zwc","reconciling":false,"servingLocality":"GLOBAL_ACCESS","serviceAccount":"firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com","appId":"1:913396219284:web:7311bf2ce1a3c9203d6381"}]}
+[info] i  === Deploy local source setup 
+[info] ✔  Wrote configuration info to firebase.json 
+[info] i  Writing default settings to apphosting.yaml... 
+[info] i  /Users/devcoup/Projects/1protip/1protip.com/apphosting.yaml is unchanged 
+[info] ✔  Firebase initialization complete! 
+[info] 
+=== Hosting Setup
+[debug] [2025-12-11T23:53:04.638Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:53:04.638Z] Checked if tokens are valid: true, expires at: 1765499393061
+[debug] [2025-12-11T23:53:04.642Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip [none]
+[debug] [2025-12-11T23:53:05.052Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip 200
+[debug] [2025-12-11T23:53:05.074Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip {"projectId":"hashtag-1-pro-tip","projectNumber":"913396219284","displayName":"hashtag-1-pro-tip","name":"projects/hashtag-1-pro-tip","resources":{"hostingSite":"hashtag-1-pro-tip"},"state":"ACTIVE","etag":"1_2a8ce56b-c06d-4024-8a40-a966cd501a70"}
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 
+[debug] [2025-12-11T23:53:11.372Z] >>> [apiv2][query] GET https://www.gstatic.com/firebasejs/releases.json [none]
+[debug] [2025-12-11T23:53:11.600Z] <<< [apiv2][status] GET https://www.gstatic.com/firebasejs/releases.json 200
+[debug] [2025-12-11T23:53:11.600Z] <<< [apiv2][body] GET https://www.gstatic.com/firebasejs/releases.json {"current":{"version":"12.6.0","browserURL":"https://www.gstatic.com/firebasejs/12.6.0/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/12.6.0/firebase.tgz"},"live":{"version":"12.6","browserURL":"https://www.gstatic.com/firebasejs/live/12.6/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/live/12.6/firebase.tgz"},"components":{"ai":"https://www.gstatic.com/firebasejs/12.6.0/firebase-ai.js","analytics":"https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js","app":"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js","app-check":"https://www.gstatic.com/firebasejs/12.6.0/firebase-app-check.js","auth":"https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js","auth/cordova":"https://www.gstatic.com/firebasejs/12.6.0/firebase-auth/cordova.js","auth/web-extension":"https://www.gstatic.com/firebasejs/12.6.0/firebase-auth/web-extension.js","functions":"https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js","firestore":"https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js","firestore/lite":"https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore/lite.js","installations":"https://www.gstatic.com/firebasejs/12.6.0/firebase-installations.js","storage":"https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js","performance":"https://www.gstatic.com/firebasejs/12.6.0/firebase-performance.js","remote-config":"https://www.gstatic.com/firebasejs/12.6.0/firebase-remote-config.js","messaging":"https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging.js","messaging/sw":"https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging/sw.js","database":"https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js","data-connect":"https://www.gstatic.com/firebasejs/12.6.0/firebase-data-connect.js","firestore.memory":"https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.memory.js"}}
+[info] ✔  Wrote public/index.html 
+[info] 
+=== Emulators Setup
+[info] i  apphosting: Initializing Emulator {"metadata":{"emulator":{"name":"apphosting"},"message":"Initializing Emulator"}}
+[info] i  pubsub: downloading pubsub-emulator-0.8.17.zip... {"metadata":{"emulator":{"name":"pubsub"},"message":"downloading pubsub-emulator-0.8.17.zip..."}}
+[debug] [2025-12-11T23:54:28.214Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.8.17.zip 
+[debug] [2025-12-11T23:54:28.394Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.8.17.zip 200
+[debug] [2025-12-11T23:54:28.394Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.8.17.zip [stream]
+[debug] [2025-12-11T23:54:33.605Z] Data is 65162324
+[debug] [2025-12-11T23:54:33.605Z] [unzip] Entry: pubsub-emulator/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:33.606Z] [unzip] Processing entry: pubsub-emulator/
+[debug] [2025-12-11T23:54:33.606Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/
+[debug] [2025-12-11T23:54:33.606Z] [unzip] Entry: pubsub-emulator/bin/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:33.606Z] [unzip] Processing entry: pubsub-emulator/bin/
+[debug] [2025-12-11T23:54:33.606Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin/
+[debug] [2025-12-11T23:54:33.606Z] [unzip] Entry: pubsub-emulator/bin/cloud-pubsub-emulator (compressed_size=2284 bytes, uncompressed_size=5728 bytes)
+[debug] [2025-12-11T23:54:33.606Z] [unzip] Processing entry: pubsub-emulator/bin/cloud-pubsub-emulator
+[debug] [2025-12-11T23:54:33.606Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin
+[debug] [2025-12-11T23:54:33.606Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin/cloud-pubsub-emulator
+[debug] [2025-12-11T23:54:33.609Z] [unzip] Entry: pubsub-emulator/bin/cloud-pubsub-emulator.bat (compressed_size=889 bytes, uncompressed_size=2276 bytes)
+[debug] [2025-12-11T23:54:33.609Z] [unzip] Processing entry: pubsub-emulator/bin/cloud-pubsub-emulator.bat
+[debug] [2025-12-11T23:54:33.609Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin
+[debug] [2025-12-11T23:54:33.609Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin/cloud-pubsub-emulator.bat
+[debug] [2025-12-11T23:54:33.609Z] [unzip] Entry: pubsub-emulator/lib/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:33.610Z] [unzip] Processing entry: pubsub-emulator/lib/
+[debug] [2025-12-11T23:54:33.610Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/lib/
+[debug] [2025-12-11T23:54:33.610Z] [unzip] Entry: pubsub-emulator/lib/cloud-pubsub-emulator-0.8.17-all.jar (compressed_size=65157965 bytes, uncompressed_size=70080695 bytes)
+[debug] [2025-12-11T23:54:33.610Z] [unzip] Processing entry: pubsub-emulator/lib/cloud-pubsub-emulator-0.8.17-all.jar
+[debug] [2025-12-11T23:54:33.610Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/lib
+[debug] [2025-12-11T23:54:33.610Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/lib/cloud-pubsub-emulator-0.8.17-all.jar
+[info] i  pubsub: Removing outdated emulator files: pubsub-emulator-0.8.14 {"metadata":{"emulator":{"name":"pubsub"},"message":"Removing outdated emulator files: pubsub-emulator-0.8.14"}}
+[info] i  pubsub: Removing outdated emulator files: pubsub-emulator-0.8.14.zip {"metadata":{"emulator":{"name":"pubsub"},"message":"Removing outdated emulator files: pubsub-emulator-0.8.14.zip"}}
+[info] i  ui: downloading ui-v1.15.0.zip... {"metadata":{"emulator":{"name":"ui"},"message":"downloading ui-v1.15.0.zip..."}}
+[debug] [2025-12-11T23:54:33.968Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip 
+[info] 
+=== Remoteconfig Setup
+[debug] [2025-12-11T23:54:34.011Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip 200
+[debug] [2025-12-11T23:54:34.012Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip [stream]
+[debug] [2025-12-11T23:54:34.318Z] Data is 3538469
+[debug] [2025-12-11T23:54:34.318Z] [unzip] Entry: client/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:34.318Z] [unzip] Processing entry: client/
+[debug] [2025-12-11T23:54:34.318Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/
+[debug] [2025-12-11T23:54:34.318Z] [unzip] Entry: client/favicon-16x16.png (compressed_size=293 bytes, uncompressed_size=293 bytes)
+[debug] [2025-12-11T23:54:34.318Z] [unzip] Processing entry: client/favicon-16x16.png
+[debug] [2025-12-11T23:54:34.318Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.318Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/favicon-16x16.png
+[debug] [2025-12-11T23:54:34.319Z] [unzip] Entry: client/safari-pinned-tab.svg (compressed_size=1433 bytes, uncompressed_size=2611 bytes)
+[debug] [2025-12-11T23:54:34.319Z] [unzip] Processing entry: client/safari-pinned-tab.svg
+[debug] [2025-12-11T23:54:34.319Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.319Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/safari-pinned-tab.svg
+[debug] [2025-12-11T23:54:34.320Z] [unzip] Entry: client/favicon.ico (compressed_size=2933 bytes, uncompressed_size=13294 bytes)
+[debug] [2025-12-11T23:54:34.320Z] [unzip] Processing entry: client/favicon.ico
+[debug] [2025-12-11T23:54:34.320Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.320Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/favicon.ico
+[debug] [2025-12-11T23:54:34.320Z] [unzip] Entry: client/index.html (compressed_size=1364 bytes, uncompressed_size=3071 bytes)
+[debug] [2025-12-11T23:54:34.320Z] [unzip] Processing entry: client/index.html
+[debug] [2025-12-11T23:54:34.320Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.321Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/index.html
+[debug] [2025-12-11T23:54:34.321Z] [unzip] Entry: client/android-chrome-192x192.png (compressed_size=2684 bytes, uncompressed_size=2684 bytes)
+[debug] [2025-12-11T23:54:34.321Z] [unzip] Processing entry: client/android-chrome-192x192.png
+[debug] [2025-12-11T23:54:34.321Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.321Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/android-chrome-192x192.png
+[debug] [2025-12-11T23:54:34.321Z] [unzip] Entry: client/apple-touch-icon.png (compressed_size=2123 bytes, uncompressed_size=2152 bytes)
+[debug] [2025-12-11T23:54:34.321Z] [unzip] Processing entry: client/apple-touch-icon.png
+[debug] [2025-12-11T23:54:34.321Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.321Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/apple-touch-icon.png
+[debug] [2025-12-11T23:54:34.322Z] [unzip] Entry: client/android-chrome-512x512.png (compressed_size=5369 bytes, uncompressed_size=5411 bytes)
+[debug] [2025-12-11T23:54:34.322Z] [unzip] Processing entry: client/android-chrome-512x512.png
+[debug] [2025-12-11T23:54:34.322Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.322Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/android-chrome-512x512.png
+[debug] [2025-12-11T23:54:34.323Z] [unzip] Entry: client/manifest.json (compressed_size=245 bytes, uncompressed_size=551 bytes)
+[debug] [2025-12-11T23:54:34.323Z] [unzip] Processing entry: client/manifest.json
+[debug] [2025-12-11T23:54:34.323Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.323Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/manifest.json
+[debug] [2025-12-11T23:54:34.323Z] [unzip] Entry: client/robots.txt (compressed_size=26 bytes, uncompressed_size=26 bytes)
+[debug] [2025-12-11T23:54:34.323Z] [unzip] Processing entry: client/robots.txt
+[debug] [2025-12-11T23:54:34.323Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.323Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/robots.txt
+[debug] [2025-12-11T23:54:34.324Z] [unzip] Entry: client/mstile-150x150.png (compressed_size=2034 bytes, uncompressed_size=2034 bytes)
+[debug] [2025-12-11T23:54:34.324Z] [unzip] Processing entry: client/mstile-150x150.png
+[debug] [2025-12-11T23:54:34.324Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.324Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/mstile-150x150.png
+[debug] [2025-12-11T23:54:34.324Z] [unzip] Entry: client/assets/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:34.324Z] [unzip] Processing entry: client/assets/
+[debug] [2025-12-11T23:54:34.324Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/
+[debug] [2025-12-11T23:54:34.324Z] [unzip] Entry: client/assets/index-BX-A56oj.js (compressed_size=582089 bytes, uncompressed_size=2092775 bytes)
+[debug] [2025-12-11T23:54:34.324Z] [unzip] Processing entry: client/assets/index-BX-A56oj.js
+[debug] [2025-12-11T23:54:34.324Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets
+[debug] [2025-12-11T23:54:34.324Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-BX-A56oj.js
+[debug] [2025-12-11T23:54:34.344Z] [unzip] Entry: client/assets/index-CjB9C900.css (compressed_size=35979 bytes, uncompressed_size=298654 bytes)
+[debug] [2025-12-11T23:54:34.344Z] [unzip] Processing entry: client/assets/index-CjB9C900.css
+[debug] [2025-12-11T23:54:34.344Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets
+[debug] [2025-12-11T23:54:34.344Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-CjB9C900.css
+[debug] [2025-12-11T23:54:34.345Z] [unzip] Entry: client/assets/index-BX-A56oj.js.map (compressed_size=2362482 bytes, uncompressed_size=10036679 bytes)
+[debug] [2025-12-11T23:54:34.345Z] [unzip] Processing entry: client/assets/index-BX-A56oj.js.map
+[debug] [2025-12-11T23:54:34.345Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets
+[debug] [2025-12-11T23:54:34.346Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-BX-A56oj.js.map
+[debug] [2025-12-11T23:54:34.404Z] [unzip] Entry: client/assets/extensions/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:34.404Z] [unzip] Processing entry: client/assets/extensions/
+[debug] [2025-12-11T23:54:34.404Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions/
+[debug] [2025-12-11T23:54:34.404Z] [unzip] Entry: client/assets/extensions/default-extension.png (compressed_size=1646 bytes, uncompressed_size=1657 bytes)
+[debug] [2025-12-11T23:54:34.404Z] [unzip] Processing entry: client/assets/extensions/default-extension.png
+[debug] [2025-12-11T23:54:34.404Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions
+[debug] [2025-12-11T23:54:34.404Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions/default-extension.png
+[debug] [2025-12-11T23:54:34.404Z] [unzip] Entry: client/assets/img/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:34.404Z] [unzip] Processing entry: client/assets/img/
+[debug] [2025-12-11T23:54:34.404Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/img/
+[debug] [2025-12-11T23:54:34.405Z] [unzip] Entry: client/assets/img/database.png (compressed_size=29449 bytes, uncompressed_size=29988 bytes)
+[debug] [2025-12-11T23:54:34.405Z] [unzip] Processing entry: client/assets/img/database.png
+[debug] [2025-12-11T23:54:34.405Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/img
+[debug] [2025-12-11T23:54:34.405Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/img/database.png
+[debug] [2025-12-11T23:54:34.406Z] [unzip] Entry: client/assets/provider-icons/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:34.406Z] [unzip] Processing entry: client/assets/provider-icons/
+[debug] [2025-12-11T23:54:34.406Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/
+[debug] [2025-12-11T23:54:34.406Z] [unzip] Entry: client/assets/provider-icons/auth_service_saml.svg (compressed_size=575 bytes, uncompressed_size=1226 bytes)
+[debug] [2025-12-11T23:54:34.406Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_saml.svg
+[debug] [2025-12-11T23:54:34.406Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.406Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_saml.svg
+[debug] [2025-12-11T23:54:34.407Z] [unzip] Entry: client/assets/provider-icons/auth_service_phone.svg (compressed_size=261 bytes, uncompressed_size=414 bytes)
+[debug] [2025-12-11T23:54:34.407Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_phone.svg
+[debug] [2025-12-11T23:54:34.407Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.407Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_phone.svg
+[debug] [2025-12-11T23:54:34.408Z] [unzip] Entry: client/assets/provider-icons/auth_service_facebook.svg (compressed_size=289 bytes, uncompressed_size=457 bytes)
+[debug] [2025-12-11T23:54:34.408Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_facebook.svg
+[debug] [2025-12-11T23:54:34.408Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.408Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_facebook.svg
+[debug] [2025-12-11T23:54:34.408Z] [unzip] Entry: client/assets/provider-icons/auth_service_game_center.svg (compressed_size=991 bytes, uncompressed_size=3921 bytes)
+[debug] [2025-12-11T23:54:34.408Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_game_center.svg
+[debug] [2025-12-11T23:54:34.408Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.408Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_game_center.svg
+[debug] [2025-12-11T23:54:34.409Z] [unzip] Entry: client/assets/provider-icons/auth_service_apple.svg (compressed_size=230 bytes, uncompressed_size=334 bytes)
+[debug] [2025-12-11T23:54:34.409Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_apple.svg
+[debug] [2025-12-11T23:54:34.409Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.409Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_apple.svg
+[debug] [2025-12-11T23:54:34.409Z] [unzip] Entry: client/assets/provider-icons/auth_service_github.svg (compressed_size=466 bytes, uncompressed_size=838 bytes)
+[debug] [2025-12-11T23:54:34.409Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_github.svg
+[debug] [2025-12-11T23:54:34.409Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.409Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_github.svg
+[debug] [2025-12-11T23:54:34.410Z] [unzip] Entry: client/assets/provider-icons/auth_service_mslive.svg (compressed_size=203 bytes, uncompressed_size=378 bytes)
+[debug] [2025-12-11T23:54:34.410Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_mslive.svg
+[debug] [2025-12-11T23:54:34.410Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.410Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_mslive.svg
+[debug] [2025-12-11T23:54:34.410Z] [unzip] Entry: client/assets/provider-icons/auth_service_yahoo.svg (compressed_size=577 bytes, uncompressed_size=1182 bytes)
+[debug] [2025-12-11T23:54:34.410Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_yahoo.svg
+[debug] [2025-12-11T23:54:34.410Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.411Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_yahoo.svg
+[debug] [2025-12-11T23:54:34.411Z] [unzip] Entry: client/assets/provider-icons/auth_service_twitter.svg (compressed_size=444 bytes, uncompressed_size=751 bytes)
+[debug] [2025-12-11T23:54:34.411Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_twitter.svg
+[debug] [2025-12-11T23:54:34.411Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.411Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_twitter.svg
+[debug] [2025-12-11T23:54:34.411Z] [unzip] Entry: client/assets/provider-icons/auth_service_play_games.svg (compressed_size=565 bytes, uncompressed_size=1173 bytes)
+[debug] [2025-12-11T23:54:34.411Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_play_games.svg
+[debug] [2025-12-11T23:54:34.411Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.412Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_play_games.svg
+[debug] [2025-12-11T23:54:34.412Z] [unzip] Entry: client/assets/provider-icons/auth_service_email.svg (compressed_size=228 bytes, uncompressed_size=326 bytes)
+[debug] [2025-12-11T23:54:34.412Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_email.svg
+[debug] [2025-12-11T23:54:34.412Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.412Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_email.svg
+[debug] [2025-12-11T23:54:34.413Z] [unzip] Entry: client/assets/provider-icons/auth_service_google.svg (compressed_size=409 bytes, uncompressed_size=720 bytes)
+[debug] [2025-12-11T23:54:34.413Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_google.svg
+[debug] [2025-12-11T23:54:34.413Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.413Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_google.svg
+[debug] [2025-12-11T23:54:34.413Z] [unzip] Entry: client/assets/provider-icons/auth_service_oidc.svg (compressed_size=414 bytes, uncompressed_size=858 bytes)
+[debug] [2025-12-11T23:54:34.413Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_oidc.svg
+[debug] [2025-12-11T23:54:34.413Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
+[debug] [2025-12-11T23:54:34.414Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_oidc.svg
+[debug] [2025-12-11T23:54:34.414Z] [unzip] Entry: client/browserconfig.xml (compressed_size=491 bytes, uncompressed_size=822 bytes)
+[debug] [2025-12-11T23:54:34.414Z] [unzip] Processing entry: client/browserconfig.xml
+[debug] [2025-12-11T23:54:34.414Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.414Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/browserconfig.xml
+[debug] [2025-12-11T23:54:34.415Z] [unzip] Entry: client/favicon-32x32.png (compressed_size=475 bytes, uncompressed_size=475 bytes)
+[debug] [2025-12-11T23:54:34.415Z] [unzip] Processing entry: client/favicon-32x32.png
+[debug] [2025-12-11T23:54:34.415Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
+[debug] [2025-12-11T23:54:34.415Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/favicon-32x32.png
+[debug] [2025-12-11T23:54:34.418Z] [unzip] Entry: server/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
+[debug] [2025-12-11T23:54:34.418Z] [unzip] Processing entry: server/
+[debug] [2025-12-11T23:54:34.418Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server/
+[debug] [2025-12-11T23:54:34.418Z] [unzip] Entry: server/server.mjs.map (compressed_size=217845 bytes, uncompressed_size=944978 bytes)
+[debug] [2025-12-11T23:54:34.418Z] [unzip] Processing entry: server/server.mjs.map
+[debug] [2025-12-11T23:54:34.418Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server
+[debug] [2025-12-11T23:54:34.418Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server/server.mjs.map
+[debug] [2025-12-11T23:54:34.422Z] [unzip] Entry: server/server.mjs (compressed_size=276407 bytes, uncompressed_size=933701 bytes)
+[debug] [2025-12-11T23:54:34.422Z] [unzip] Processing entry: server/server.mjs
+[debug] [2025-12-11T23:54:34.422Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server
+[debug] [2025-12-11T23:54:34.422Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server/server.mjs
+[info] i  ui: Removing outdated emulator files: ui-v1.14.0 {"metadata":{"emulator":{"name":"ui"},"message":"Removing outdated emulator files: ui-v1.14.0"}}
+[info] i  ui: Removing outdated emulator files: ui-v1.14.0.zip {"metadata":{"emulator":{"name":"ui"},"message":"Removing outdated emulator files: ui-v1.14.0.zip"}}
