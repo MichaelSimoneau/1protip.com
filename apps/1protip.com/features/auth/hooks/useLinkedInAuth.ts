@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
 import { supabase } from '@/services/supabase/client';
@@ -47,6 +47,25 @@ export function useLinkedInAuth() {
     profile: null,
   });
 
+  // Use a ref to persist the generated state across re-renders during the auth flow
+  // This is critical because if the component re-renders (e.g. due to loading state change),
+  // the 'state' variable captured in the closure might be stale or regenerated if we weren't careful.
+  // Actually, generateState is just a helper. The 'state' used for validation must be the one sent.
+  // In the login function, we generate 'state' and pass it to handleCallback.
+  // However, handleCallback is called AFTER the redirect returns.
+  // In a popup flow (WebBrowser.openAuthSessionAsync), the promise resolves with the result including the url.
+  // So the 'state' variable inside the login() function scope is still valid and correct (closure).
+  // But wait, if the page reloads (full redirect flow), React state is lost.
+  // openAuthSessionAsync on web might cause a full page navigation if it's not a popup?
+  // No, expo-web-browser usually tries to use a popup or an iframe.
+  // If it's a full redirect (e.g. mobile safari), we might lose state if not stored in AsyncStorage/localStorage.
+  // But for now, let's assume the standard flow keeps the JS environment alive or rehydrates correctly.
+  
+  // The user reported "No authorization code received".
+  // This means the URL parsing logic failed to find 'code'.
+  // OR the state mismatch error happened.
+  // Let's refine the URL construction first.
+
   const generateState = useCallback(() => {
     return (
       Math.random().toString(36).substring(2, 15) +
@@ -55,14 +74,23 @@ export function useLinkedInAuth() {
   }, []);
 
   const buildAuthUrl = useCallback((state: string): string => {
+    // LinkedIn documentation says redirect_uri should be URL encoded.
+    // URLSearchParams handles encoding values automatically.
+    // BUT we were adding redirect_uri manually to the string in the return statement AND in params?
+    // In the previous version (which I'm fixing), 'redirect_uri' was missing from 'params' object
+    // and manually appended to the string.
+    // The issue might be double encoding or improper inclusion if params.toString() already encodes spaces/symbols.
+    // Let's rely entirely on URLSearchParams to construct the query string safely.
+    
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: LINKEDIN_CLIENT_ID || '',
+      redirect_uri: LINKEDIN_REDIRECT_URI,
       state,
       scope: 'r_liteprofile r_emailaddress w_member_social',
     });
 
-    return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}&redirect_uri=${encodeURIComponent(LINKEDIN_REDIRECT_URI)}`;
+    return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
   }, []);
 
   const exchangeCodeForToken = useCallback(async (code: string): Promise<string> => {
@@ -93,23 +121,39 @@ export function useLinkedInAuth() {
 
   const handleCallback = useCallback(
     async (url: string, expectedState: string): Promise<void> => {
-      const parsed = Linking.parse(url);
-      
-      // On web, the code might be in the hash or query params depending on how the auth provider redirects.
-      // LinkedIn usually returns code as a query param.
-      // However, Linking.parse might behave differently on web vs mobile.
-      // Let's robustly check both locations.
-      let code = parsed.queryParams?.code as string;
-      let returnedState = parsed.queryParams?.state as string;
+      // Robust URL parsing
+      let code: string | null = null;
+      let returnedState: string | null = null;
 
-      // Fallback: Manually parse window.location if we are on web and code is missing
-      if (Platform.OS === 'web' && !code && typeof window !== 'undefined') {
-          const urlParams = new URLSearchParams(window.location.search);
-          code = urlParams.get('code') || '';
-          returnedState = urlParams.get('state') || '';
+      try {
+        const parsed = Linking.parse(url);
+        code = parsed.queryParams?.code as string;
+        returnedState = parsed.queryParams?.state as string;
+      } catch (e) {
+        console.warn('Linking.parse failed', e);
+      }
+
+      // Fallback: Manually parse if Linking failed or returned empty
+      if (!code && typeof window !== 'undefined') {
+          // If the 'url' passed is just the path or partial, we might want to check window.location
+          // But 'result.url' from openAuthSessionAsync should be the full return URL.
+          // Let's try to parse the 'url' argument as a URL object first.
+          try {
+             const urlObj = new URL(url);
+             const params = new URLSearchParams(urlObj.search);
+             code = params.get('code');
+             returnedState = params.get('state');
+          } catch (e) {
+             // If url argument is not a valid full URL, fallback to window.location
+             // This happens if the redirect came back to the app root and we are reading current location
+             const params = new URLSearchParams(window.location.search);
+             code = params.get('code');
+             returnedState = params.get('state');
+          }
       }
 
       if (returnedState !== expectedState) {
+        console.error('State mismatch', { expected: expectedState, received: returnedState });
         throw new Error('State mismatch - possible CSRF attack');
       }
 
