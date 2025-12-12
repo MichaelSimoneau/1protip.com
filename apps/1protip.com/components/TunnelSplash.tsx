@@ -164,12 +164,12 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
                       fontWeight: '700',
                       textAlign: 'center',
                       includeFontPadding: false,
-                      // "#1" stays centered in the square visually
+                      // "in" stays centered in the square visually
                     },
                     textStyle,
                   ]}
                 >
-                  #1
+                  in
                 </Animated.Text>
               </View>
               
@@ -301,7 +301,7 @@ class SplashErrorBoundary extends React.Component<{ children: ReactNode }, { has
       return (
         <View style={[styles.container, styles.fallback]}>
           <View style={[styles.fallbackLogo, { width: 160, height: 160, borderRadius: 24 }]}>
-            <Text style={[styles.fallbackLogoText, { fontSize: 64 }]}>#1</Text>
+            <Text style={[styles.fallbackLogoText, { fontSize: 64 }]}>in</Text>
           </View>
         </View>
       );
