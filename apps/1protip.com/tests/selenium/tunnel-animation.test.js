@@ -73,11 +73,11 @@ test('Tunnel animation renders correctly', async () => {
 
   // Wait for at least one square to be visible/present
   await driver.wait(async () => {
-    const elements = await driver.findElements(By.xpath("//*[contains(text(), 'in')]"));
+    const elements = await driver.findElements(By.xpath("//*[contains(text(), '#1')]"));
     return elements.length > 0;
-  }, 10000, 'LinkedIn logo text "in" not found');
+  }, 10000, 'LinkedIn logo text "#1" not found');
 
-  const logoText = await driver.findElement(By.xpath("//*[contains(text(), 'in')]"));
+  const logoText = await driver.findElement(By.xpath("//*[contains(text(), '#1')]"));
   assert.ok(logoText, 'Logo text element should exist');
 
   // Also check for LOGIN text
