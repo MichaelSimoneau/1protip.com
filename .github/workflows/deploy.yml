@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      EXPO_PUBLIC_LINKEDIN_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_LINKEDIN_CLIENT_ID }}
+      EXPO_PUBLIC_LINKEDIN_REDIRECT_URI: https://1protip.com/auth/linkedin/callback
     steps:
       - uses: actions/checkout@v4
 
@@ -36,10 +39,7 @@ jobs:
 
       - name: Run Selenium Tests (and Build)
         run: pnpm --filter @1protip/dotcom test:selenium
-        env:
-          EXPO_PUBLIC_LINKEDIN_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_LINKEDIN_CLIENT_ID }}
-          # Secret shouldn't be needed for web build, but if backend tests run, maybe.
-          # The selenium test just checks the web UI.
+        # env: variables inherited from job level
 
       - name: Deploy to Firebase Hosting (Preview)
         if: github.event_name == 'pull_request'
