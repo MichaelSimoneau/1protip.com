@@ -41,12 +41,11 @@ export class LinkedInAuth {
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: LINKEDIN_CLIENT_ID,
-      redirect_uri: LINKEDIN_REDIRECT_URI,
       state,
       scope: 'r_liteprofile r_emailaddress w_member_social',
     });
 
-    return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
+    return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}&redirect_uri=${encodeURIComponent(LINKEDIN_REDIRECT_URI)}`;
   }
 
   private static async handleCallback(

@@ -1,0 +1,67 @@
+[debug] [2025-12-12T12:46:47.194Z] ----------------------------------------------------------------------
+[debug] [2025-12-12T12:46:47.197Z] Command:       /Users/devcoup/.nvm/versions/node/v22.14.0/bin/node /Users/devcoup/.nvm/versions/node/v22.14.0/bin/firebase init hosting:github
+[debug] [2025-12-12T12:46:47.197Z] CLI Version:   15.0.0
+[debug] [2025-12-12T12:46:47.197Z] Platform:      darwin
+[debug] [2025-12-12T12:46:47.197Z] Node Version:  v22.14.0
+[debug] [2025-12-12T12:46:47.197Z] Time:          Fri Dec 12 2025 07:46:47 GMT-0500 (Eastern Standard Time)
+[debug] [2025-12-12T12:46:47.198Z] ----------------------------------------------------------------------
+[debug] 
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/devcoup/Projects/1protip/1protip.com
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] 
+[debug] [2025-12-12T12:46:48.058Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T12:46:48.058Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[debug] [2025-12-12T12:46:48.059Z] Checked if tokens are valid: true, expires at: 1765546564514
+[debug] [2025-12-12T12:46:48.059Z] Checked if tokens are valid: true, expires at: 1765546564514
+[debug] [2025-12-12T12:46:48.060Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip [none]
+[debug] [2025-12-12T12:46:48.421Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip 200
+[debug] [2025-12-12T12:46:48.421Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip {"projectId":"hashtag-1-pro-tip","projectNumber":"913396219284","displayName":"hashtag-1-pro-tip","name":"projects/hashtag-1-pro-tip","resources":{"hostingSite":"hashtag-1-pro-tip"},"state":"ACTIVE","etag":"1_2a8ce56b-c06d-4024-8a40-a966cd501a70"}
+[info] i  Using project hashtag-1-pro-tip (hashtag-1-pro-tip) . 
+[info] 
+=== Hosting:github Setup
+[info] 
+[info] i  Detected a .git folder at /Users/devcoup/Projects/1protip/1protip.com 
+[info] i  Authorizing with GitHub to upload your service account to a GitHub repository's secrets store. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://github.com/login/oauth/authorize?client_id=89cf50f02ac6aaed3484&state=91931353&redirect_uri=http%3A%2F%2Flocalhost%3A9005&scope=read%3Auser%20repo%20public_repo
+[info] 
+[info] Waiting for authentication...
+[debug] [2025-12-12T12:46:49.369Z] >>> [apiv2][query] POST https://github.com/login/oauth/access_token [none]
+[debug] [2025-12-12T12:46:49.369Z] >>> [apiv2][body] POST https://github.com/login/oauth/access_token [stream]
+[debug] [2025-12-12T12:46:49.709Z] <<< [apiv2][status] POST https://github.com/login/oauth/access_token 200
+[debug] [2025-12-12T12:46:49.713Z] <<< [apiv2][body] POST https://github.com/login/oauth/access_token {"access_token":"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","token_type":"bearer","scope":"read:user,repo"}
+[debug] [2025-12-12T12:46:49.768Z] >>> [apiv2][query] GET https://api.github.com/user [none]
+[debug] [2025-12-12T12:46:50.002Z] <<< [apiv2][status] GET https://api.github.com/user 200
+[debug] [2025-12-12T12:46:50.003Z] <<< [apiv2][body] GET https://api.github.com/user {"login":"MichaelSimoneau","id":101996253,"node_id":"U_kgDOBhRW3Q","avatar_url":"https://avatars.githubusercontent.com/u/101996253?v=4","gravatar_id":"","url":"https://api.github.com/users/MichaelSimoneau","html_url":"https://github.com/MichaelSimoneau","followers_url":"https://api.github.com/users/MichaelSimoneau/followers","following_url":"https://api.github.com/users/MichaelSimoneau/following{/other_user}","gists_url":"https://api.github.com/users/MichaelSimoneau/gists{/gist_id}","starred_url":"https://api.github.com/users/MichaelSimoneau/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/MichaelSimoneau/subscriptions","organizations_url":"https://api.github.com/users/MichaelSimoneau/orgs","repos_url":"https://api.github.com/users/MichaelSimoneau/repos","events_url":"https://api.github.com/users/MichaelSimoneau/events{/privacy}","received_events_url":"https://api.github.com/users/MichaelSimoneau/received_events","type":"User","user_view_type":"private","site_admin":false,"name":"Michael Simoneau","company":"@YachtOffice @EnigmaKey ","blog":"https://MichaelSimoneau.com","location":"Los Angeles, CA, USA","email":"michael@brainycouch.com","hireable":null,"bio":"I am Michael Simoneau, an outside-the-sphere thinker who enjoys code and philosophy.","twitter_username":null,"notification_email":"michael@brainycouch.com","public_repos":3,"public_gists":0,"followers":0,"following":8,"created_at":"2022-03-20T20:40:11Z","updated_at":"2025-12-11T23:50:23Z","private_gists":0,"total_private_repos":6,"owned_private_repos":5,"disk_usage":21978,"collaborators":2,"two_factor_authentication":true,"plan":{"name":"free","space":976562499,"collaborators":0,"private_repos":10000}}
+[info] 
+[info] ✔  Success! Logged into GitHub as MichaelSimoneau 
+[info] 
+[debug] [2025-12-12T12:48:04.997Z] >>> [apiv2][query] GET https://api.github.com/repos/git remote -v/actions/secrets/public-key type=owner
+[debug] [2025-12-12T12:48:05.176Z] <<< [apiv2][status] GET https://api.github.com/repos/git remote -v/actions/secrets/public-key 404
+[debug] [2025-12-12T12:48:05.177Z] <<< [apiv2][body] GET https://api.github.com/repos/git remote -v/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest","status":"404"}
+[info] 
+[info] 
+[error] ⚠  The provided authorization cannot be used with this repository. If this repository is in an organization, did you remember to grant access? 
+[info] 
+[info] i  Action required: Visit this URL to ensure access has been granted to the appropriate organization(s) for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] 
