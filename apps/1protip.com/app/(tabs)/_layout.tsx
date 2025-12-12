@@ -32,8 +32,8 @@ export default function TabLayout() {
   return (
     <TabPanelProvider>
       <Tabs
-        initialRouteName="feed"
-        tabBar={(props: BottomTabBarProps) => (isAuthenticated ? <CustomTabBar {...props} /> : null)}
+        initialRouteName="index"
+        tabBar={(props) => (isAuthenticated ? <CustomTabBar {...props} /> : null)}
         screenOptions={{
           headerShown: false,
           tabBarActiveTintColor: '#0066cc',

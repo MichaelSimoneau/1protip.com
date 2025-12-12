@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, type ReactNode } from 'react';
-import { View, StyleSheet, Dimensions, Platform, Text } from 'react-native';
+import { View, StyleSheet, Platform, Text, Pressable, ActivityIndicator, useWindowDimensions } from 'react-native';
 import { LinkedInLogoButton } from './LinkedInLogoButton';
 
 // Lazily require reanimated so a native/JS mismatch falls back safely.
@@ -34,11 +34,9 @@ try {
   useAnimatedStyle = undefined as never;
 }
 
-const { width, height } = Dimensions.get('window');
 const SQUARE_COUNT = 9; // 8 border squares + 1 filled logo square
 const LINKEDIN_BLUE = '#0077b5';
 const INITIAL_SIZE = 40;
-const FINAL_SIZE = Math.max(width, height) * 1.5; // Larger than screen
 const LOGO_FINAL_SIZE = 160; // Final size for the logo square
 const ANIMATION_DURATION = 1500; // 1.5 seconds per square
 const DELAY_BETWEEN_SQUARES = 375; // ~3 seconds total for 8 squares
@@ -57,16 +55,17 @@ type RoundedSquareProps = {
   onPress?: () => void;
   isLoading?: boolean;
   disabled?: boolean;
+  finalSize: number;
 };
 
-function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress, isLoading = false, disabled = false }: RoundedSquareProps) {
+function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress, isLoading = false, disabled = false, finalSize }: RoundedSquareProps) {
   if (!Animated) return null;
 
   const squareSize = useSharedValue(INITIAL_SIZE);
   const squareOpacity = useSharedValue(0);
   const startDelay = index * DELAY_BETWEEN_SQUARES;
   const isLogoSquare = isFilled && showLogoText;
-  const targetSize = isLogoSquare ? LOGO_FINAL_SIZE : FINAL_SIZE;
+  const targetSize = isLogoSquare ? LOGO_FINAL_SIZE : finalSize;
   const shouldFadeOut = !isLogoSquare;
 
   useEffect(() => {
@@ -112,6 +111,7 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
   // For logo square, we need to show text and make it pressable
   if (isLogoSquare) {
     const textSize = useSharedValue(0);
+    const loginTextSize = useSharedValue(0);
     const [isReady, setIsReady] = React.useState(false);
     
     useEffect(() => {
@@ -121,15 +121,24 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
           duration: 300,
           easing: Easing?.out(Easing.ease) || undefined,
         });
+        loginTextSize.value = withTiming(LOGO_FINAL_SIZE * 0.1, {
+          duration: 300,
+          easing: Easing?.out(Easing.ease) || undefined,
+        });
         // Enable interactivity after text appears
         setIsReady(true);
       }, startDelay + ANIMATION_DURATION);
 
       return () => clearTimeout(textTimer);
-    }, [startDelay, textSize]);
+    }, [startDelay, textSize, loginTextSize]);
 
     const textStyle = useAnimatedStyle(() => ({
       fontSize: textSize.value as number,
+      opacity: squareOpacity.value as number,
+    }));
+
+    const loginTextStyle = useAnimatedStyle(() => ({
+      fontSize: loginTextSize.value as number,
       opacity: squareOpacity.value as number,
     }));
 
@@ -147,19 +156,39 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
               disabled={disabled || isLoading}
               style={StyleSheet.absoluteFill}
             >
-              <Animated.Text
-                style={[
-                  {
-                    color: '#ffffff',
-                    fontWeight: '700',
-                    textAlign: 'center',
-                    includeFontPadding: false,
-                  },
-                  textStyle,
-                ]}
-              >
-                in
-              </Animated.Text>
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Animated.Text
+                  style={[
+                    {
+                      color: '#ffffff',
+                      fontWeight: '700',
+                      textAlign: 'center',
+                      includeFontPadding: false,
+                      // "in" stays centered in the square visually
+                    },
+                    textStyle,
+                  ]}
+                >
+                  in
+                </Animated.Text>
+              </View>
+              
+              <View style={{ position: 'absolute', bottom: '15%', width: '100%', alignItems: 'center' }}>
+                <Animated.Text
+                  style={[
+                    {
+                      color: '#ffffff',
+                      fontWeight: '600',
+                      textAlign: 'center',
+                      letterSpacing: 1,
+                    },
+                    loginTextStyle,
+                  ]}
+                >
+                  LOGIN
+                </Animated.Text>
+              </View>
+
               {isLoading && (
                 <View style={StyleSheet.absoluteFill}>
                   <ActivityIndicator size="large" color="#ffffff" style={{ flex: 1 }} />
@@ -181,6 +210,15 @@ export function TunnelSplash({
   logoDisabled = false,
   brandText,
 }: TunnelSplashProps) {
+  const { width, height } = useWindowDimensions();
+  const [mounted, setMounted] = React.useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const finalSize = Math.max(width, height) * 1.5;
+
   // Calculate safe text position to avoid logo overlap
   // Logo final size is 160px, positioned at center
   // We position text at top 15-20% to ensure it never overlaps, even during expansion
@@ -191,29 +229,27 @@ export function TunnelSplash({
   const safeTopPosition = Math.max(20, logoCenterY - logoRadius - textHeight - 20);
   const textTopPosition = Math.min(safeTopPosition, height * 0.2);
 
-  // On web, avoid Reanimated entirely and render a static fallback.
-  if (Platform.OS === 'web') {
-    return (
-      <View style={[styles.container, styles.fallback]}>
-        {brandText ? (
-          <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
-        ) : null}
-        <View style={[styles.fallbackLogo, { width: LOGO_FINAL_SIZE, height: LOGO_FINAL_SIZE, borderRadius: LOGO_FINAL_SIZE * 0.15 }]}>
-          <Text style={[styles.fallbackLogoText, { fontSize: LOGO_FINAL_SIZE * 0.4 }]}>in</Text>
-        </View>
-      </View>
-    );
+  // On web, to avoid hydration mismatch (server vs client), we must match the server render initially.
+  // The server renders the fallback (or nothing).
+  // Once mounted, we can switch to the animation.
+  if (Platform.OS === 'web' && !mounted) {
+    // Render an empty container to match the initial state of the animation (which starts empty/invisible).
+    // This avoids a "flash" of static content before the animation starts.
+    return <View style={styles.container} />;
   }
 
   if (!Animated) {
     return (
       <View style={[styles.container, styles.fallback]}>
-        {brandText ? (
+        {brandText && mounted ? (
           <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
         ) : null}
-        <View style={[styles.fallbackLogo, { width: LOGO_FINAL_SIZE, height: LOGO_FINAL_SIZE, borderRadius: LOGO_FINAL_SIZE * 0.15 }]}>
-          <Text style={[styles.fallbackLogoText, { fontSize: LOGO_FINAL_SIZE * 0.4 }]}>in</Text>
-        </View>
+        <LinkedInLogoButton
+          onPress={onLogoPress || (() => {})}
+          isLoading={logoLoading}
+          disabled={logoDisabled}
+          size={LOGO_FINAL_SIZE}
+        />
       </View>
     );
   }
@@ -223,7 +259,7 @@ export function TunnelSplash({
       <View style={styles.tunnelContainer}>
         {/* First 8 squares: border-only, expand and fade out */}
         {[...Array(8)].map((_, index) => (
-          <RoundedSquare key={index} index={index} />
+          <RoundedSquare key={index} index={index} finalSize={finalSize} />
         ))}
         {/* 9th square: filled LinkedIn logo, expands to final size and stays */}
         <RoundedSquare
@@ -234,11 +270,12 @@ export function TunnelSplash({
           onPress={onLogoPress}
           isLoading={logoLoading}
           disabled={logoDisabled}
+          finalSize={finalSize}
         />
       </View>
 
       {/* Brand text overlay - positioned dynamically to avoid overlap */}
-      {brandText ? (
+      {brandText && mounted ? (
         <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
       ) : null}
     </View>

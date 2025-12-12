@@ -40,8 +40,8 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const clientId = Deno.env.get("LINKEDIN_CLIENT_ID");
-    const clientSecret = Deno.env.get("LINKEDIN_CLIENT_SECRET");
+    const clientId = Deno.env.get("LINKEDIN_CLIENT_ID") || Deno.env.get("EXPO_PUBLIC_LINKEDIN_CLIENT_ID");
+    const clientSecret = Deno.env.get("LINKEDIN_CLIENT_SECRET") || Deno.env.get("EXPO_SECRET_LINKEDIN_CLIENT_SECRET");
 
     if (!clientId || !clientSecret) {
       return new Response(

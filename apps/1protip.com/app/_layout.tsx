@@ -14,6 +14,7 @@ export default function RootLayout() {
       <Head>
         <meta charSet="utf-8" />
         <title>#1ProTip</title>
+        <meta name="description" content="The best pro tips, crowdsourced and collected in one place. Share yours at #1ProTip!" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://1protip.com/" />

@@ -4,58 +4,63 @@ import { router } from 'expo-router';
 import { TunnelSplash } from '@/components/TunnelSplash';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 
+const SPLASH_DURATION = 3500; // 3000ms animation + 500ms buffer
+
 export default function HomeTab() {
   const { login, getProfile, isLoading, error, profile } = useLinkedInAuth();
   const [checkingSession, setCheckingSession] = useState(true);
+  const [splashFinished, setSplashFinished] = useState(false);
+  const [sessionValid, setSessionValid] = useState(false);
 
-  // Check for existing session/token on mount
+  // Handle splash timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSplashFinished(true);
+    }, SPLASH_DURATION);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Check session in background
   useEffect(() => {
     const checkSession = async () => {
       try {
         const existingProfile = await getProfile();
         if (existingProfile) {
-          // Valid token exists, navigate to feed
-          router.replace('/feed');
-        } else {
-          // No valid session, show LinkedIn logo
-          setCheckingSession(false);
+          setSessionValid(true);
         }
       } catch (err) {
-        // Error checking session, show LinkedIn logo
         console.error('Error checking session:', err);
+      } finally {
         setCheckingSession(false);
       }
     };
 
     checkSession();
-  }, [getProfile, router]);
+  }, [getProfile]);
 
-  // Navigate to feed when profile becomes available after login
+  // Handle navigation after splash finishes
   useEffect(() => {
-    if (profile && !checkingSession) {
+    if (splashFinished && sessionValid) {
       router.replace('/feed');
     }
-  }, [profile, checkingSession, router]);
+  }, [splashFinished, sessionValid]);
+
+  // Handle navigation after login interaction
+  useEffect(() => {
+    if (splashFinished && profile && !checkingSession && !sessionValid) {
+      router.replace('/feed');
+    }
+  }, [profile, checkingSession, splashFinished, sessionValid]);
 
   const handleLinkedInPress = async () => {
     try {
       await login();
-      // After successful login, getProfile is called automatically
-      // and profile state is updated, which will trigger navigation via useEffect
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to connect to LinkedIn';
       Alert.alert('Connection Failed', errorMessage, [{ text: 'OK' }]);
     }
   };
-
-  // Show loading while checking session
-  if (checkingSession) {
-    return (
-      <View style={styles.container}>
-        <TunnelSplash />
-      </View>
-    );
-  }
 
   // Brand text component
   const brandText = <Text style={styles.brandText}>#1ProTip</Text>;
@@ -65,7 +70,9 @@ export default function HomeTab() {
       <TunnelSplash
         onLogoPress={handleLinkedInPress}
         logoLoading={isLoading}
-        logoDisabled={isLoading}
+        // Disable logo until splash is finished AND we're done checking session
+        // (to avoid clicking while auto-redirect might happen)
+        logoDisabled={isLoading || !splashFinished || checkingSession}
         brandText={brandText}
       />
       {error && (
