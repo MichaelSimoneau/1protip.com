@@ -1,8 +1,8 @@
 import { Tabs } from 'expo-router';
 import { Hash, User } from 'lucide-react-native';
 import { Text } from 'react-native';
-import { CustomTabBar } from '@/shared/components/CustomTabBar';
-import { TabPanelProvider } from '@/shared/contexts/TabPanelContext';
+import { CustomTabBar } from '@/components/CustomTabBar';
+import { TabPanelProvider } from '@/contexts/TabPanelContext';
 
 export default function TabLayout() {
   return (

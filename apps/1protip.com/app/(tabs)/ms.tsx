@@ -9,7 +9,21 @@ import { router } from 'expo-router';
 
 export default function MSTab() {
   const [loading, setLoading] = useState(true);
-  const { postId } = useLocalSearchParams<{ postId?: string }>();
+  const rawParams = useLocalSearchParams<{
+    postId?: string | string[];
+    action?: string | string[];
+    slug?: string | string[];
+  }>();
+
+  const normalizeParam = (value?: string | string[]) => (Array.isArray(value) ? value[0] : value);
+
+  const postId = normalizeParam(rawParams.postId);
+  const action = normalizeParam(rawParams.action);
+  const slug = normalizeParam(rawParams.slug) || 'michaelsimoneau';
+
+  const defaultProfileUrl = `https://${slug}.com`;
+  const targetUrl = action === 'donate' ? 'https://donate.1protip.com' : defaultProfileUrl;
+  const webTitle = action === 'donate' ? 'Donate to Michael Simoneau' : 'Michael Simoneau Website';
   const [post, setPost] = useState<FeedPost | null>(null);
 
   useEffect(() => {
@@ -17,6 +31,12 @@ export default function MSTab() {
       loadPost(postId);
     }
   }, [postId]);
+
+  useEffect(() => {
+    if (!postId) {
+      setLoading(true);
+    }
+  }, [targetUrl, postId]);
 
   const loadPost = async (id: string) => {
     setLoading(true);
@@ -93,13 +113,13 @@ export default function MSTab() {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
         <iframe
-          src="https://MichaelSimoneau.com"
+          src={targetUrl}
           style={{
             width: '100%',
             height: '100%',
             border: 'none',
           }}
-          title="Michael Simoneau Website"
+          title={webTitle}
         />
       </SafeAreaView>
     );
@@ -113,7 +133,7 @@ export default function MSTab() {
         </View>
       )}
       <WebView
-        source={{ uri: 'https://MichaelSimoneau.com' }}
+        source={{ uri: targetUrl }}
         style={styles.webview}
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}

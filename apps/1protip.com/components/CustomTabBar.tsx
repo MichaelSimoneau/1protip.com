@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StyleSheet, Animated, TextInput, ActivityIndicator } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useState, useRef, useEffect } from 'react';
-import { useTabPanel } from '@/shared/contexts/TabPanelContext';
+import { useTabPanel } from '@/contexts/TabPanelContext';
 import { X, Send } from 'lucide-react-native';
 import { commentOnPost as commentWithService } from '@/services/linkedin/socialActions';
 
@@ -11,6 +11,14 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
   const { panelType, activePost, closePanel } = useTabPanel();
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleMsDonate = () => {
+    setShowPanel(null);
+    navigation.navigate('ms', {
+      action: 'donate',
+      slug: 'michaelsimoneau',
+    });
+  };
 
   useEffect(() => {
     const shouldShow = panelType !== null || showPanel !== null;
@@ -124,6 +132,10 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
           <View style={styles.panelContent}>
             <Text style={styles.panelTitle}>MS Actions</Text>
             <Text style={styles.panelText}>Michael Simoneau quick actions</Text>
+            <Pressable style={styles.primaryActionButton} onPress={handleMsDonate}>
+              <Text style={styles.primaryActionText}>Donate via PayPal</Text>
+              <Text style={styles.primaryActionSubtext}>Supports @michaelsimoneau</Text>
+            </Pressable>
           </View>
         );
       default:
@@ -259,5 +271,29 @@ const styles = StyleSheet.create({
   },
   sendButtonDisabled: {
     backgroundColor: '#cccccc',
+  },
+  primaryActionButton: {
+    marginTop: 20,
+    backgroundColor: '#0070ba',
+    paddingVertical: 18,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  primaryActionText: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#ffffff',
+    marginBottom: 4,
+  },
+  primaryActionSubtext: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#e6f0ff',
   },
 });

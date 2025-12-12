@@ -1,317 +1,436 @@
-[debug] [2025-12-11T23:52:32.161Z] ----------------------------------------------------------------------
-[debug] [2025-12-11T23:52:32.166Z] Command:       /Users/devcoup/.nvm/versions/node/v22.14.0/bin/node /Users/devcoup/.nvm/versions/node/v20.18.1/bin/firebase init
-[debug] [2025-12-11T23:52:32.167Z] CLI Version:   14.24.1
-[debug] [2025-12-11T23:52:32.167Z] Platform:      darwin
-[debug] [2025-12-11T23:52:32.167Z] Node Version:  v22.14.0
-[debug] [2025-12-11T23:52:32.167Z] Time:          Thu Dec 11 2025 18:52:32 GMT-0500 (Eastern Standard Time)
-[debug] [2025-12-11T23:52:32.167Z] ----------------------------------------------------------------------
+[debug] [2025-12-12T04:10:42.671Z] ----------------------------------------------------------------------
+[debug] [2025-12-12T04:10:42.672Z] Command:       /Users/devcoup/.nvm/versions/node/v22.14.0/bin/node /Users/devcoup/.nvm/versions/node/v22.14.0/bin/firebase emulators:start --only functions,hosting
+[debug] [2025-12-12T04:10:42.673Z] CLI Version:   15.0.0
+[debug] [2025-12-12T04:10:42.673Z] Platform:      darwin
+[debug] [2025-12-12T04:10:42.673Z] Node Version:  v22.14.0
+[debug] [2025-12-12T04:10:42.673Z] Time:          Thu Dec 11 2025 23:10:42 GMT-0500 (Eastern Standard Time)
+[debug] [2025-12-12T04:10:42.673Z] ----------------------------------------------------------------------
 [debug] 
-[info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+[debug] [2025-12-12T04:10:43.438Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-12-12T04:10:43.438Z] > authorizing via signed-in user (super.user@enigma.com.co)
+[info] i  emulators: Starting emulators: functions, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, hosting"}}
+[debug] [2025-12-12T04:10:43.755Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-12-12T04:10:43.755Z] assigned listening specs for emulators {"user":{"hosting":[{"address":"0.0.0.0","family":"IPv4","port":3333}],"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2025-12-12T04:10:43.758Z] Emulator locator file path: /var/folders/ty/pbtmsb691y97jzx90zgqs5zr0000gn/T/hub-hashtag-1-pro-tip.json
+[debug] [2025-12-12T04:10:43.758Z] [hub] writing locator at /var/folders/ty/pbtmsb691y97jzx90zgqs5zr0000gn/T/hub-hashtag-1-pro-tip.json
+[warn] ⚠  tasks: Port 6666 is restricted by some web browsers, including Chrome. You may want to choose a different port such as 6670. {"metadata":{"emulator":{"name":"tasks"},"message":"Port 6666 is restricted by some web browsers, including Chrome. You may want to choose a different port such as 6670."}}
+[debug] [2025-12-12T04:10:43.885Z] late-assigned ports for functions and eventarc emulators {"user":{"hosting":[{"address":"0.0.0.0","family":"IPv4","port":3333}],"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"functions":[{"address":"0.0.0.0","family":"IPv4","port":8888}],"eventarc":[{"address":"0.0.0.0","family":"IPv4","port":5555}],"tasks":[{"address":"0.0.0.0","family":"IPv4","port":6666}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, auth, firestore, database, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, auth, firestore, database, pubsub, storage, dataconnect\u001b[22m"}}
+[warn] ⚠  functions: Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful! {"metadata":{"emulator":{"name":"functions"},"message":"Application Default Credentials detected. Non-emulated services will access production using these credentials. Be careful!"}}
+[debug] [2025-12-12T04:10:44.750Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:44.750Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:44.750Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/adminSdkConfig [none]
+[debug] [2025-12-12T04:10:45.116Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/adminSdkConfig 200
+[debug] [2025-12-12T04:10:45.116Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/adminSdkConfig {"projectId":"hashtag-1-pro-tip","storageBucket":"hashtag-1-pro-tip.firebasestorage.app"}
+[debug] [2025-12-12T04:10:45.130Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:45.130Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:45.130Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/sites 
+[debug] [2025-12-12T04:10:45.524Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/sites 200
+[debug] [2025-12-12T04:10:45.524Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/sites {"sites":[{"name":"projects/hashtag-1-pro-tip/sites/hashtag-1-pro-tip","defaultUrl":"https://hashtag-1-pro-tip.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2025-12-12T04:10:45.524Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:45.524Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:45.524Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/webApps/-/config [none]
+[debug] [2025-12-12T04:10:45.847Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/webApps/-/config 200
+[debug] [2025-12-12T04:10:45.847Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip/webApps/-/config {"projectId":"hashtag-1-pro-tip","appId":"1:913396219284:web:7311bf2ce1a3c9203d6381","storageBucket":"hashtag-1-pro-tip.firebasestorage.app","apiKey":"AIzaSyCDqN4IRNDPtFeV6xHkgty15cujtJDNUWE","authDomain":"hashtag-1-pro-tip.firebaseapp.com","messagingSenderId":"913396219284","projectNumber":"913396219284","version":"2"}
+[debug] [2025-12-12T04:10:45.857Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:45.858Z] Checked if tokens are valid: true, expires at: 1765515769934
+[debug] [2025-12-12T04:10:45.858Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip [none]
+[debug] [2025-12-12T04:10:46.176Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip 200
+[debug] [2025-12-12T04:10:46.177Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip {"projectId":"hashtag-1-pro-tip","projectNumber":"913396219284","displayName":"hashtag-1-pro-tip","name":"projects/hashtag-1-pro-tip","resources":{"hostingSite":"hashtag-1-pro-tip"},"state":"ACTIVE","etag":"1_2a8ce56b-c06d-4024-8a40-a966cd501a70"}
+[info] i  hosting[hashtag-1-pro-tip]: Serving hosting files from: apps/1protip.com/dist {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mapps/1protip.com/dist\u001b[22m"}}
+[info] ✔  hosting[hashtag-1-pro-tip]: Local server: http://0.0.0.0:3333 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://0.0.0.0:3333\u001b[22m\u001b[24m"}}
+[info] i  functions: Watching "/Users/devcoup/Projects/1protip/1protip.com/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/devcoup/Projects/1protip/1protip.com/functions\" for Cloud Functions..."}}
+[debug] [2025-12-12T04:10:46.237Z] Validating nodejs source
+[debug] [2025-12-12T04:10:46.796Z] > [functions] package.json contents: {
+  "main": "lib/index.js",
+  "scripts": {
+    "genkit:start": "genkit start -- tsx --watch src/genkit-sample.ts",
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "name": "functions",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@genkit-ai/firebase": "^1.25.0",
+    "@genkit-ai/googleai": "^1.25.0",
+    "express": "^5.2.1",
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^7.0.1",
+    "genkit": "^1.25.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}
+[debug] [2025-12-12T04:10:46.797Z] Building nodejs source
+[debug] [2025-12-12T04:10:46.797Z] Failed to find version of module node: reached end of search path /Users/devcoup/Projects/1protip/1protip.com/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2025-12-12T04:10:46.799Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-12-12T04:10:46.803Z] Found firebase-functions binary at '/Users/devcoup/Projects/1protip/1protip.com/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8951
 
-You're about to initialize a Firebase project in this directory:
+[debug] [2025-12-12T04:10:47.182Z] Got response from /__/functions.yaml {"endpoints":{"feed":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"feed"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] [hosting] Rewriting /feed to http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed for local Function us-central1/feed
+[debug] [2025-12-12T04:10:50.760Z] >>> [apiv2][query] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 
+[debug] [2025-12-12T04:10:50.762Z] [work-queue] {"queuedWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:50.762Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:50.762Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:50.762Z"],"workRunningCount":1}
+[debug] [2025-12-12T04:10:50.764Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:50.765Z] <<< [apiv2][status] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 404
+[debug] [2025-12-12T04:10:50.765Z] <<< [apiv2][body] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed [stream]
+[info] i  hosting: 127.0.0.1 - - [12/Dec/2025:04:10:50 +0000] "GET /feed HTTP/1.1" 404 63 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:04:10:50 +0000] \"GET /feed HTTP/1.1\" 404 63 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36\""}}
+[info] ✔  functions: Loaded functions definitions from source: feed. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: feed."}}
+[info] ✔  functions[us-central1-feed]: http function initialized (http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed)."}}
+[debug] [2025-12-12T04:10:51.231Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
 
-  /Users/devcoup/Projects/1protip/1protip.com
+┌───────────┬──────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port    │ View in Emulator UI             │
+├───────────┼──────────────┼─────────────────────────────────┤
+│ Functions │ 0.0.0.0:8888 │ http://127.0.0.1:4000/functions │
+├───────────┼──────────────┼─────────────────────────────────┤
+│ Hosting   │ 0.0.0.0:3333 │ n/a                             │
+└───────────┴──────────────┴─────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500
 
-Before we get started, keep in mind:
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[info] [hosting] Rewriting /feed to http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed for local Function us-central1/feed
+[debug] [2025-12-12T04:10:54.883Z] >>> [apiv2][query] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 
+[debug] [2025-12-12T04:10:54.890Z] [work-queue] {"queuedWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:54.889Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:54.890Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:54.889Z"],"workRunningCount":1}
+[debug] [2025-12-12T04:10:54.890Z] Accepted request GET /hashtag-1-pro-tip/us-central1/feed/feed --> us-central1-feed
+[debug] [2025-12-12T04:10:54.900Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-12T04:10:54.901Z] [functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed"}}
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2025-12-12T04:10:54.908Z] [worker-pool] addWorker(us-central1-feed) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-feed)"}}
+[debug] [2025-12-12T04:10:54.909Z] [worker-pool] Adding worker with key us-central1-feed, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-feed, total=1"}}
+[debug] [2025-12-12T04:10:55.494Z] [runtime-status] [88129] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-admin@12.7.0/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-admin@12.7.0/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2025-12-12T04:10:55.494Z] [runtime-status] [88129] Resolved module firebase-functions {"declared":true,"installed":true,"version":"7.0.1","resolution":"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"7.0.1\",\"resolution\":\"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2025-12-12T04:10:55.494Z] [runtime-status] [88129] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2025-12-12T04:10:55.495Z] [runtime-status] [88129] Resolved module firebase-functions {"declared":true,"installed":true,"version":"7.0.1","resolution":"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"7.0.1\",\"resolution\":\"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2025-12-12T04:10:55.495Z] [runtime-status] [88129] Detected firebase-functions v7+, skipping legacy stubs. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Detected firebase-functions v7+, skipping legacy stubs."}}
+[debug] [2025-12-12T04:10:55.497Z] [runtime-status] [88129] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-admin@12.7.0/node_modules/firebase-admin/lib/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-admin@12.7.0/node_modules/firebase-admin/lib/index.js\"}"}}
+[debug] [2025-12-12T04:10:55.504Z] [runtime-status] [88129] Resolved module firebase-functions {"declared":true,"installed":true,"version":"7.0.1","resolution":"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/v2/index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"7.0.1\",\"resolution\":\"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/v2/index.js\"}"}}
+[debug] [2025-12-12T04:10:55.670Z] [runtime-status] [88129] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-admin@12.7.0/node_modules/firebase-admin/lib/index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"/Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-admin@12.7.0/node_modules/firebase-admin/lib/index.js\"}}"}}
+[debug] [2025-12-12T04:10:55.674Z] [runtime-status] [88129] Functions runtime initialized. {"cwd":"/Users/devcoup/Projects/1protip/1protip.com/functions","node_version":"22.14.0"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Functions runtime initialized. {\"cwd\":\"/Users/devcoup/Projects/1protip/1protip.com/functions\",\"node_version\":\"22.14.0\"}"}}
+[debug] [2025-12-12T04:10:55.674Z] [runtime-status] [88129] Listening to port: /var/folders/ty/pbtmsb691y97jzx90zgqs5zr0000gn/T/fire_emu_772f739634222d13.sock {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[runtime-status] [88129] Listening to port: /var/folders/ty/pbtmsb691y97jzx90zgqs5zr0000gn/T/fire_emu_772f739634222d13.sock"}}
+[debug] [2025-12-12T04:10:55.720Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE"}}
+[debug] [2025-12-12T04:10:55.720Z] [worker-pool] submitRequest(triggerId=us-central1-feed) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-feed)"}}
+[info] i  functions: Beginning execution of "us-central1-feed" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Beginning execution of \"us-central1-feed\""}}
+[debug] [2025-12-12T04:10:55.721Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY"}}
+[info] >  {"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"} {"user":{"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"severity\":\"ERROR\",\"message\":\"feed error Error: LinkedIn token request failed: {\\\"error\\\":\\\"access_denied\\\",\\\"error_description\\\":\\\"This application is not allowed to create application tokens\\\"}\\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21\"}"}}
+[debug] [2025-12-12T04:10:56.065Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-feed" in 344.485542ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finished \"us-central1-feed\" in 344.485542ms"}}
+[debug] [2025-12-12T04:10:56.065Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE"}}
+[debug] [2025-12-12T04:10:56.066Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-12T04:10:56.066Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-12T04:10:56.066Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:56.066Z] <<< [apiv2][status] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 500
+[debug] [2025-12-12T04:10:56.066Z] <<< [apiv2][body] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed [stream]
+[info] i  hosting: 127.0.0.1 - - [12/Dec/2025:04:10:56 +0000] "GET /feed HTTP/1.1" 500 159 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:04:10:56 +0000] \"GET /feed HTTP/1.1\" 500 159 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /feed to http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed for local Function us-central1/feed
+[debug] [2025-12-12T04:10:57.563Z] >>> [apiv2][query] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 
+[debug] [2025-12-12T04:10:57.563Z] [work-queue] {"queuedWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:57.563Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:57.564Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:57.563Z"],"workRunningCount":1}
+[debug] [2025-12-12T04:10:57.564Z] Accepted request GET /hashtag-1-pro-tip/us-central1/feed/feed --> us-central1-feed
+[debug] [2025-12-12T04:10:57.564Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-12T04:10:57.564Z] [functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed"}}
+[debug] [2025-12-12T04:10:57.564Z] [worker-pool] submitRequest(triggerId=us-central1-feed) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-feed)"}}
+[info] i  functions: Beginning execution of "us-central1-feed" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Beginning execution of \"us-central1-feed\""}}
+[debug] [2025-12-12T04:10:57.564Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY"}}
+[info] >  {"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"} {"user":{"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"severity\":\"ERROR\",\"message\":\"feed error Error: LinkedIn token request failed: {\\\"error\\\":\\\"access_denied\\\",\\\"error_description\\\":\\\"This application is not allowed to create application tokens\\\"}\\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21\"}"}}
+[debug] [2025-12-12T04:10:57.743Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-feed" in 179.361083ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finished \"us-central1-feed\" in 179.361083ms"}}
+[debug] [2025-12-12T04:10:57.744Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE"}}
+[debug] [2025-12-12T04:10:57.744Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-12T04:10:57.744Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-12T04:10:57.744Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:57.744Z] <<< [apiv2][status] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 500
+[debug] [2025-12-12T04:10:57.744Z] <<< [apiv2][body] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed [stream]
+[info] i  hosting: 127.0.0.1 - - [12/Dec/2025:04:10:57 +0000] "GET /feed HTTP/1.1" 500 159 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:04:10:57 +0000] \"GET /feed HTTP/1.1\" 500 159 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /feed to http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed for local Function us-central1/feed
+[debug] [2025-12-12T04:10:59.554Z] >>> [apiv2][query] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 
+[debug] [2025-12-12T04:10:59.554Z] [work-queue] {"queuedWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:59.554Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:59.555Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:10:59.554Z"],"workRunningCount":1}
+[debug] [2025-12-12T04:10:59.555Z] Accepted request GET /hashtag-1-pro-tip/us-central1/feed/feed --> us-central1-feed
+[debug] [2025-12-12T04:10:59.555Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-12T04:10:59.555Z] [functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed"}}
+[debug] [2025-12-12T04:10:59.555Z] [worker-pool] submitRequest(triggerId=us-central1-feed) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-feed)"}}
+[info] i  functions: Beginning execution of "us-central1-feed" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Beginning execution of \"us-central1-feed\""}}
+[debug] [2025-12-12T04:10:59.556Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY"}}
+[info] >  {"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"} {"user":{"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"severity\":\"ERROR\",\"message\":\"feed error Error: LinkedIn token request failed: {\\\"error\\\":\\\"access_denied\\\",\\\"error_description\\\":\\\"This application is not allowed to create application tokens\\\"}\\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21\"}"}}
+[debug] [2025-12-12T04:10:59.700Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-feed" in 144.7495ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finished \"us-central1-feed\" in 144.7495ms"}}
+[debug] [2025-12-12T04:10:59.700Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE"}}
+[debug] [2025-12-12T04:10:59.700Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-12T04:10:59.700Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-12T04:10:59.701Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:10:59.701Z] <<< [apiv2][status] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 500
+[debug] [2025-12-12T04:10:59.701Z] <<< [apiv2][body] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed [stream]
+[info] i  hosting: 127.0.0.1 - - [12/Dec/2025:04:10:59 +0000] "GET /feed HTTP/1.1" 500 159 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:04:10:59 +0000] \"GET /feed HTTP/1.1\" 500 159 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /feed to http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed for local Function us-central1/feed
+[debug] [2025-12-12T04:11:00.885Z] >>> [apiv2][query] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 
+[debug] [2025-12-12T04:11:00.886Z] [work-queue] {"queuedWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:11:00.886Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:11:00.886Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:11:00.886Z"],"workRunningCount":1}
+[debug] [2025-12-12T04:11:00.886Z] Accepted request GET /hashtag-1-pro-tip/us-central1/feed/feed --> us-central1-feed
+[debug] [2025-12-12T04:11:00.887Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-12T04:11:00.887Z] [functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed"}}
+[debug] [2025-12-12T04:11:00.887Z] [worker-pool] submitRequest(triggerId=us-central1-feed) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-feed)"}}
+[info] i  functions: Beginning execution of "us-central1-feed" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Beginning execution of \"us-central1-feed\""}}
+[debug] [2025-12-12T04:11:00.887Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY"}}
+[info] >  {"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"} {"user":{"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"severity\":\"ERROR\",\"message\":\"feed error Error: LinkedIn token request failed: {\\\"error\\\":\\\"access_denied\\\",\\\"error_description\\\":\\\"This application is not allowed to create application tokens\\\"}\\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21\"}"}}
+[debug] [2025-12-12T04:11:01.031Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-feed" in 144.209292ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finished \"us-central1-feed\" in 144.209292ms"}}
+[debug] [2025-12-12T04:11:01.031Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE"}}
+[debug] [2025-12-12T04:11:01.032Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-12T04:11:01.032Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-12T04:11:01.032Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:11:01.032Z] <<< [apiv2][status] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 500
+[debug] [2025-12-12T04:11:01.032Z] <<< [apiv2][body] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed [stream]
+[info] i  hosting: 127.0.0.1 - - [12/Dec/2025:04:11:01 +0000] "GET /feed HTTP/1.1" 500 159 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:04:11:01 +0000] \"GET /feed HTTP/1.1\" 500 159 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Cursor/2.2.9 Chrome/138.0.7204.251 Electron/37.7.0 Safari/537.36\""}}
+[info] [hosting] Rewriting /feed to http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed for local Function us-central1/feed
+[debug] [2025-12-12T04:11:47.067Z] >>> [apiv2][query] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 
+[debug] [2025-12-12T04:11:47.068Z] [work-queue] {"queuedWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:11:47.068Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:11:47.068Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/hashtag-1-pro-tip/us-central1/feed/feed-2025-12-12T04:11:47.068Z"],"workRunningCount":1}
+[debug] [2025-12-12T04:11:47.068Z] Accepted request GET /hashtag-1-pro-tip/us-central1/feed/feed --> us-central1-feed
+[debug] [2025-12-12T04:11:47.076Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2025-12-12T04:11:47.076Z] [functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/hashtag-1-pro-tip/us-central1/feed/feed, mapping to path=/feed"}}
+[debug] [2025-12-12T04:11:47.076Z] [worker-pool] submitRequest(triggerId=us-central1-feed) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-feed)"}}
+[info] i  functions: Beginning execution of "us-central1-feed" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Beginning execution of \"us-central1-feed\""}}
+[debug] [2025-12-12T04:11:47.076Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: BUSY"}}
+[info] >  {"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"} {"user":{"severity":"ERROR","message":"feed error Error: LinkedIn token request failed: {\"error\":\"access_denied\",\"error_description\":\"This application is not allowed to create application tokens\"}\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"severity\":\"ERROR\",\"message\":\"feed error Error: LinkedIn token request failed: {\\\"error\\\":\\\"access_denied\\\",\\\"error_description\\\":\\\"This application is not allowed to create application tokens\\\"}\\n    at getAppAccessToken (/Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:153:15)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js:246:23\\n    at async /Users/devcoup/Projects/1protip/1protip.com/node_modules/.pnpm/firebase-functions@7.0.1_firebase-admin@12.7.0/node_modules/firebase-functions/lib/common/providers/https.js:566:4\\n    at async runFunction (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:399:9)\\n    at async runHTTPS (/Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:424:5)\\n    at async /Users/devcoup/.nvm/versions/node/v22.14.0/lib/node_modules/firebase-tools/lib/emulator/functionsEmulatorRuntime.js:585:21\"}"}}
+[debug] [2025-12-12T04:11:47.315Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-feed" in 238.531208ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finished \"us-central1-feed\" in 238.531208ms"}}
+[debug] [2025-12-12T04:11:47.315Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: IDLE"}}
+[debug] [2025-12-12T04:11:47.315Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2025-12-12T04:11:47.315Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2025-12-12T04:11:47.315Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2025-12-12T04:11:47.315Z] <<< [apiv2][status] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed 500
+[debug] [2025-12-12T04:11:47.315Z] <<< [apiv2][body] GET http://127.0.0.1:8888/hashtag-1-pro-tip/us-central1/feed/feed [stream]
+[info] i  hosting: 127.0.0.1 - - [12/Dec/2025:04:11:47 +0000] "GET /feed HTTP/1.1" 500 159 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:04:11:47 +0000] \"GET /feed HTTP/1.1\" 500 159 \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[info] i  hosting: 127.0.0.1 - - [12/Dec/2025:04:11:47 +0000] "GET /favicon.ico HTTP/1.1" 200 - "http://localhost:3333/feed" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [12/Dec/2025:04:11:47 +0000] \"GET /favicon.ico HTTP/1.1\" 200 - \"http://localhost:3333/feed\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36\""}}
+[debug] [2025-12-12T04:12:10.659Z] File /Users/devcoup/Projects/1protip/1protip.com/functions/src/index.ts changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/devcoup/Projects/1protip/1protip.com/functions/src/index.ts changed, reloading triggers"}}
+[debug] [2025-12-12T04:12:11.662Z] Validating nodejs source
+[debug] [2025-12-12T04:12:12.309Z] > [functions] package.json contents: {
+  "main": "lib/index.js",
+  "scripts": {
+    "genkit:start": "genkit start -- tsx --watch src/genkit-sample.ts",
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "name": "functions",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@genkit-ai/firebase": "^1.25.0",
+    "@genkit-ai/googleai": "^1.25.0",
+    "express": "^5.2.1",
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^7.0.1",
+    "genkit": "^1.25.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}
+[debug] [2025-12-12T04:12:12.309Z] Building nodejs source
+[debug] [2025-12-12T04:12:12.310Z] Failed to find version of module node: reached end of search path /Users/devcoup/Projects/1protip/1protip.com/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2025-12-12T04:12:12.314Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-12-12T04:12:12.315Z] Found firebase-functions binary at '/Users/devcoup/Projects/1protip/1protip.com/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8288
 
-  * You are initializing within an existing Firebase project directory
+[debug] [2025-12-12T04:12:12.851Z] Got response from /__/functions.yaml {"endpoints":{"feed":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"feed"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2025-12-12T04:12:15.438Z] File /Users/devcoup/Projects/1protip/1protip.com/functions/src/index.ts changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/devcoup/Projects/1protip/1protip.com/functions/src/index.ts changed, reloading triggers"}}
+[debug] [2025-12-12T04:12:16.439Z] Validating nodejs source
+[debug] [2025-12-12T04:12:16.906Z] > [functions] package.json contents: {
+  "main": "lib/index.js",
+  "scripts": {
+    "genkit:start": "genkit start -- tsx --watch src/genkit-sample.ts",
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "name": "functions",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@genkit-ai/firebase": "^1.25.0",
+    "@genkit-ai/googleai": "^1.25.0",
+    "express": "^5.2.1",
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^7.0.1",
+    "genkit": "^1.25.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}
+[debug] [2025-12-12T04:12:16.906Z] Building nodejs source
+[debug] [2025-12-12T04:12:16.906Z] Failed to find version of module node: reached end of search path /Users/devcoup/Projects/1protip/1protip.com/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2025-12-12T04:12:16.907Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-12-12T04:12:16.908Z] Found firebase-functions binary at '/Users/devcoup/Projects/1protip/1protip.com/functions/node_modules/.bin/firebase-functions'
+[info] ✔  functions: Loaded functions definitions from source: feed. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: feed."}}
+[debug] [2025-12-12T04:12:16.913Z] [worker-pool] Shutting down IDLE worker (us-central1-feed) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-feed)"}}
+[debug] [2025-12-12T04:12:16.913Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: FINISHING {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: FINISHING"}}
+[debug] [2025-12-12T04:12:16.923Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: exited {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: exited"}}
+[debug] [2025-12-12T04:12:16.923Z] [worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: FINISHED {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-feed"},"extension":{},"message":"[worker-us-central1-feed-e3619cb7-9dfc-4bc0-bebd-5c47a2df9883]: FINISHED"}}
+[info] Serving at port 8987
 
-[debug] [2025-12-11T23:52:40.504Z] ExitPromptError: User force closed the prompt with SIGINT
-    at Interface.sigint (/Users/devcoup/.nvm/versions/node/v20.18.1/lib/node_modules/firebase-tools/node_modules/@inquirer/core/dist/commonjs/lib/create-prompt.js:101:37)
-    at Interface.emit (node:events:518:28)
-    at Interface.emit (node:domain:489:12)
-    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1124:18)
-    at ReadStream.onkeypress (node:internal/readline/interface:263:20)
-    at ReadStream.emit (node:events:530:35)
-    at ReadStream.emit (node:domain:489:12)
-    at emitKeys (node:internal/readline/utils:370:14)
-    at emitKeys.next (<anonymous>)
-    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
-[error] 
-[error] Error: An unexpected error has occurred.
-[debug] [2025-12-11T23:52:50.414Z] ----------------------------------------------------------------------
-[debug] [2025-12-11T23:52:50.415Z] Command:       /Users/devcoup/.nvm/versions/node/v22.14.0/bin/node /Users/devcoup/.nvm/versions/node/v20.18.1/bin/firebase init
-[debug] [2025-12-11T23:52:50.416Z] CLI Version:   14.24.1
-[debug] [2025-12-11T23:52:50.416Z] Platform:      darwin
-[debug] [2025-12-11T23:52:50.416Z] Node Version:  v22.14.0
-[debug] [2025-12-11T23:52:50.416Z] Time:          Thu Dec 11 2025 18:52:50 GMT-0500 (Eastern Standard Time)
-[debug] [2025-12-11T23:52:50.416Z] ----------------------------------------------------------------------
-[debug] 
-[info] 
-     ######## #### ########  ######## ########     ###     ######  ########
-     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
-     ######    ##  ########  ######   ########  #########  ######  ######
-     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
-     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+[debug] [2025-12-12T04:12:17.152Z] Got response from /__/functions.yaml {"endpoints":{"feed":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"feed"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: feed. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: feed."}}
+[debug] [2025-12-12T04:12:24.283Z] File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js.map changed, reloading triggers"}}
+[debug] [2025-12-12T04:12:24.283Z] File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/index.js changed, reloading triggers"}}
+[debug] [2025-12-12T04:12:24.283Z] File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/genkit-sample.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/genkit-sample.js changed, reloading triggers"}}
+[debug] [2025-12-12T04:12:24.283Z] File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/genkit-sample.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/devcoup/Projects/1protip/1protip.com/functions/lib/genkit-sample.js.map changed, reloading triggers"}}
+[debug] [2025-12-12T04:12:25.284Z] Validating nodejs source
+[debug] [2025-12-12T04:12:25.708Z] > [functions] package.json contents: {
+  "main": "lib/index.js",
+  "scripts": {
+    "genkit:start": "genkit start -- tsx --watch src/genkit-sample.ts",
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "name": "functions",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@genkit-ai/firebase": "^1.25.0",
+    "@genkit-ai/googleai": "^1.25.0",
+    "express": "^5.2.1",
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^7.0.1",
+    "genkit": "^1.25.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}
+[debug] [2025-12-12T04:12:25.708Z] Building nodejs source
+[debug] [2025-12-12T04:12:25.708Z] Failed to find version of module node: reached end of search path /Users/devcoup/Projects/1protip/1protip.com/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2025-12-12T04:12:25.709Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-12-12T04:12:25.710Z] Found firebase-functions binary at '/Users/devcoup/Projects/1protip/1protip.com/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8214
 
-You're about to initialize a Firebase project in this directory:
+[debug] [2025-12-12T04:12:25.927Z] Got response from /__/functions.yaml {"endpoints":{"feed":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"feed"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: feed. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: feed."}}
+[debug] [2025-12-12T04:12:38.665Z] File /Users/devcoup/Projects/1protip/1protip.com/functions/src/index.ts changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File /Users/devcoup/Projects/1protip/1protip.com/functions/src/index.ts changed, reloading triggers"}}
+[debug] [2025-12-12T04:12:39.666Z] Validating nodejs source
+[debug] [2025-12-12T04:12:40.475Z] > [functions] package.json contents: {
+  "main": "lib/index.js",
+  "scripts": {
+    "genkit:start": "genkit start -- tsx --watch src/genkit-sample.ts",
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "name": "functions",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "@genkit-ai/firebase": "^1.25.0",
+    "@genkit-ai/googleai": "^1.25.0",
+    "express": "^5.2.1",
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^7.0.1",
+    "genkit": "^1.25.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}
+[debug] [2025-12-12T04:12:40.476Z] Building nodejs source
+[debug] [2025-12-12T04:12:40.476Z] Failed to find version of module node: reached end of search path /Users/devcoup/Projects/1protip/1protip.com/functions/node_modules
+[info] ✔  functions: Using node@22 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2025-12-12T04:12:40.479Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-12-12T04:12:40.481Z] Found firebase-functions binary at '/Users/devcoup/Projects/1protip/1protip.com/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8759
 
-  /Users/devcoup/Projects/1protip/1protip.com
-
-Before we get started, keep in mind:
-
-  * You are initializing within an existing Firebase project directory
-
-[info] 
-=== Project Setup
-[info] 
-[info] First, let's associate this project directory with a Firebase project.
-[info] You can create multiple project aliases by running firebase use --add, 
-[info] 
-[debug] [2025-12-11T23:52:56.917Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2025-12-11T23:52:56.917Z] > authorizing via signed-in user (super.user@enigma.com.co)
-[debug] [2025-12-11T23:52:56.919Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:56.919Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:56.921Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip [none]
-[debug] [2025-12-11T23:52:57.293Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip 200
-[debug] [2025-12-11T23:52:57.293Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip {"projectId":"hashtag-1-pro-tip","projectNumber":"913396219284","displayName":"hashtag-1-pro-tip","name":"projects/hashtag-1-pro-tip","resources":{"hostingSite":"hashtag-1-pro-tip"},"state":"ACTIVE","etag":"1_2a8ce56b-c06d-4024-8a40-a966cd501a70"}
-[info] i  Using project hashtag-1-pro-tip (hashtag-1-pro-tip) . 
-[info] 
-=== App Hosting Setup
-[debug] [2025-12-11T23:52:57.323Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:57.323Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:57.323Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/hashtag-1-pro-tip/billingInfo [none]
-[debug] [2025-12-11T23:52:57.615Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/hashtag-1-pro-tip/billingInfo 200
-[debug] [2025-12-11T23:52:57.615Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/hashtag-1-pro-tip/billingInfo {"name":"projects/hashtag-1-pro-tip/billingInfo","projectId":"hashtag-1-pro-tip","billingAccountName":"billingAccounts/014C46-D4DCD3-B1D4A7","billingEnabled":true}
-[debug] [2025-12-11T23:52:57.616Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:57.616Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:57.616Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions [none]
-[debug] [2025-12-11T23:52:57.616Z] >>> [apiv2][(partial)header] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions x-goog-quota-user=projects/hashtag-1-pro-tip
-[debug] [2025-12-11T23:52:57.616Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
-[debug] [2025-12-11T23:52:57.804Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions 200
-[debug] [2025-12-11T23:52:57.804Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts/firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
-[debug] [2025-12-11T23:52:57.805Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:57.805Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:57.805Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts [none]
-[debug] [2025-12-11T23:52:57.805Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts {"accountId":"firebase-app-hosting-compute","serviceAccount":{"displayName":"Firebase App Hosting compute service account","description":"Default service account used to run builds and deploys for Firebase App Hosting"}}
-[debug] [2025-12-11T23:52:58.145Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts 409
-[debug] [2025-12-11T23:52:58.145Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/hashtag-1-pro-tip/serviceAccounts [omitted]
-[debug] [2025-12-11T23:52:58.146Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:58.146Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:58.146Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:getIamPolicy [none]
-[debug] [2025-12-11T23:52:58.517Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:getIamPolicy 200
-[debug] [2025-12-11T23:52:58.518Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:getIamPolicy {"version":1,"etag":"BwZFtcYeZBc=","bindings":[{"role":"roles/artifactregistry.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-artifactregistry.iam.gserviceaccount.com"]},{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:913396219284@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-913396219284@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-913396219284@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.readTokenAccessor","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:913396219284-compute@developer.gserviceaccount.com","serviceAccount:hashtag-1-pro-tip@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com","serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.computeRunner","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:super.user@enigma.com.co"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-913396219284@serverless-robot-prod.iam.gserviceaccount.com"]},{"role":"roles/secretmanager.admin_withcond_119f9eeba620cc161cb5","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/storage.objectViewer","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]}]}
-[debug] [2025-12-11T23:52:58.519Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:58.519Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:52:58.519Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy [none]
-[debug] [2025-12-11T23:52:58.519Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy {"policy":{"version":1,"etag":"BwZFtcYeZBc=","bindings":[{"role":"roles/artifactregistry.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-artifactregistry.iam.gserviceaccount.com"]},{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:913396219284@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-913396219284@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-913396219284@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.readTokenAccessor","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:913396219284-compute@developer.gserviceaccount.com","serviceAccount:hashtag-1-pro-tip@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com","serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.computeRunner","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:super.user@enigma.com.co"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-913396219284@serverless-robot-prod.iam.gserviceaccount.com"]},{"role":"roles/secretmanager.admin_withcond_119f9eeba620cc161cb5","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/storage.objectViewer","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]}]},"updateMask":"bindings"}
-[debug] [2025-12-11T23:52:59.612Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy 200
-[debug] [2025-12-11T23:52:59.612Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/hashtag-1-pro-tip:setIamPolicy {"version":1,"etag":"BwZFtdg+YcM=","bindings":[{"role":"roles/artifactregistry.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-artifactregistry.iam.gserviceaccount.com"]},{"role":"roles/cloudbuild.builds.builder","members":["serviceAccount:913396219284@cloudbuild.gserviceaccount.com"]},{"role":"roles/cloudbuild.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-cloudbuild.iam.gserviceaccount.com"]},{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-913396219284@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/containerregistry.ServiceAgent","members":["serviceAccount:service-913396219284@containerregistry.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.readTokenAccessor","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/developerconnect.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:913396219284-compute@developer.gserviceaccount.com","serviceAccount:hashtag-1-pro-tip@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com","serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.computeRunner","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/firebaseapphosting.serviceAgent","members":["serviceAccount:service-913396219284@gcp-sa-firebaseapphosting.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-fbsvc@hashtag-1-pro-tip.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:super.user@enigma.com.co"]},{"role":"roles/run.serviceAgent","members":["serviceAccount:service-913396219284@serverless-robot-prod.iam.gserviceaccount.com"]},{"role":"roles/secretmanager.admin_withcond_119f9eeba620cc161cb5","members":["serviceAccount:service-913396219284@gcp-sa-devconnect.iam.gserviceaccount.com"]},{"role":"roles/storage.objectViewer","members":["serviceAccount:firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com"]}]}
-[info] i  This command links your local project to Firebase App Hosting. You will be able to deploy your web app with `firebase deploy` after setup. 
-[debug] [2025-12-11T23:53:01.543Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:53:01.543Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:53:01.543Z] >>> [apiv2][query] GET https://firebaseapphosting.googleapis.com/v1beta/projects/hashtag-1-pro-tip/locations/-/backends 
-[debug] [2025-12-11T23:53:02.062Z] <<< [apiv2][status] GET https://firebaseapphosting.googleapis.com/v1beta/projects/hashtag-1-pro-tip/locations/-/backends 200
-[debug] [2025-12-11T23:53:02.062Z] <<< [apiv2][body] GET https://firebaseapphosting.googleapis.com/v1beta/projects/hashtag-1-pro-tip/locations/-/backends {"backends":[{"name":"projects/hashtag-1-pro-tip/locations/us-central1/backends/hashtag1protip","createTime":"2025-12-11T23:46:27.256146431Z","updateTime":"2025-12-11T23:46:29.055027Z","uri":"hashtag1protip--hashtag-1-pro-tip.us-central1.hosted.app","codebase":{"repository":"projects/hashtag-1-pro-tip/locations/us-central1/connections/apphosting-github-conn-ylc4e2d/gitRepositoryLinks/MichaelSimoneau-1protip.com","rootDirectory":"/"},"uid":"17012fb3-1209-4ea1-8bb7-2c0155fcabc7","etag":"Xxom0-sGtsiB4CGiDGrFhhuQPSm2yM79OwagYj09zwc","reconciling":false,"servingLocality":"GLOBAL_ACCESS","serviceAccount":"firebase-app-hosting-compute@hashtag-1-pro-tip.iam.gserviceaccount.com","appId":"1:913396219284:web:7311bf2ce1a3c9203d6381"}]}
-[info] i  === Deploy local source setup 
-[info] ✔  Wrote configuration info to firebase.json 
-[info] i  Writing default settings to apphosting.yaml... 
-[info] i  /Users/devcoup/Projects/1protip/1protip.com/apphosting.yaml is unchanged 
-[info] ✔  Firebase initialization complete! 
-[info] 
-=== Hosting Setup
-[debug] [2025-12-11T23:53:04.638Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:53:04.638Z] Checked if tokens are valid: true, expires at: 1765499393061
-[debug] [2025-12-11T23:53:04.642Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip [none]
-[debug] [2025-12-11T23:53:05.052Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip 200
-[debug] [2025-12-11T23:53:05.074Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/hashtag-1-pro-tip {"projectId":"hashtag-1-pro-tip","projectNumber":"913396219284","displayName":"hashtag-1-pro-tip","name":"projects/hashtag-1-pro-tip","resources":{"hostingSite":"hashtag-1-pro-tip"},"state":"ACTIVE","etag":"1_2a8ce56b-c06d-4024-8a40-a966cd501a70"}
-[info] 
-[info] Your public directory is the folder (relative to your project directory) that
-[info] will contain Hosting assets to be uploaded with firebase deploy. If you
-[info] have a build process for your assets, use your build's output directory.
-[info] 
-[debug] [2025-12-11T23:53:11.372Z] >>> [apiv2][query] GET https://www.gstatic.com/firebasejs/releases.json [none]
-[debug] [2025-12-11T23:53:11.600Z] <<< [apiv2][status] GET https://www.gstatic.com/firebasejs/releases.json 200
-[debug] [2025-12-11T23:53:11.600Z] <<< [apiv2][body] GET https://www.gstatic.com/firebasejs/releases.json {"current":{"version":"12.6.0","browserURL":"https://www.gstatic.com/firebasejs/12.6.0/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/12.6.0/firebase.tgz"},"live":{"version":"12.6","browserURL":"https://www.gstatic.com/firebasejs/live/12.6/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/live/12.6/firebase.tgz"},"components":{"ai":"https://www.gstatic.com/firebasejs/12.6.0/firebase-ai.js","analytics":"https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js","app":"https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js","app-check":"https://www.gstatic.com/firebasejs/12.6.0/firebase-app-check.js","auth":"https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js","auth/cordova":"https://www.gstatic.com/firebasejs/12.6.0/firebase-auth/cordova.js","auth/web-extension":"https://www.gstatic.com/firebasejs/12.6.0/firebase-auth/web-extension.js","functions":"https://www.gstatic.com/firebasejs/12.6.0/firebase-functions.js","firestore":"https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js","firestore/lite":"https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore/lite.js","installations":"https://www.gstatic.com/firebasejs/12.6.0/firebase-installations.js","storage":"https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js","performance":"https://www.gstatic.com/firebasejs/12.6.0/firebase-performance.js","remote-config":"https://www.gstatic.com/firebasejs/12.6.0/firebase-remote-config.js","messaging":"https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging.js","messaging/sw":"https://www.gstatic.com/firebasejs/12.6.0/firebase-messaging/sw.js","database":"https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js","data-connect":"https://www.gstatic.com/firebasejs/12.6.0/firebase-data-connect.js","firestore.memory":"https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.memory.js"}}
-[info] ✔  Wrote public/index.html 
-[info] 
-=== Emulators Setup
-[info] i  apphosting: Initializing Emulator {"metadata":{"emulator":{"name":"apphosting"},"message":"Initializing Emulator"}}
-[info] i  pubsub: downloading pubsub-emulator-0.8.17.zip... {"metadata":{"emulator":{"name":"pubsub"},"message":"downloading pubsub-emulator-0.8.17.zip..."}}
-[debug] [2025-12-11T23:54:28.214Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.8.17.zip 
-[debug] [2025-12-11T23:54:28.394Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.8.17.zip 200
-[debug] [2025-12-11T23:54:28.394Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.8.17.zip [stream]
-[debug] [2025-12-11T23:54:33.605Z] Data is 65162324
-[debug] [2025-12-11T23:54:33.605Z] [unzip] Entry: pubsub-emulator/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:33.606Z] [unzip] Processing entry: pubsub-emulator/
-[debug] [2025-12-11T23:54:33.606Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/
-[debug] [2025-12-11T23:54:33.606Z] [unzip] Entry: pubsub-emulator/bin/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:33.606Z] [unzip] Processing entry: pubsub-emulator/bin/
-[debug] [2025-12-11T23:54:33.606Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin/
-[debug] [2025-12-11T23:54:33.606Z] [unzip] Entry: pubsub-emulator/bin/cloud-pubsub-emulator (compressed_size=2284 bytes, uncompressed_size=5728 bytes)
-[debug] [2025-12-11T23:54:33.606Z] [unzip] Processing entry: pubsub-emulator/bin/cloud-pubsub-emulator
-[debug] [2025-12-11T23:54:33.606Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin
-[debug] [2025-12-11T23:54:33.606Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin/cloud-pubsub-emulator
-[debug] [2025-12-11T23:54:33.609Z] [unzip] Entry: pubsub-emulator/bin/cloud-pubsub-emulator.bat (compressed_size=889 bytes, uncompressed_size=2276 bytes)
-[debug] [2025-12-11T23:54:33.609Z] [unzip] Processing entry: pubsub-emulator/bin/cloud-pubsub-emulator.bat
-[debug] [2025-12-11T23:54:33.609Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin
-[debug] [2025-12-11T23:54:33.609Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/bin/cloud-pubsub-emulator.bat
-[debug] [2025-12-11T23:54:33.609Z] [unzip] Entry: pubsub-emulator/lib/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:33.610Z] [unzip] Processing entry: pubsub-emulator/lib/
-[debug] [2025-12-11T23:54:33.610Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/lib/
-[debug] [2025-12-11T23:54:33.610Z] [unzip] Entry: pubsub-emulator/lib/cloud-pubsub-emulator-0.8.17-all.jar (compressed_size=65157965 bytes, uncompressed_size=70080695 bytes)
-[debug] [2025-12-11T23:54:33.610Z] [unzip] Processing entry: pubsub-emulator/lib/cloud-pubsub-emulator-0.8.17-all.jar
-[debug] [2025-12-11T23:54:33.610Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/lib
-[debug] [2025-12-11T23:54:33.610Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/pubsub-emulator-0.8.17/pubsub-emulator/lib/cloud-pubsub-emulator-0.8.17-all.jar
-[info] i  pubsub: Removing outdated emulator files: pubsub-emulator-0.8.14 {"metadata":{"emulator":{"name":"pubsub"},"message":"Removing outdated emulator files: pubsub-emulator-0.8.14"}}
-[info] i  pubsub: Removing outdated emulator files: pubsub-emulator-0.8.14.zip {"metadata":{"emulator":{"name":"pubsub"},"message":"Removing outdated emulator files: pubsub-emulator-0.8.14.zip"}}
-[info] i  ui: downloading ui-v1.15.0.zip... {"metadata":{"emulator":{"name":"ui"},"message":"downloading ui-v1.15.0.zip..."}}
-[debug] [2025-12-11T23:54:33.968Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip 
-[info] 
-=== Remoteconfig Setup
-[debug] [2025-12-11T23:54:34.011Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip 200
-[debug] [2025-12-11T23:54:34.012Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.15.0.zip [stream]
-[debug] [2025-12-11T23:54:34.318Z] Data is 3538469
-[debug] [2025-12-11T23:54:34.318Z] [unzip] Entry: client/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:34.318Z] [unzip] Processing entry: client/
-[debug] [2025-12-11T23:54:34.318Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/
-[debug] [2025-12-11T23:54:34.318Z] [unzip] Entry: client/favicon-16x16.png (compressed_size=293 bytes, uncompressed_size=293 bytes)
-[debug] [2025-12-11T23:54:34.318Z] [unzip] Processing entry: client/favicon-16x16.png
-[debug] [2025-12-11T23:54:34.318Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.318Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/favicon-16x16.png
-[debug] [2025-12-11T23:54:34.319Z] [unzip] Entry: client/safari-pinned-tab.svg (compressed_size=1433 bytes, uncompressed_size=2611 bytes)
-[debug] [2025-12-11T23:54:34.319Z] [unzip] Processing entry: client/safari-pinned-tab.svg
-[debug] [2025-12-11T23:54:34.319Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.319Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/safari-pinned-tab.svg
-[debug] [2025-12-11T23:54:34.320Z] [unzip] Entry: client/favicon.ico (compressed_size=2933 bytes, uncompressed_size=13294 bytes)
-[debug] [2025-12-11T23:54:34.320Z] [unzip] Processing entry: client/favicon.ico
-[debug] [2025-12-11T23:54:34.320Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.320Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/favicon.ico
-[debug] [2025-12-11T23:54:34.320Z] [unzip] Entry: client/index.html (compressed_size=1364 bytes, uncompressed_size=3071 bytes)
-[debug] [2025-12-11T23:54:34.320Z] [unzip] Processing entry: client/index.html
-[debug] [2025-12-11T23:54:34.320Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.321Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/index.html
-[debug] [2025-12-11T23:54:34.321Z] [unzip] Entry: client/android-chrome-192x192.png (compressed_size=2684 bytes, uncompressed_size=2684 bytes)
-[debug] [2025-12-11T23:54:34.321Z] [unzip] Processing entry: client/android-chrome-192x192.png
-[debug] [2025-12-11T23:54:34.321Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.321Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/android-chrome-192x192.png
-[debug] [2025-12-11T23:54:34.321Z] [unzip] Entry: client/apple-touch-icon.png (compressed_size=2123 bytes, uncompressed_size=2152 bytes)
-[debug] [2025-12-11T23:54:34.321Z] [unzip] Processing entry: client/apple-touch-icon.png
-[debug] [2025-12-11T23:54:34.321Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.321Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/apple-touch-icon.png
-[debug] [2025-12-11T23:54:34.322Z] [unzip] Entry: client/android-chrome-512x512.png (compressed_size=5369 bytes, uncompressed_size=5411 bytes)
-[debug] [2025-12-11T23:54:34.322Z] [unzip] Processing entry: client/android-chrome-512x512.png
-[debug] [2025-12-11T23:54:34.322Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.322Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/android-chrome-512x512.png
-[debug] [2025-12-11T23:54:34.323Z] [unzip] Entry: client/manifest.json (compressed_size=245 bytes, uncompressed_size=551 bytes)
-[debug] [2025-12-11T23:54:34.323Z] [unzip] Processing entry: client/manifest.json
-[debug] [2025-12-11T23:54:34.323Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.323Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/manifest.json
-[debug] [2025-12-11T23:54:34.323Z] [unzip] Entry: client/robots.txt (compressed_size=26 bytes, uncompressed_size=26 bytes)
-[debug] [2025-12-11T23:54:34.323Z] [unzip] Processing entry: client/robots.txt
-[debug] [2025-12-11T23:54:34.323Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.323Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/robots.txt
-[debug] [2025-12-11T23:54:34.324Z] [unzip] Entry: client/mstile-150x150.png (compressed_size=2034 bytes, uncompressed_size=2034 bytes)
-[debug] [2025-12-11T23:54:34.324Z] [unzip] Processing entry: client/mstile-150x150.png
-[debug] [2025-12-11T23:54:34.324Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.324Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/mstile-150x150.png
-[debug] [2025-12-11T23:54:34.324Z] [unzip] Entry: client/assets/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:34.324Z] [unzip] Processing entry: client/assets/
-[debug] [2025-12-11T23:54:34.324Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/
-[debug] [2025-12-11T23:54:34.324Z] [unzip] Entry: client/assets/index-BX-A56oj.js (compressed_size=582089 bytes, uncompressed_size=2092775 bytes)
-[debug] [2025-12-11T23:54:34.324Z] [unzip] Processing entry: client/assets/index-BX-A56oj.js
-[debug] [2025-12-11T23:54:34.324Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets
-[debug] [2025-12-11T23:54:34.324Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-BX-A56oj.js
-[debug] [2025-12-11T23:54:34.344Z] [unzip] Entry: client/assets/index-CjB9C900.css (compressed_size=35979 bytes, uncompressed_size=298654 bytes)
-[debug] [2025-12-11T23:54:34.344Z] [unzip] Processing entry: client/assets/index-CjB9C900.css
-[debug] [2025-12-11T23:54:34.344Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets
-[debug] [2025-12-11T23:54:34.344Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-CjB9C900.css
-[debug] [2025-12-11T23:54:34.345Z] [unzip] Entry: client/assets/index-BX-A56oj.js.map (compressed_size=2362482 bytes, uncompressed_size=10036679 bytes)
-[debug] [2025-12-11T23:54:34.345Z] [unzip] Processing entry: client/assets/index-BX-A56oj.js.map
-[debug] [2025-12-11T23:54:34.345Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets
-[debug] [2025-12-11T23:54:34.346Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/index-BX-A56oj.js.map
-[debug] [2025-12-11T23:54:34.404Z] [unzip] Entry: client/assets/extensions/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:34.404Z] [unzip] Processing entry: client/assets/extensions/
-[debug] [2025-12-11T23:54:34.404Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions/
-[debug] [2025-12-11T23:54:34.404Z] [unzip] Entry: client/assets/extensions/default-extension.png (compressed_size=1646 bytes, uncompressed_size=1657 bytes)
-[debug] [2025-12-11T23:54:34.404Z] [unzip] Processing entry: client/assets/extensions/default-extension.png
-[debug] [2025-12-11T23:54:34.404Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions
-[debug] [2025-12-11T23:54:34.404Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/extensions/default-extension.png
-[debug] [2025-12-11T23:54:34.404Z] [unzip] Entry: client/assets/img/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:34.404Z] [unzip] Processing entry: client/assets/img/
-[debug] [2025-12-11T23:54:34.404Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/img/
-[debug] [2025-12-11T23:54:34.405Z] [unzip] Entry: client/assets/img/database.png (compressed_size=29449 bytes, uncompressed_size=29988 bytes)
-[debug] [2025-12-11T23:54:34.405Z] [unzip] Processing entry: client/assets/img/database.png
-[debug] [2025-12-11T23:54:34.405Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/img
-[debug] [2025-12-11T23:54:34.405Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/img/database.png
-[debug] [2025-12-11T23:54:34.406Z] [unzip] Entry: client/assets/provider-icons/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:34.406Z] [unzip] Processing entry: client/assets/provider-icons/
-[debug] [2025-12-11T23:54:34.406Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/
-[debug] [2025-12-11T23:54:34.406Z] [unzip] Entry: client/assets/provider-icons/auth_service_saml.svg (compressed_size=575 bytes, uncompressed_size=1226 bytes)
-[debug] [2025-12-11T23:54:34.406Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_saml.svg
-[debug] [2025-12-11T23:54:34.406Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.406Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_saml.svg
-[debug] [2025-12-11T23:54:34.407Z] [unzip] Entry: client/assets/provider-icons/auth_service_phone.svg (compressed_size=261 bytes, uncompressed_size=414 bytes)
-[debug] [2025-12-11T23:54:34.407Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_phone.svg
-[debug] [2025-12-11T23:54:34.407Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.407Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_phone.svg
-[debug] [2025-12-11T23:54:34.408Z] [unzip] Entry: client/assets/provider-icons/auth_service_facebook.svg (compressed_size=289 bytes, uncompressed_size=457 bytes)
-[debug] [2025-12-11T23:54:34.408Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_facebook.svg
-[debug] [2025-12-11T23:54:34.408Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.408Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_facebook.svg
-[debug] [2025-12-11T23:54:34.408Z] [unzip] Entry: client/assets/provider-icons/auth_service_game_center.svg (compressed_size=991 bytes, uncompressed_size=3921 bytes)
-[debug] [2025-12-11T23:54:34.408Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_game_center.svg
-[debug] [2025-12-11T23:54:34.408Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.408Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_game_center.svg
-[debug] [2025-12-11T23:54:34.409Z] [unzip] Entry: client/assets/provider-icons/auth_service_apple.svg (compressed_size=230 bytes, uncompressed_size=334 bytes)
-[debug] [2025-12-11T23:54:34.409Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_apple.svg
-[debug] [2025-12-11T23:54:34.409Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.409Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_apple.svg
-[debug] [2025-12-11T23:54:34.409Z] [unzip] Entry: client/assets/provider-icons/auth_service_github.svg (compressed_size=466 bytes, uncompressed_size=838 bytes)
-[debug] [2025-12-11T23:54:34.409Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_github.svg
-[debug] [2025-12-11T23:54:34.409Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.409Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_github.svg
-[debug] [2025-12-11T23:54:34.410Z] [unzip] Entry: client/assets/provider-icons/auth_service_mslive.svg (compressed_size=203 bytes, uncompressed_size=378 bytes)
-[debug] [2025-12-11T23:54:34.410Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_mslive.svg
-[debug] [2025-12-11T23:54:34.410Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.410Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_mslive.svg
-[debug] [2025-12-11T23:54:34.410Z] [unzip] Entry: client/assets/provider-icons/auth_service_yahoo.svg (compressed_size=577 bytes, uncompressed_size=1182 bytes)
-[debug] [2025-12-11T23:54:34.410Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_yahoo.svg
-[debug] [2025-12-11T23:54:34.410Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.411Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_yahoo.svg
-[debug] [2025-12-11T23:54:34.411Z] [unzip] Entry: client/assets/provider-icons/auth_service_twitter.svg (compressed_size=444 bytes, uncompressed_size=751 bytes)
-[debug] [2025-12-11T23:54:34.411Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_twitter.svg
-[debug] [2025-12-11T23:54:34.411Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.411Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_twitter.svg
-[debug] [2025-12-11T23:54:34.411Z] [unzip] Entry: client/assets/provider-icons/auth_service_play_games.svg (compressed_size=565 bytes, uncompressed_size=1173 bytes)
-[debug] [2025-12-11T23:54:34.411Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_play_games.svg
-[debug] [2025-12-11T23:54:34.411Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.412Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_play_games.svg
-[debug] [2025-12-11T23:54:34.412Z] [unzip] Entry: client/assets/provider-icons/auth_service_email.svg (compressed_size=228 bytes, uncompressed_size=326 bytes)
-[debug] [2025-12-11T23:54:34.412Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_email.svg
-[debug] [2025-12-11T23:54:34.412Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.412Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_email.svg
-[debug] [2025-12-11T23:54:34.413Z] [unzip] Entry: client/assets/provider-icons/auth_service_google.svg (compressed_size=409 bytes, uncompressed_size=720 bytes)
-[debug] [2025-12-11T23:54:34.413Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_google.svg
-[debug] [2025-12-11T23:54:34.413Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.413Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_google.svg
-[debug] [2025-12-11T23:54:34.413Z] [unzip] Entry: client/assets/provider-icons/auth_service_oidc.svg (compressed_size=414 bytes, uncompressed_size=858 bytes)
-[debug] [2025-12-11T23:54:34.413Z] [unzip] Processing entry: client/assets/provider-icons/auth_service_oidc.svg
-[debug] [2025-12-11T23:54:34.413Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons
-[debug] [2025-12-11T23:54:34.414Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/assets/provider-icons/auth_service_oidc.svg
-[debug] [2025-12-11T23:54:34.414Z] [unzip] Entry: client/browserconfig.xml (compressed_size=491 bytes, uncompressed_size=822 bytes)
-[debug] [2025-12-11T23:54:34.414Z] [unzip] Processing entry: client/browserconfig.xml
-[debug] [2025-12-11T23:54:34.414Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.414Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/browserconfig.xml
-[debug] [2025-12-11T23:54:34.415Z] [unzip] Entry: client/favicon-32x32.png (compressed_size=475 bytes, uncompressed_size=475 bytes)
-[debug] [2025-12-11T23:54:34.415Z] [unzip] Processing entry: client/favicon-32x32.png
-[debug] [2025-12-11T23:54:34.415Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client
-[debug] [2025-12-11T23:54:34.415Z] [unzip] Writing file: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/client/favicon-32x32.png
-[debug] [2025-12-11T23:54:34.418Z] [unzip] Entry: server/ (compressed_size=0 bytes, uncompressed_size=0 bytes)
-[debug] [2025-12-11T23:54:34.418Z] [unzip] Processing entry: server/
-[debug] [2025-12-11T23:54:34.418Z] [unzip] mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server/
-[debug] [2025-12-11T23:54:34.418Z] [unzip] Entry: server/server.mjs.map (compressed_size=217845 bytes, uncompressed_size=944978 bytes)
-[debug] [2025-12-11T23:54:34.418Z] [unzip] Processing entry: server/server.mjs.map
-[debug] [2025-12-11T23:54:34.418Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server
-[debug] [2025-12-11T23:54:34.418Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server/server.mjs.map
-[debug] [2025-12-11T23:54:34.422Z] [unzip] Entry: server/server.mjs (compressed_size=276407 bytes, uncompressed_size=933701 bytes)
-[debug] [2025-12-11T23:54:34.422Z] [unzip] Processing entry: server/server.mjs
-[debug] [2025-12-11T23:54:34.422Z] [unzip] else mkdir: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server
-[debug] [2025-12-11T23:54:34.422Z] [unzip] deflating: /Users/devcoup/.cache/firebase/emulators/ui-v1.15.0/server/server.mjs
-[info] i  ui: Removing outdated emulator files: ui-v1.14.0 {"metadata":{"emulator":{"name":"ui"},"message":"Removing outdated emulator files: ui-v1.14.0"}}
-[info] i  ui: Removing outdated emulator files: ui-v1.14.0.zip {"metadata":{"emulator":{"name":"ui"},"message":"Removing outdated emulator files: ui-v1.14.0.zip"}}
+[debug] [2025-12-12T04:12:41.015Z] Got response from /__/functions.yaml {"endpoints":{"feed":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":10,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"feed"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] ✔  functions: Loaded functions definitions from source: feed. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: feed."}}

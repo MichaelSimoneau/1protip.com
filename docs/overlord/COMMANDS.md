@@ -13,4 +13,12 @@
 - LinkedIn feed directive: retain `EXPO_SECRET_LINKEDIN_CLIENT_SECRET`; add `LINKEDIN_SERVICE_*` secrets for a shared LinkedIn access token/profile so `linkedin-get-posts` can sync posts without a Supabase session; feed hook now always invokes the function to allow public syncing.
 - Tooling directive: migrate Node tooling to pnpm (packageManager pnpm@9) and add a repo-local Python CLI that bootstraps `.venv` and writes local `.bashrc`/`.zshrc` snippets to auto-activate the venv (keep `.venv` untracked).
 - New directive (2025-12-11): stop using Supabase; replace its usage with the requested alternative (scope pending clarification).
+- New directive (2025-12-11): MS actions fly-out must include a big blue PayPal donate button linked for `michaelsimoneau`, opening `https://donate.1protip.com` inside the MS webview.
+- New directive (2025-12-11): Resolve Metro errors by using local app components/contexts instead of the missing `@1protip/shared` module in the app bundle.
+- New directive (2025-12-11): Fix Firebase hosting where compat scripts (`firebase-app-compat.js`, `firebase-firestore-compat.js`, etc.) return 404/HTML causing MIME type errors and `firebase` to be undefined in the hosted page.
+- New directive (2025-12-11): Ensure `expo-router` Head usage in `apps/1protip.com/app/_layout.tsx` follows the public API (import from `expo-router`, JSX children instead of string).
+- New directive (2025-12-11): Add hosting rewrites so `/api/{func_name}` proxies to Cloud Function `func_name` (e.g., feed, menuSuggestion) in `firebase.json`.
+- New directive (2025-12-12): Update app code to call backend via `/api/*` URLs (e.g., feed default `/api/feed`).
+- New directive (2025-12-12): Do not keep env vars for endpoints already hardcoded in `firebase.json`; hardcode app usage to `/api/*` instead of env.
+- New directive (2025-12-12): Feed function forces hashtag `#1ProTip`, uses LinkedIn client credentials, pins latest 10 owner (Michael Simoneau) posts to the top, paginates the remainder, and app shows a single-card reanimated rolodex that phases in other users after the pinned posts.
 

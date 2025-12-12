@@ -1,0 +1,10 @@
+packages:
+  - functions
+  - apps/*
+  - shared
+
+onlyBuiltDependencies:
+  - esbuild
+  - geckodriver
+  - protobufjs
+  - unrs-resolver
