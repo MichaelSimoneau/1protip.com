@@ -19,7 +19,7 @@
   ],
   "hosting": {
     "site": "hashtag-1-pro-tip",
-    "public": "apps/1protip.com/dist",
+    "public": "apps/free/dist",
     "predeploy": [
       "pnpm --filter @1protip/dotcom build:web"
     ],

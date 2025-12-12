@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useFeed } from '@/features/feed/hooks/useFeed';
+import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye } from 'lucide-react-native';
 import { useCallback, useRef, useState } from 'react';
@@ -158,13 +159,19 @@ const RolodexCard = ({
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList as any);
 
 export default function FeedTab() {
-  const { posts, isLoading, isLoadingMore, error, hasMore, refreshFeed, loadMore } = useFeed();
+  const { posts, isLoading, isLoadingMore, error, hasMore, refreshFeed, loadMore, prependPost } = useFeed();
+  const { profile } = useLinkedInAuth();
+  const isAuthenticated = !!profile;
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
-  const { openCommentPanel } = useTabPanel();
+  const { openCommentPanel, setPostCreatedCallback } = useTabPanel();
   const scrollY = useSharedValue(0);
   const currentIndex = useSharedValue(0);
   const listRef = useRef<FlatList<FeedPost>>(null);
+
+  useEffect(() => {
+    setPostCreatedCallback(prependPost);
+  }, [prependPost, setPostCreatedCallback]);
 
   const onScroll = useAnimatedScrollHandler({
     onScroll: (event) => {
@@ -208,6 +215,10 @@ export default function FeedTab() {
   };
 
   const handleLike = async (postUrn: string) => {
+    if (!isAuthenticated) {
+      showFeedback('Login to like posts');
+      return;
+    }
     if (actionInProgress) return;
 
     setActionInProgress(postUrn);
@@ -222,10 +233,18 @@ export default function FeedTab() {
   };
 
   const handleCommentOpen = async (post: FeedPost) => {
+    if (!isAuthenticated) {
+      showFeedback('Login to comment');
+      return;
+    }
     openCommentPanel(post);
   };
 
   const handleRepost = async (postUrn: string) => {
+    if (!isAuthenticated) {
+      showFeedback('Login to repost');
+      return;
+    }
     if (actionInProgress) return;
 
     setActionInProgress(postUrn);

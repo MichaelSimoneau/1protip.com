@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const ENV_FILES = [
-  path.join(__dirname, '../apps/1protip.com/.env'),
+  path.join(__dirname, '../apps/free/.env'),
   path.join(__dirname, '../functions/.env')
 ];
 
@@ -91,5 +91,6 @@ function syncSecrets() {
 }
 
 syncSecrets();
+
 
 

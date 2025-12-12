@@ -16,7 +16,7 @@ const getRedirectUri = () => {
     // However, LinkedIn requires an EXACT match.
     // If we are in production (window.location.hostname !== 'localhost'), we should use the prod URI.
     if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-       return 'https://1protip.com/auth/linkedin/callback';
+       return 'https://free/auth/linkedin/callback';
     }
   }
   // Default fallback or local dev

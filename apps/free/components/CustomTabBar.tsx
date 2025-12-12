@@ -4,13 +4,16 @@ import { useState, useRef, useEffect } from 'react';
 import { useTabPanel } from '@/contexts/TabPanelContext';
 import { X, Send } from 'lucide-react-native';
 import { commentOnPost as commentWithService } from '@/services/linkedin/socialActions';
+import { createAppPost } from '@/services/linkedin/feed';
 
 export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const [showPanel, setShowPanel] = useState<number | null>(null);
   const panelHeight = useRef(new Animated.Value(0)).current;
-  const { panelType, activePost, closePanel } = useTabPanel();
+  const { panelType, activePost, closePanel, onPostCreated } = useTabPanel();
   const [commentText, setCommentText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [postText, setPostText] = useState('');
+  const [isPosting, setIsPosting] = useState(false);
 
   const handleMsDonate = () => {
     setShowPanel(null);
@@ -65,6 +68,22 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
       console.error('Failed to post comment:', err);
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handlePostSubmit = async () => {
+    if (!postText.trim() || isPosting) return;
+
+    setIsPosting(true);
+    try {
+      const newPost = await createAppPost(postText.trim());
+      setPostText('');
+      setShowPanel(null);
+      onPostCreated?.(newPost);
+    } catch (err) {
+      console.error('Failed to create post:', err);
+    } finally {
+      setIsPosting(false);
     }
   };
 
@@ -123,8 +142,42 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
       case 'feed':
         return (
           <View style={styles.panelContent}>
-            <Text style={styles.panelTitle}>Feed Actions</Text>
-            <Text style={styles.panelText}>Filter, sort, and manage your feed</Text>
+            <View style={styles.commentHeader}>
+              <Text style={styles.panelTitle}>Share a ProTip</Text>
+              <Pressable onPress={() => setShowPanel(null)} style={styles.closeButton}>
+                <X size={24} color="#666666" />
+              </Pressable>
+            </View>
+            <Text style={[styles.panelText, { marginBottom: 16 }]}>
+              Post to the #1ProTip community
+            </Text>
+            
+            <View style={styles.commentInputContainer}>
+              <TextInput
+                style={styles.commentInput}
+                placeholder="What's your tip?"
+                placeholderTextColor="#999999"
+                value={postText}
+                onChangeText={setPostText}
+                multiline
+                numberOfLines={3}
+                editable={!isPosting}
+              />
+              <Pressable
+                style={[
+                  styles.sendButton,
+                  (!postText.trim() || isPosting) && styles.sendButtonDisabled,
+                ]}
+                onPress={handlePostSubmit}
+                disabled={!postText.trim() || isPosting}
+              >
+                {isPosting ? (
+                  <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                  <Send size={20} color="#ffffff" />
+                )}
+              </Pressable>
+            </View>
           </View>
         );
       case 'ms':

@@ -9,6 +9,8 @@ interface TabPanelContextValue {
   openCommentPanel: (post: FeedPost) => void;
   openTilesPanel: () => void;
   closePanel: () => void;
+  onPostCreated: ((post: FeedPost) => void) | null;
+  setPostCreatedCallback: (callback: (post: FeedPost) => void) => void;
 }
 
 const TabPanelContext = createContext<TabPanelContextValue | null>(null);
@@ -16,6 +18,7 @@ const TabPanelContext = createContext<TabPanelContextValue | null>(null);
 export function TabPanelProvider({ children }: { children: ReactNode }) {
   const [panelType, setPanelType] = useState<PanelType>(null);
   const [activePost, setActivePost] = useState<FeedPost | null>(null);
+  const [onPostCreated, setOnPostCreated] = useState<((post: FeedPost) => void) | null>(null);
 
   const openCommentPanel = (post: FeedPost) => {
     setActivePost(post);
@@ -32,6 +35,10 @@ export function TabPanelProvider({ children }: { children: ReactNode }) {
     setActivePost(null);
   };
 
+  const setPostCreatedCallback = (callback: (post: FeedPost) => void) => {
+    setOnPostCreated(() => callback);
+  };
+
   return (
     <TabPanelContext.Provider
       value={{
@@ -40,6 +47,8 @@ export function TabPanelProvider({ children }: { children: ReactNode }) {
         openCommentPanel,
         openTilesPanel,
         closePanel,
+        onPostCreated,
+        setPostCreatedCallback,
       }}
     >
       {children}

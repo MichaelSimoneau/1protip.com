@@ -63,6 +63,8 @@ const OWNER_URN =
   process.env.LINKEDIN_OWNER_URN || "urn:li:person:michaelsimoneau";
 const OWNER_HANDLE =
   process.env.LINKEDIN_OWNER_HANDLE || "michaelsimoneau";
+const ORG_URN =
+  process.env.LINKEDIN_ORG_URN || "urn:li:organization:105663673";
 const DEFAULT_HASHTAG = "#1ProTip";
 const DEFAULT_COUNT = 10;
 const MAX_COUNT = 100;
@@ -404,6 +406,83 @@ export const linkedinSignIn = onCall(async (request) => {
     throw new HttpsError('internal', 'Internal server error.');
   }
 });
+
+export const feed = onRequest(
+  { cors: true },
+  async (req, res) => {
+    try {
+      if (req.method !== "POST") {
+        throw new Error("Method not allowed");
+      }
+
+      const { content } = req.body;
+      if (!content || typeof content !== "string") {
+        throw new Error("Missing or invalid content");
+      }
+
+      // Prepend hashtag if not present
+      const finalContent = content.includes(DEFAULT_HASHTAG)
+        ? content
+        : `${DEFAULT_HASHTAG} ${content}`;
+
+      const token = await getAppAccessToken();
+
+      if (!ORG_URN) {
+        throw new Error("Organization URN not configured");
+      }
+
+      const body = {
+        author: ORG_URN,
+        commentary: finalContent,
+        visibility: "PUBLIC",
+        distribution: {
+          feedDistribution: "MAIN_FEED",
+          targetEntities: [],
+          thirdPartyDistributionChannels: []
+        },
+        lifecycleState: "PUBLISHED",
+        isReshareDisabledByAuthor: false
+      };
+
+      const response = await fetch("https://api.linkedin.com/rest/posts", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "LinkedIn-Version": "202412",
+          "X-Restli-Protocol-Version": "2.0.0",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`LinkedIn post failed: ${text}`);
+      }
+
+      // The response header 'x-restli-id' contains the URN of the created post
+      const newPostUrn = response.headers.get("x-restli-id") || `urn:li:share:${Date.now()}`;
+
+      // Construct a FeedPost to return immediately
+      const newPost: FeedPost = {
+        id: newPostUrn,
+        content: finalContent,
+        created_at: new Date().toISOString(),
+        linkedin_post_id: newPostUrn,
+        author_name: "1ProTip App", // Or fetch org name if we want to be fancy, but static is fine for now
+        // author_avatar_url: ... // could put app logo here
+        is_owner: false, // It's the app page, not the user
+      };
+
+      res.status(200).json(newPost);
+    } catch (error: unknown) {
+      logger.error("postToPage error", error);
+      res.status(500).json({
+        error: error instanceof Error ? error.message : "Internal server error",
+      });
+    }
+  }
+);
 
 export const feed = onRequest(
   { cors: true },

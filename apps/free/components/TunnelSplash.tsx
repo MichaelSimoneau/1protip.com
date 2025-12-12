@@ -46,6 +46,7 @@ type TunnelSplashProps = {
   logoLoading?: boolean;
   logoDisabled?: boolean;
   brandText?: ReactNode;
+  onSkip?: () => void;
 };
 
 type RoundedSquareProps = {
@@ -209,6 +210,7 @@ export function TunnelSplash({
   logoLoading = false,
   logoDisabled = false,
   brandText,
+  onSkip,
 }: TunnelSplashProps) {
   const { width, height } = useWindowDimensions();
   const [mounted, setMounted] = React.useState(false);
@@ -228,6 +230,9 @@ export function TunnelSplash({
   const textHeight = 60; // Approximate text height with margin
   const safeTopPosition = Math.max(20, logoCenterY - logoRadius - textHeight - 20);
   const textTopPosition = Math.min(safeTopPosition, height * 0.2);
+  
+  // Calculate skip button position (below logo)
+  const skipButtonTop = logoCenterY + logoRadius + 60;
 
   // On web, to avoid hydration mismatch (server vs client), we must match the server render initially.
   // The server renders the fallback (or nothing).
@@ -250,6 +255,13 @@ export function TunnelSplash({
           disabled={logoDisabled}
           size={LOGO_FINAL_SIZE}
         />
+        {onSkip && (
+          <View style={[styles.skipButtonContainer, { top: skipButtonTop }]}>
+            <Pressable onPress={onSkip} style={styles.skipButton}>
+              <Text style={styles.skipButtonText}>SKIP LOGIN</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     );
   }
@@ -278,6 +290,15 @@ export function TunnelSplash({
       {brandText && mounted ? (
         <View style={[styles.brandTextContainer, { top: textTopPosition }]}>{brandText}</View>
       ) : null}
+
+      {/* Skip Login Button */}
+      {onSkip && mounted && (
+        <View style={[styles.skipButtonContainer, { top: skipButtonTop }]}>
+          <Pressable onPress={onSkip} style={styles.skipButton}>
+            <Text style={styles.skipButtonText}>SKIP LOGIN</Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
@@ -368,5 +389,25 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '700',
     textAlign: 'center',
+  },
+  skipButtonContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 20,
+    opacity: 0.5,
+  },
+  skipButton: {
+    padding: 16,
+  },
+  skipButtonText: {
+    color: '#ffffff',
+    fontSize: 24,
+    fontWeight: '800',
+    letterSpacing: 2,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 4,
   },
 });

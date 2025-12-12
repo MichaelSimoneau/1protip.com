@@ -62,6 +62,10 @@ export default function HomeTab() {
     }
   };
 
+  const handleSkip = () => {
+    router.replace('/feed');
+  };
+
   // Brand text component
   const brandText = <Text style={styles.brandText}>#1ProTip</Text>;
 
@@ -69,6 +73,7 @@ export default function HomeTab() {
     <View style={styles.container}>
       <TunnelSplash
         onLogoPress={handleLinkedInPress}
+        onSkip={splashFinished && !checkingSession ? handleSkip : undefined}
         logoLoading={isLoading}
         // Disable logo until splash is finished AND we're done checking session
         // (to avoid clicking while auto-redirect might happen)

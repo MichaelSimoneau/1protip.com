@@ -83,6 +83,13 @@ export function useFeed() {
     await loadPage({ reset: false });
   }, [loadPage]);
 
+  const prependPost = useCallback((post: FeedPost) => {
+    setState((prev) => ({
+      ...prev,
+      posts: [post, ...prev.posts],
+    }));
+  }, []);
+
   useEffect(() => {
     loadPage({ reset: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,5 +103,6 @@ export function useFeed() {
     error: state.error,
     refreshFeed,
     loadMore,
+    prependPost,
   };
 }

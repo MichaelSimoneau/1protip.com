@@ -25,7 +25,7 @@ This plan consolidates recent instructions into a unified roadmap for deployment
 Create a script to sync environment variables from local `.env` files to both GitHub Actions Secrets and Firebase Functions Secrets.
 
 -   **Source Files:**
-    -   Root `.env` (or `apps/1protip.com/.env`)
+    -   Root `.env` (or `apps/free/.env`)
     -   `functions/.env`
 -   **Destinations:**
     -   GitHub Repository Secrets (`gh secret set`)

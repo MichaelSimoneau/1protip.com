@@ -16,7 +16,7 @@ importers:
         specifier: ^15.0.0
         version: 15.0.0(@types/node@25.0.0)(encoding@0.1.13)(typescript@5.9.3)
 
-  apps/1protip.com:
+  apps/free:
     dependencies:
       '@1protip/shared':
         specifier: file:../../shared

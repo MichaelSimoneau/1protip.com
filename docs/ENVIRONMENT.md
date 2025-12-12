@@ -9,7 +9,7 @@ Set the following LinkedIn environment variables for all builds:
 Supported redirect values (pick one per environment):
 - Web/local: `http://localhost:8081/auth/linkedin/callback`
 - Expo Go / simulator: `exp://localhost:8081/--/auth/linkedin/callback`
-- Production web: `https://1protip.com/auth/linkedin/callback` (or `https://app.1protip.com/auth/linkedin/callback`)
+- Production web: `https://free/auth/linkedin/callback` (or `https://app.1protip.com/auth/linkedin/callback`)
 
 Aliases `EXPO_PUBLIC_CLIENT_ID` and `EXPO_SECRET_CLIENT_SECRET` are accepted by `scripts/sync-secrets.js` but prefer the canonical keys above.
 

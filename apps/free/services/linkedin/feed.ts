@@ -1,5 +1,6 @@
 const DEFAULT_HASHTAG = '#1ProTip';
 const FEED_API_URL = '/api/feed';
+const POST_API_URL = '/api/postToPage';
 
 export type FeedResponse = {
   posts: FeedPost[];
@@ -60,4 +61,21 @@ export async function fetchHashtagFeed(
       "pinnedCount" in data && typeof data.pinnedCount === "number" ? data.pinnedCount : undefined,
     total: "total" in data && typeof data.total === "number" ? data.total : undefined,
   };
+}
+
+export async function createAppPost(content: string): Promise<FeedPost> {
+  const response = await fetch(POST_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ content }),
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`Post creation failed: ${text}`);
+  }
+
+  return await response.json();
 }

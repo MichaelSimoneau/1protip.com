@@ -47,7 +47,7 @@ exp://localhost:8081/--/auth/linkedin/callback
 
 **For Production:**
 ```
-https://1protip.com/auth/linkedin/callback
+https://free/auth/linkedin/callback
 https://app.1protip.com/auth/linkedin/callback
 ```
 

@@ -46,7 +46,7 @@ Follow the detailed guide: [LinkedIn App Setup](./LINKEDIN_APP_SETUP.md)
 2. Create new app called "1ProTip Platform"
 3. Add redirect URLs:
    - `exp://localhost:8081/--/auth/linkedin/callback` (dev)
-   - `https://1protip.com/auth/linkedin/callback` (prod)
+   - `https://free/auth/linkedin/callback` (prod)
 4. Copy Client ID and Client Secret
 
 ### Step 3: Configure Environment Variables
