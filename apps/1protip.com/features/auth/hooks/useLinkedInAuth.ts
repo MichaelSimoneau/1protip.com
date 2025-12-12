@@ -16,6 +16,7 @@ export interface LinkedInProfile {
   lastName: string;
   profilePicture?: string;
   email?: string;
+  has_connected_with_owner?: boolean;
 }
 
 interface AuthState {
@@ -96,25 +97,74 @@ export function useLinkedInAuth() {
     [exchangeCodeForToken, storeAccessToken]
   );
 
+  const updateConnectionStatus = useCallback(async (status: boolean) => {
+    const { data: session } = await supabase.auth.getSession();
+    if (!session.session) return;
+
+    // Optimistic update
+    setState((prev) => ({
+      ...prev,
+      profile: prev.profile ? { ...prev.profile, has_connected_with_owner: status } : null,
+    }));
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ has_connected_with_owner: status })
+      .eq('id', session.session.user.id);
+      
+    if (error) {
+      console.error('Error updating connection status:', error);
+    }
+  }, []);
+
   const getProfile = useCallback(async (): Promise<LinkedInProfile | null> => {
     const { data: session } = await supabase.auth.getSession();
     if (!session.session) return null;
 
     try {
-      const { data, error } = await supabase.functions.invoke(
+      // Fetch fresh LinkedIn data from the edge function
+      const { data: linkedInData, error: linkedInError } = await supabase.functions.invoke(
         'linkedin-get-profile',
         {
           body: {},
         }
       );
 
-      if (error) {
-        console.error('Error fetching LinkedIn profile:', error);
-        return null;
+      if (linkedInError) {
+        console.error('Error fetching LinkedIn profile:', linkedInError);
       }
 
-      setState((prev) => ({ ...prev, profile: data }));
-      return data;
+      // Fetch local profile data (connection status etc)
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('has_connected_with_owner, full_name, avatar_url')
+        .eq('id', session.session.user.id)
+        .single();
+
+      if (profileError) {
+         console.error('Error fetching local profile:', profileError);
+      }
+
+      let combinedProfile: LinkedInProfile | null = null;
+
+      if (linkedInData) {
+        combinedProfile = {
+          ...linkedInData,
+          has_connected_with_owner: profileData?.has_connected_with_owner ?? false,
+        };
+      } else if (profileData) {
+         const nameParts = (profileData.full_name || '').split(' ');
+         combinedProfile = {
+            id: session.session.user.id,
+            firstName: nameParts[0] || '',
+            lastName: nameParts.slice(1).join(' ') || '',
+            profilePicture: profileData.avatar_url,
+            has_connected_with_owner: profileData?.has_connected_with_owner ?? false,
+         }
+      }
+
+      setState((prev) => ({ ...prev, profile: combinedProfile }));
+      return combinedProfile;
     } catch (error) {
       console.error('Error fetching LinkedIn profile:', error);
       return null;
@@ -154,6 +204,7 @@ export function useLinkedInAuth() {
   return {
     login,
     getProfile,
+    updateConnectionStatus,
     isLoading: state.isLoading,
     error: state.error,
     profile: state.profile,

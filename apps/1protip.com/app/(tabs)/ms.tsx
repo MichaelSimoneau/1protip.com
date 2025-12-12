@@ -36,7 +36,7 @@ export default function MSTab() {
     if (!postId) {
       setLoading(true);
     }
-  }, [targetUrl, postId]);
+  }, [postId]);
 
   const loadPost = async (id: string) => {
     setLoading(true);

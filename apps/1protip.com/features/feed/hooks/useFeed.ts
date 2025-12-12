@@ -17,7 +17,7 @@ export function useFeed() {
     isLoading: true,
     isLoadingMore: false,
     error: null,
-    nextStart: 0,
+    nextStart: undefined,
   });
 
   const loadPage = useCallback(
@@ -85,7 +85,8 @@ export function useFeed() {
 
   useEffect(() => {
     loadPage({ reset: true });
-  }, [loadPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     posts: state.posts,

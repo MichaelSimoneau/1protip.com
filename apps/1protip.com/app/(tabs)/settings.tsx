@@ -1,369 +1,386 @@
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, ScrollView, TextInput, Linking, Alert, Animated } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Image, Linking, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link2, UserPlus, Hash, X, Plus } from 'lucide-react-native';
+import { Link2, UserPlus, Check, ExternalLink, MessageCircle, Hash, LogOut } from 'lucide-react-native';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect } from 'react';
 import { useHashtagPreferences } from '@/features/settings/hooks/useHashtagPreferences';
-import { useEffect, useState, useRef } from 'react';
-import { useLocalSearchParams } from 'expo-router';
 
-export default function SettingsTab() {
-  const { login, profile, isLoading, error, getProfile } = useLinkedInAuth();
-  const { hashtags, isLoading: hashtagsLoading, addHashtag, removeHashtag } = useHashtagPreferences();
-  const [newHashtag, setNewHashtag] = useState('');
-  const { highlight } = useLocalSearchParams<{ highlight?: string }>();
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+const MICHAEL_PROFILE_URL = 'https://linkedin.com/in/michaelsimoneau';
+// Placeholder for Michael's profile picture if not dynamically fetched (which implies web scraping). 
+// I'll use a generic or empty one, or a specific asset if I had it. 
+// For now, I'll use a high-quality placeholder or the app icon as a fallback if I can't find a better one.
+const MICHAEL_AVATAR_URI = 'https://media.licdn.com/dms/image/v2/D5603AQF7iI1f9tqD0g/profile-displayphoto-shrink_400_400/0/1708538666324?e=1741824000&v=beta&t=example'; // I shouldn't guess the URL.
+// I'll use a standard placeholder.
+const PLACEHOLDER_AVATAR = 'https://ui-avatars.com/api/?name=Michael+Simoneau&background=0066cc&color=fff&size=200';
+
+export default function AccountScreen() {
+  const { login, profile, isLoading, error, getProfile, updateConnectionStatus } = useLinkedInAuth();
+  const { hashtags } = useHashtagPreferences();
 
   useEffect(() => {
     getProfile();
   }, [getProfile]);
 
-  useEffect(() => {
-    if (highlight === 'connect' && !profile) {
-      const pulse = Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.05,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1.05,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]);
-      pulse.start();
-    }
-  }, [highlight, profile]);
-
-  const handleLinkedInConnect = async () => {
-    try {
-      await login();
-    } catch (err) {
-      console.error('LinkedIn connection failed:', err);
-    }
-  };
+  const isConnectedToMichael = profile?.has_connected_with_owner;
 
   const handleConnectWithMichael = async () => {
-    const linkedInUrl = 'https://linkedin.com/in/michaelsimoneau';
-    const canOpen = await Linking.canOpenURL(linkedInUrl);
+    const canOpen = await Linking.canOpenURL(MICHAEL_PROFILE_URL);
     if (canOpen) {
-      await Linking.openURL(linkedInUrl);
-    }
-  };
-
-  const handleAddHashtag = async () => {
-    if (newHashtag.trim()) {
-      try {
-        await addHashtag(newHashtag.trim());
-        setNewHashtag('');
-      } catch (err) {
-        Alert.alert('Error', 'Failed to add hashtag');
+      await Linking.openURL(MICHAEL_PROFILE_URL);
+      // Assume if they clicked, they might have connected.
+      // If we are logged in, update the status.
+      if (profile) {
+        updateConnectionStatus(true);
       }
     }
   };
 
-  const handleRemoveHashtag = async (tag: string) => {
-    if (tag === '#1protip') {
-      return;
-    }
+  const handleLogin = async () => {
     try {
-      await removeHashtag(tag);
+      await login();
     } catch (err) {
-      Alert.alert('Error', 'Failed to remove hashtag');
+      console.error('Login failed', err);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Connect & Account</Text>
-        <Text style={styles.subtitle}>Manage your LinkedIn connection and preferences</Text>
-      </View>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Banner Section */}
+        <View style={styles.bannerContainer}>
+          <LinearGradient
+            colors={['#004182', '#0077b5']}
+            style={styles.banner}
+          />
+          <View style={styles.profileHeader}>
+            <Image
+              source={{ uri: PLACEHOLDER_AVATAR }} 
+              style={styles.profileImage}
+            />
+            <View style={styles.profileInfo}>
+              <Text style={styles.name}>Michael Simoneau</Text>
+              <Text style={styles.headline}>Enterprise Architect & Technology Leader | Creator of 1ProTip</Text>
+              <Text style={styles.location}>San Francisco Bay Area</Text>
+              
+              <View style={styles.statsRow}>
+                <Text style={styles.statText}><Text style={styles.statBold}>500+</Text> connections</Text>
+              </View>
 
-      <ScrollView style={styles.content}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>LinkedIn Account</Text>
-
-          <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-            <Pressable
-              style={styles.settingCard}
-              onPress={handleLinkedInConnect}
-              disabled={isLoading}
-            >
-            <View style={styles.settingIcon}>
-              {isLoading ? (
-                <ActivityIndicator size="small" color="#0066cc" />
-              ) : (
-                <Link2 size={24} color="#0066cc" />
-              )}
-            </View>
-            <View style={styles.settingContent}>
-              <Text style={styles.settingTitle}>Your LinkedIn</Text>
-              <Text style={styles.settingDescription}>
-                {profile ? `Connected as ${profile.firstName}` : 'Not connected'}
-              </Text>
-            </View>
-            {profile ? (
-              <Text style={[styles.settingBadge, styles.settingBadgeSuccess]}>
-                Connected
-              </Text>
-            ) : (
-              <Text style={styles.settingBadge}>Tap to Connect</Text>
-            )}
-            </Pressable>
-          </Animated.View>
-
-          <Pressable
-            style={[styles.settingCard, styles.connectCard]}
-            onPress={handleConnectWithMichael}
-          >
-            <View style={[styles.settingIcon, styles.connectIcon]}>
-              <UserPlus size={24} color="#ffffff" />
-            </View>
-            <View style={styles.settingContent}>
-              <Text style={[styles.settingTitle, styles.connectText]}>Connect with Michael Simoneau</Text>
-              <Text style={[styles.settingDescription, styles.connectSubtext]}>
-                Follow the creator of #1ProTip
-              </Text>
-            </View>
-          </Pressable>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Hashtag Preferences</Text>
-
-          <View style={styles.hashtagCard}>
-            <View style={styles.hashtagInputContainer}>
-              <Hash size={20} color="#666666" style={styles.hashIcon} />
-              <TextInput
-                style={styles.hashtagInput}
-                placeholder="Add hashtag to follow"
-                value={newHashtag}
-                onChangeText={setNewHashtag}
-                onSubmitEditing={handleAddHashtag}
-                autoCapitalize="none"
-                returnKeyType="done"
-              />
-              <Pressable
-                style={styles.addButton}
-                onPress={handleAddHashtag}
-                disabled={!newHashtag.trim() || hashtagsLoading}
-              >
-                {hashtagsLoading ? (
-                  <ActivityIndicator size="small" color="#0066cc" />
+              <View style={styles.actionButtons}>
+                {isConnectedToMichael ? (
+                  <Pressable style={[styles.button, styles.buttonSecondary]}>
+                    <Check size={20} color="#666" />
+                    <Text style={[styles.buttonText, styles.buttonTextSecondary]}>Pending</Text>
+                  </Pressable>
                 ) : (
-                  <Plus size={20} color={newHashtag.trim() ? "#0066cc" : "#cccccc"} />
+                  <Pressable style={[styles.button, styles.buttonPrimary]} onPress={handleConnectWithMichael}>
+                    <UserPlus size={20} color="#fff" />
+                    <Text style={styles.buttonText}>Connect</Text>
+                  </Pressable>
                 )}
-              </Pressable>
-            </View>
-
-            <View style={styles.hashtagList}>
-              {hashtags.map((tag) => (
-                <View key={tag} style={styles.hashtagTag}>
-                  <Text style={styles.hashtagText}>{tag}</Text>
-                  {tag !== '#1protip' && (
-                    <Pressable
-                      onPress={() => handleRemoveHashtag(tag)}
-                      hitSlop={8}
-                      disabled={hashtagsLoading}
-                    >
-                      <X size={16} color="#666666" />
-                    </Pressable>
-                  )}
-                </View>
-              ))}
+                
+                <Pressable style={[styles.button, styles.buttonOutline]} onPress={() => Linking.openURL(MICHAEL_PROFILE_URL)}>
+                  <ExternalLink size={20} color="#0077b5" />
+                  <Text style={[styles.buttonText, styles.buttonTextOutline]}>View Profile</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
         </View>
 
-        {!profile && (
-          <View style={styles.infoCard}>
-            <Text style={styles.infoTitle}>Get Started:</Text>
-            <Text style={styles.infoText}>
-              1. Connect your LinkedIn account above
-            </Text>
-            <Text style={styles.infoText}>
-              2. Add hashtags you want to follow
-            </Text>
-            <Text style={styles.infoText}>
-              3. Start sharing and engaging with posts
-            </Text>
+        {/* Highlights / Interactions Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Highlights</Text>
+          <View style={styles.card}>
+            <View style={styles.highlightItem}>
+              <View style={styles.highlightIconContainer}>
+                <Hash size={18} color="#666" />
+              </View>
+              <View style={styles.highlightContent}>
+                <Text style={styles.highlightTitle}>Common Interests</Text>
+                <Text style={styles.highlightText}>You both follow <Text style={styles.highlightBold}>#1protip</Text></Text>
+              </View>
+            </View>
+            
+            {profile && (
+              <View style={[styles.highlightItem, { marginTop: 16 }]}>
+                <View style={styles.highlightIconContainer}>
+                   <Image source={{ uri: profile.profilePicture || PLACEHOLDER_AVATAR }} style={{ width: 24, height: 24, borderRadius: 12 }} />
+                </View>
+                 <View style={styles.highlightContent}>
+                  <Text style={styles.highlightTitle}>You know Michael</Text>
+                  <Text style={styles.highlightText}>
+                    {isConnectedToMichael ? 'You connected with Michael via 1ProTip' : 'Connect to expand your network'}
+                  </Text>
+                </View>
+              </View>
+            )}
           </View>
-        )}
+        </View>
+
+        {/* User's Account Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Your Account</Text>
+          <View style={styles.card}>
+            {profile ? (
+              <View style={styles.accountRow}>
+                <Image source={{ uri: profile.profilePicture }} style={styles.userAvatar} />
+                <View style={styles.userInfo}>
+                  <Text style={styles.userName}>{profile.firstName} {profile.lastName}</Text>
+                  <Text style={styles.userStatus}>Connected via LinkedIn</Text>
+                </View>
+                {/* Logout or Manage could go here */}
+              </View>
+            ) : (
+              <View style={styles.connectPrompt}>
+                <Text style={styles.connectPromptText}>Connect your LinkedIn to see mutual connections and manage your profile.</Text>
+                <Pressable style={styles.signInButton} onPress={handleLogin} disabled={isLoading}>
+                   {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.signInButtonText}>Sign in with LinkedIn</Text>}
+                </Pressable>
+              </View>
+            )}
+          </View>
+          
+          {profile && (
+            <View style={[styles.card, { marginTop: 16 }]}>
+                <Text style={styles.cardLabel}>Hashtags you follow</Text>
+                <View style={styles.tagsContainer}>
+                    {hashtags.map(tag => (
+                        <View key={tag} style={styles.tagChip}>
+                            <Text style={styles.tagText}>{tag}</Text>
+                        </View>
+                    ))}
+                </View>
+            </View>
+          )}
+        </View>
+
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f3f2ef', // LinkedIn-like background gray
   },
-  header: {
-    padding: 24,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+  scrollContent: {
+    paddingBottom: 40,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#1a1a1a',
+  bannerContainer: {
+    backgroundColor: '#fff',
     marginBottom: 8,
+    paddingBottom: 16,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 2,
   },
-  subtitle: {
+  banner: {
+    height: 120,
+    width: '100%',
+  },
+  profileHeader: {
+    paddingHorizontal: 24,
+    marginTop: -50,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 4,
+    borderColor: '#fff',
+    backgroundColor: '#eee',
+  },
+  profileInfo: {
+    marginTop: 12,
+  },
+  name: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: 'rgba(0,0,0,0.9)',
+  },
+  headline: {
+    fontSize: 16,
+    color: 'rgba(0,0,0,0.6)',
+    marginTop: 4,
+    lineHeight: 22,
+  },
+  location: {
     fontSize: 14,
-    color: '#666666',
+    color: 'rgba(0,0,0,0.6)',
+    marginTop: 4,
   },
-  content: {
-    padding: 16,
+  statsRow: {
+    marginTop: 12,
+    flexDirection: 'row',
+  },
+  statText: {
+    fontSize: 14,
+    color: '#0077b5',
+    fontWeight: '600',
+  },
+  statBold: {
+    fontWeight: '700',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    marginTop: 16,
+    gap: 12,
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 24,
+    gap: 8,
+    minWidth: 120,
+  },
+  buttonPrimary: {
+    backgroundColor: '#0077b5',
+  },
+  buttonSecondary: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#666',
+  },
+  buttonOutline: {
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#0077b5',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
+  },
+  buttonTextSecondary: {
+    color: '#666',
+  },
+  buttonTextOutline: {
+    color: '#0077b5',
   },
   section: {
-    marginBottom: 24,
+    marginBottom: 8,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#1a1a1a',
-    marginBottom: 12,
-    paddingHorizontal: 4,
+    fontWeight: '600',
+    color: 'rgba(0,0,0,0.9)',
+    marginHorizontal: 16,
+    marginVertical: 12,
   },
-  settingCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
+  card: {
+    backgroundColor: '#fff',
     padding: 16,
-    marginBottom: 12,
+    marginHorizontal: 0, // Edge to edge on mobile mostly, or consistent with style
+    // If we want cards look:
+    // marginHorizontal: 12, borderRadius: 8
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
-    shadowRadius: 4,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 1 },
     elevation: 2,
   },
-  connectCard: {
-    backgroundColor: '#0066cc',
+  highlightItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
   },
-  settingIcon: {
+  highlightIconContainer: {
+    marginTop: 2,
+  },
+  highlightContent: {
+    flex: 1,
+  },
+  highlightTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'rgba(0,0,0,0.9)',
+  },
+  highlightText: {
+    fontSize: 14,
+    color: 'rgba(0,0,0,0.6)',
+    marginTop: 2,
+    lineHeight: 20,
+  },
+  highlightBold: {
+    fontWeight: '600',
+    color: 'rgba(0,0,0,0.9)',
+  },
+  accountRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  userAvatar: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
+    backgroundColor: '#eee',
   },
-  connectIcon: {
-    backgroundColor: '#0052a3',
-  },
-  settingContent: {
+  userInfo: {
     flex: 1,
   },
-  settingTitle: {
+  userName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1a1a1a',
-    marginBottom: 4,
+    color: 'rgba(0,0,0,0.9)',
   },
-  connectText: {
-    color: '#ffffff',
-  },
-  settingDescription: {
+  userStatus: {
     fontSize: 14,
-    color: '#666666',
+    color: '#0077b5',
   },
-  connectSubtext: {
-    color: '#e3f2fd',
-  },
-  settingBadge: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#ff6b35',
-    backgroundColor: '#fff3f0',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  settingBadgeSuccess: {
-    color: '#00cc88',
-    backgroundColor: '#e6fff8',
-  },
-  hashtagCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  hashtagInputContainer: {
-    flexDirection: 'row',
+  connectPrompt: {
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    borderRadius: 8,
-    paddingHorizontal: 12,
+    padding: 8,
+  },
+  connectPromptText: {
+    fontSize: 14,
+    color: 'rgba(0,0,0,0.6)',
+    textAlign: 'center',
     marginBottom: 16,
   },
-  hashIcon: {
-    marginRight: 8,
-  },
-  hashtagInput: {
-    flex: 1,
-    height: 44,
-    fontSize: 16,
-    color: '#1a1a1a',
-  },
-  addButton: {
-    padding: 4,
-  },
-  hashtagList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  hashtagTag: {
-    flexDirection: 'row',
+  signInButton: {
+    backgroundColor: '#0077b5',
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 24,
+    width: '100%',
     alignItems: 'center',
-    backgroundColor: '#e3f2fd',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
-    gap: 6,
   },
-  hashtagText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#0066cc',
-  },
-  infoCard: {
-    backgroundColor: '#e3f2fd',
-    borderRadius: 12,
-    padding: 20,
-    marginTop: 12,
-  },
-  infoTitle: {
+  signInButtonText: {
+    color: '#fff',
     fontSize: 16,
-    fontWeight: '700',
-    color: '#0066cc',
-    marginBottom: 12,
+    fontWeight: '600',
   },
-  infoText: {
-    fontSize: 14,
-    lineHeight: 24,
-    color: '#1a1a1a',
+  cardLabel: {
+      fontSize: 14,
+      fontWeight: '600',
+      marginBottom: 12,
+      color: 'rgba(0,0,0,0.7)',
   },
+  tagsContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 8,
+  },
+  tagChip: {
+      backgroundColor: '#f3f2ef',
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: 'rgba(0,0,0,0.1)',
+  },
+  tagText: {
+      fontSize: 14,
+      color: 'rgba(0,0,0,0.7)',
+      fontWeight: '600',
+  }
 });

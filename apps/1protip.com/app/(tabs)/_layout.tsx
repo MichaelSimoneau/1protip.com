@@ -56,7 +56,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="ms"
+        name="MichaelSimoneau"
         options={{
           title: 'MS',
           tabBarIcon: ({ size, color }: { size: number; color: string }) => (

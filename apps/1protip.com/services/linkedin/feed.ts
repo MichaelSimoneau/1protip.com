@@ -34,25 +34,16 @@ export async function fetchHashtagFeed(
 
   const url = `${FEED_API_URL}?${params.toString()}`;
 
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'pre-fix',hypothesisId:'H1',location:'services/linkedin/feed.ts:fetchHashtagFeed',message:'request start',data:{url,origin:typeof location!=='undefined'?location.href:'unknown',start,count},timestamp:Date.now()})}).catch(()=>{});
-  // #endregion
 
   const response = await fetch(url);
 
   if (!response.ok) {
-    // #region agent log
-    fetch('http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'pre-fix',hypothesisId:'H1',location:'services/linkedin/feed.ts:fetchHashtagFeed',message:'request failed',data:{status:response.status,statusText:response.statusText,url},timestamp:Date.now()})}).catch(()=>{});
-    // #endregion
     const text = await response.text();
     throw new Error(`Feed request failed: ${text}`);
   }
 
   const data = (await response.json()) as FeedResponse | { posts?: FeedPost[] };
 
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'pre-fix',hypothesisId:'H1',location:'services/linkedin/feed.ts:fetchHashtagFeed',message:'request success',data:{status:response.status,receivedPosts:Array.isArray((data as any).posts)?(data as any).posts.length:0,start,dataStart:(data as any).start,nextStart:(data as any).nextStart},timestamp:Date.now()})}).catch(()=>{});
-  // #endregion
 
   const posts = "posts" in data ? data.posts || [] : [];
 
