@@ -6,15 +6,18 @@ import Animated, {
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
+  Easing,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useFeed } from '@/features/feed/hooks/useFeed';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye } from 'lucide-react-native';
-import { useCallback, useRef, useState } from 'react';
+import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye, Lock, Hash } from 'lucide-react-native';
+import { useCallback, useRef, useState, useEffect } from 'react';
 import { router } from 'expo-router';
 import { useTabPanel } from '@/contexts/TabPanelContext';
+import { TunnelSplash } from '@/components/TunnelSplash';
 import type { FeedPost } from '@/services/linkedin/feed';
 import {
   likePost as likeWithService,
@@ -160,7 +163,7 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList as any);
 
 export default function FeedTab() {
   const { posts, isLoading, isLoadingMore, error, hasMore, refreshFeed, loadMore, prependPost } = useFeed();
-  const { profile } = useLinkedInAuth();
+  const { profile, login } = useLinkedInAuth();
   const isAuthenticated = !!profile;
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
@@ -168,6 +171,37 @@ export default function FeedTab() {
   const scrollY = useSharedValue(0);
   const currentIndex = useSharedValue(0);
   const listRef = useRef<FlatList<FeedPost>>(null);
+
+  // Lock State
+  const [isLocked, setIsLocked] = useState(true);
+  const lockOpacity = useSharedValue(1);
+  const feedOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    // If authenticated on mount, unlock immediately
+    if (isAuthenticated) {
+      handleUnlock();
+    }
+  }, [isAuthenticated]);
+
+  const handleUnlock = () => {
+    setIsLocked(false);
+    lockOpacity.value = withTiming(0, { duration: 500, easing: Easing.out(Easing.ease) });
+    feedOpacity.value = withTiming(1, { duration: 500, easing: Easing.in(Easing.ease) });
+  };
+
+  const handleSkipLogin = () => {
+    handleUnlock();
+  };
+
+  const handleLogin = async () => {
+    try {
+      await login();
+      handleUnlock();
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     setPostCreatedCallback(prependPost);
@@ -265,91 +299,110 @@ export default function FeedTab() {
     });
   };
 
-  if (isLoading && posts.length === 0) {
-    return <LoadingSpinner message="Loading your feed..." />;
-  }
+  // Lock Overlay Styles
+  const lockContainerStyle = useAnimatedStyle(() => ({
+    opacity: lockOpacity.value,
+    zIndex: lockOpacity.value > 0 ? 100 : -1,
+  }));
 
-  if (error) {
-    return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.header}>
-          <Text style={styles.title}>#1ProTip</Text>
-          <Text style={styles.subtitle}>Professional tips from the LinkedIn community</Text>
-        </View>
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Error loading feed</Text>
-          <Text style={styles.errorMessage}>{error.message}</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
+  const feedContainerStyle = useAnimatedStyle(() => ({
+    opacity: feedOpacity.value,
+  }));
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>#1ProTip</Text>
-        <Text style={styles.subtitle}>Professional tips from the LinkedIn community</Text>
-      </View>
+    <View style={styles.container}>
+      {/* Lock / Splash Overlay */}
+      <Animated.View style={[StyleSheet.absoluteFill, lockContainerStyle]}>
+        <TunnelSplash
+          onLogoPress={handleLogin}
+          onSkip={handleSkipLogin}
+          logoLoading={false}
+          brandText={<Text style={styles.brandText}>#1ProTip</Text>}
+        />
+      </Animated.View>
 
-      {feedbackMessage && (
-        <View style={styles.feedback}>
-          <Text style={styles.feedbackText}>{feedbackMessage}</Text>
-        </View>
-      )}
+      {/* Main Feed Content */}
+      <Animated.View style={[styles.container, feedContainerStyle]}>
+        <SafeAreaView style={styles.container} edges={['top']}>
+          <View style={styles.header}>
+            <View style={styles.headerRow}>
+              <View>
+                <Text style={styles.title}>#1ProTip</Text>
+                <Text style={styles.subtitle}>Professional tips from the LinkedIn community</Text>
+              </View>
+              {/* Dynamic Icon Animation could go here */}
+              <Hash size={32} color="#0066cc" />
+            </View>
+          </View>
 
-      <GestureDetector gesture={panGesture}>
-        <AnimatedFlatList
-          ref={listRef}
-          data={posts}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
-          scrollEventThrottle={16}
-          onScroll={onScroll}
-          refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={refreshFeed} />
-          }
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.65}
-          maxToRenderPerBatch={2}
-          windowSize={2}
-          removeClippedSubviews
-          initialNumToRender={1}
-          getItemLayout={getItemLayout}
-          snapToInterval={CARD_TOTAL}
-          snapToAlignment="start"
-          decelerationRate="fast"
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={() => (
-            <View style={styles.placeholder}>
-              <Rss size={64} color="#cccccc" />
-              <Text style={styles.placeholderTitle}>No posts yet</Text>
-              <Text style={styles.placeholderText}>
-                Connect your LinkedIn and posts with #1ProTip will appear here
-              </Text>
+          {error && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>Error loading feed</Text>
+              <Text style={styles.errorMessage}>{error.message}</Text>
             </View>
           )}
-          ListFooterComponent={() =>
-            isLoadingMore ? (
-              <View style={styles.footerLoading}>
-                <LoadingSpinner message="Loading more tips..." />
-              </View>
-            ) : null
-          }
-          renderItem={({ item, index }: { item: FeedPost; index: number }) => (
-            <RolodexCard
-              item={item}
-              index={index}
-              scrollY={scrollY}
-              onLike={handleLike}
-              onComment={handleCommentOpen}
-              onRepost={handleRepost}
-              onView={handleView}
-              disabled={!!actionInProgress}
-            />
+
+          {feedbackMessage && (
+            <View style={styles.feedback}>
+              <Text style={styles.feedbackText}>{feedbackMessage}</Text>
+            </View>
           )}
-        />
-      </GestureDetector>
-    </SafeAreaView>
+
+          <GestureDetector gesture={panGesture}>
+            <AnimatedFlatList
+              ref={listRef}
+              data={posts}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.listContent}
+              scrollEventThrottle={16}
+              onScroll={onScroll}
+              refreshControl={
+                <RefreshControl refreshing={isLoading} onRefresh={refreshFeed} />
+              }
+              onEndReached={handleEndReached}
+              onEndReachedThreshold={0.65}
+              maxToRenderPerBatch={2}
+              windowSize={2}
+              removeClippedSubviews
+              initialNumToRender={1}
+              getItemLayout={getItemLayout}
+              snapToInterval={CARD_TOTAL}
+              snapToAlignment="start"
+              decelerationRate="fast"
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={() => (
+                <View style={styles.placeholder}>
+                  <Rss size={64} color="#cccccc" />
+                  <Text style={styles.placeholderTitle}>No posts yet</Text>
+                  <Text style={styles.placeholderText}>
+                    Connect your LinkedIn and posts with #1ProTip will appear here
+                  </Text>
+                </View>
+              )}
+              ListFooterComponent={() =>
+                isLoadingMore ? (
+                  <View style={styles.footerLoading}>
+                    <LoadingSpinner message="Loading more tips..." />
+                  </View>
+                ) : null
+              }
+              renderItem={({ item, index }: { item: FeedPost; index: number }) => (
+                <RolodexCard
+                  item={item}
+                  index={index}
+                  scrollY={scrollY}
+                  onLike={handleLike}
+                  onComment={handleCommentOpen}
+                  onRepost={handleRepost}
+                  onView={handleView}
+                  disabled={!!actionInProgress}
+                />
+              )}
+            />
+          </GestureDetector>
+        </SafeAreaView>
+      </Animated.View>
+    </View>
   );
 }
 
@@ -364,6 +417,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 32,
     fontWeight: '800',
@@ -373,6 +431,16 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: '#666666',
+  },
+  brandText: {
+    color: '#ffffff',
+    fontSize: 48,
+    fontWeight: '800',
+    textAlign: 'center',
+    letterSpacing: 1,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
   feedback: {
     backgroundColor: '#0066cc',

@@ -45,46 +45,15 @@ export function LinkedInLogoButton({
   disabled = false,
   size = 160,
 }: LinkedInLogoButtonProps) {
-  // Early return for web or when reanimated is unavailable
-  if (Platform.OS === 'web' || !Animated || !useSharedValue) {
-    return (
-      <Pressable
-        onPress={onPress}
-        disabled={disabled || isLoading}
-        style={({ pressed }) => [
-          styles.container,
-          { width: size, height: size },
-          pressed && styles.pressed,
-        ]}
-      >
-        <View
-          style={[
-            styles.logoContainer,
-            {
-              width: size,
-              height: size,
-              borderRadius: size * 0.15,
-              backgroundColor: LINKEDIN_BLUE,
-            },
-          ]}
-        >
-          <Text style={[styles.logoText, { fontSize: size * 0.4 }]}>in</Text>
-          {isLoading && (
-            <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#ffffff" />
-            </View>
-          )}
-        </View>
-      </Pressable>
-    );
-  }
-
   const pulseScale = useSharedValue(1);
   const shadowOpacity = useSharedValue(0.8);
   const brightness = useSharedValue(1);
   const glowIntensity = useSharedValue(0.6);
 
   useEffect(() => {
+    // Early return if not ready or on web without reanimated
+    if (!Animated || !useSharedValue) return;
+
     if (isLoading || disabled) {
       pulseScale.value = 1;
       shadowOpacity.value = 0.8;
@@ -171,6 +140,40 @@ export function LinkedInLogoButton({
   const glowAnimatedStyle = useAnimatedStyle(() => ({
     opacity: glowIntensity.value as number,
   }));
+
+  // Render static fallback if reanimated is missing
+  if (Platform.OS === 'web' || !Animated || !useSharedValue) {
+    return (
+      <Pressable
+        onPress={onPress}
+        disabled={disabled || isLoading}
+        style={({ pressed }) => [
+          styles.container,
+          { width: size, height: size },
+          pressed && styles.pressed,
+        ]}
+      >
+        <View
+          style={[
+            styles.logoContainer,
+            {
+              width: size,
+              height: size,
+              borderRadius: size * 0.15,
+              backgroundColor: LINKEDIN_BLUE,
+            },
+          ]}
+        >
+          <Text style={[styles.logoText, { fontSize: size * 0.4 }]}>in</Text>
+          {isLoading && (
+            <View style={styles.loadingOverlay}>
+              <ActivityIndicator size="large" color="#ffffff" />
+            </View>
+          )}
+        </View>
+      </Pressable>
+    );
+  }
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>

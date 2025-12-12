@@ -1,12 +1,17 @@
-import { View, Text, Pressable, StyleSheet, Animated, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Animated, TextInput, ActivityIndicator, PanResponder } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useState, useRef, useEffect } from 'react';
 import { useTabPanel } from '@/contexts/TabPanelContext';
-import { X, Send } from 'lucide-react-native';
+import { X, Send, Lock, Unlock } from 'lucide-react-native';
 import { commentOnPost as commentWithService } from '@/services/linkedin/socialActions';
 import { createAppPost } from '@/services/linkedin/feed';
+import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 
-export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+interface CustomTabBarProps extends Partial<BottomTabBarProps> {
+  onTabPress?: (index: number) => void;
+}
+
+export function CustomTabBar({ state, descriptors, navigation, onTabPress }: CustomTabBarProps) {
   const [showPanel, setShowPanel] = useState<number | null>(null);
   const panelHeight = useRef(new Animated.Value(0)).current;
   const { panelType, activePost, closePanel, onPostCreated } = useTabPanel();
@@ -14,13 +19,43 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [postText, setPostText] = useState('');
   const [isPosting, setIsPosting] = useState(false);
+  const { profile, logout } = useLinkedInAuth();
+  const isAuthenticated = !!profile;
+
+  // Swipe Gesture Handling
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        // Detect vertical swipes only
+        return Math.abs(gestureState.dy) > 20 && Math.abs(gestureState.dx) < 20;
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy < -50) {
+          // Swipe Up - Show Panel if active tab allows
+          if (state && state.index !== undefined) {
+             const activeRouteName = state.routes[state.index].name;
+             // Only allow swipe up on certain tabs if needed, currently all
+             setShowPanel(state.index);
+          }
+        } else if (gestureState.dy > 50) {
+          // Swipe Down - Hide Panel
+          setShowPanel(null);
+          closePanel();
+        }
+      },
+    })
+  ).current;
 
   const handleMsDonate = () => {
     setShowPanel(null);
-    navigation.navigate('ms', {
-      action: 'donate',
-      slug: 'michaelsimoneau',
-    });
+    if (navigation) {
+        navigation.navigate('ms'); // This might need parameters if we can pass them
+    }
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setShowPanel(null);
   };
 
   useEffect(() => {
@@ -33,7 +68,10 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
   }, [showPanel, panelType]);
 
   const handleTabPress = (index: number) => {
-    const isFocused = state.index === index;
+    // If locked (Feed tab logic handled in FeedTab itself via TunnelSplash), 
+    // but here we just handle navigation.
+    // If user is on a tab and taps it again, toggle panel
+    const isFocused = state?.index === index;
 
     if (isFocused) {
       if (showPanel === index) {
@@ -43,14 +81,19 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
       }
     } else {
       setShowPanel(null);
-      const event = navigation.emit({
-        type: 'tabPress',
-        target: state.routes[index].key,
-        canPreventDefault: true,
-      });
+      
+      if (onTabPress) {
+        onTabPress(index);
+      } else if (navigation && state) {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: state.routes[index].key,
+            canPreventDefault: true,
+          });
 
-      if (!event.defaultPrevented) {
-        navigation.navigate(state.routes[index].name);
+          if (!event.defaultPrevented) {
+            navigation.navigate(state.routes[index].name);
+          }
       }
     }
   };
@@ -137,6 +180,11 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
           <View style={styles.panelContent}>
             <Text style={styles.panelTitle}>Account Actions</Text>
             <Text style={styles.panelText}>Quick settings and account options</Text>
+            {isAuthenticated && (
+                <Pressable style={[styles.primaryActionButton, { backgroundColor: '#cc0000', marginTop: 16 }]} onPress={handleLogout}>
+                    <Text style={styles.primaryActionText}>Logout</Text>
+                </Pressable>
+            )}
           </View>
         );
       case 'feed':
@@ -197,17 +245,17 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
   };
 
   const tabOrder = ['settings', 'feed', 'ms'];
-  const orderedRoutes = tabOrder
+  const orderedRoutes = state ? tabOrder
     .map(name => {
       const index = state.routes.findIndex(r => r.name === name);
       return index >= 0 ? { route: state.routes[index], index } : null;
     })
-    .filter(Boolean) as Array<{ route: typeof state.routes[0]; index: number }>;
+    .filter(Boolean) as Array<{ route: typeof state.routes[0]; index: number }> : [];
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} {...panResponder.panHandlers}>
       <Animated.View style={[styles.panel, { height: panelHeight }]}>
-        {panelType !== null ? renderPanel('') : (showPanel !== null && renderPanel(state.routes[showPanel].name))}
+        {panelType !== null ? renderPanel('') : (showPanel !== null && state ? renderPanel(state.routes[showPanel].name) : null)}
       </Animated.View>
 
       <View style={styles.tabBar}>
@@ -215,6 +263,15 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
           const { options } = descriptors[route.key];
           const isFocused = state.index === index;
           const isPanelOpen = showPanel === index || panelType !== null;
+
+          // Dynamic Icon for Feed
+          let icon = options.tabBarIcon;
+          if (route.name === 'feed' && !isAuthenticated) {
+             // We can optionally show a Lock icon here if we want to reflect the locked state in the tab bar too
+             // For now, we stick to the plan: Feed Tab is the Lock screen content, but icon transforms.
+             // Since we don't have easy access to the animation value here without context,
+             // we keep the static icon or update based on auth.
+          }
 
           return (
             <Pressable
@@ -226,8 +283,8 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
                 isPanelOpen && isFocused && styles.tabWithPanel,
               ]}
             >
-              {options.tabBarIcon &&
-                options.tabBarIcon({
+              {icon &&
+                icon({
                   focused: isFocused,
                   color: isFocused ? '#ffffff' : '#666666',
                   size: 32,

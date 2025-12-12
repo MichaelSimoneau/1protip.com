@@ -60,16 +60,20 @@ type RoundedSquareProps = {
 };
 
 function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress, isLoading = false, disabled = false, finalSize }: RoundedSquareProps) {
-  if (!Animated) return null;
-
   const squareSize = useSharedValue(INITIAL_SIZE);
   const squareOpacity = useSharedValue(0);
+  const textSize = useSharedValue(0);
+  const loginTextSize = useSharedValue(0);
+  const [isReady, setIsReady] = React.useState(false);
+
   const startDelay = index * DELAY_BETWEEN_SQUARES;
   const isLogoSquare = isFilled && showLogoText;
   const targetSize = isLogoSquare ? LOGO_FINAL_SIZE : finalSize;
   const shouldFadeOut = !isLogoSquare;
 
   useEffect(() => {
+    if (!Animated) return;
+
     const timer = setTimeout(() => {
       // Fade in quickly
       squareOpacity.value = withTiming(0.8, { duration: 200 });
@@ -96,6 +100,26 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
     return () => clearTimeout(timer);
   }, [startDelay, squareSize, squareOpacity, targetSize, shouldFadeOut]);
 
+  useEffect(() => {
+    if (!isLogoSquare || !Animated) return;
+
+    // Show text when square reaches final size
+    const textTimer = setTimeout(() => {
+      textSize.value = withTiming(LOGO_FINAL_SIZE * 0.4, {
+        duration: 300,
+        easing: Easing?.out(Easing.ease) || undefined,
+      });
+      loginTextSize.value = withTiming(LOGO_FINAL_SIZE * 0.1, {
+        duration: 300,
+        easing: Easing?.out(Easing.ease) || undefined,
+      });
+      // Enable interactivity after text appears
+      setIsReady(true);
+    }, startDelay + ANIMATION_DURATION);
+
+    return () => clearTimeout(textTimer);
+  }, [startDelay, textSize, loginTextSize, isLogoSquare]);
+
   const style = useAnimatedStyle(() => ({
     width: squareSize.value as number,
     height: squareSize.value as number,
@@ -109,40 +133,20 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
     alignItems: 'center',
   }));
 
+  const textStyle = useAnimatedStyle(() => ({
+    fontSize: textSize.value as number,
+    opacity: squareOpacity.value as number,
+  }));
+
+  const loginTextStyle = useAnimatedStyle(() => ({
+    fontSize: loginTextSize.value as number,
+    opacity: squareOpacity.value as number,
+  }));
+
+  if (!Animated) return null;
+
   // For logo square, we need to show text and make it pressable
   if (isLogoSquare) {
-    const textSize = useSharedValue(0);
-    const loginTextSize = useSharedValue(0);
-    const [isReady, setIsReady] = React.useState(false);
-    
-    useEffect(() => {
-      // Show text when square reaches final size
-      const textTimer = setTimeout(() => {
-        textSize.value = withTiming(LOGO_FINAL_SIZE * 0.4, {
-          duration: 300,
-          easing: Easing?.out(Easing.ease) || undefined,
-        });
-        loginTextSize.value = withTiming(LOGO_FINAL_SIZE * 0.1, {
-          duration: 300,
-          easing: Easing?.out(Easing.ease) || undefined,
-        });
-        // Enable interactivity after text appears
-        setIsReady(true);
-      }, startDelay + ANIMATION_DURATION);
-
-      return () => clearTimeout(textTimer);
-    }, [startDelay, textSize, loginTextSize]);
-
-    const textStyle = useAnimatedStyle(() => ({
-      fontSize: textSize.value as number,
-      opacity: squareOpacity.value as number,
-    }));
-
-    const loginTextStyle = useAnimatedStyle(() => ({
-      fontSize: loginTextSize.value as number,
-      opacity: squareOpacity.value as number,
-    }));
-
     return (
       <Animated.View style={style}>
         <Animated.View
