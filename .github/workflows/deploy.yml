@@ -32,10 +32,10 @@ jobs:
         run: pnpm --filter @1protip/dotcom test
 
       - name: Setup Firefox
-        uses: browser-actions/setup-firefox@v1
+        uses: browser-actions/setup-firefox@latest
       
       - name: Setup Geckodriver
-        uses: browser-actions/setup-geckodriver@v1
+        uses: browser-actions/setup-geckodriver@latest
 
       - name: Run Selenium Tests (and Build)
         run: pnpm --filter @1protip/dotcom test:selenium
