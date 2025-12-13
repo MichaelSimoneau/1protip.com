@@ -29,10 +29,23 @@ async function waitForServer(url, attempts = 20, delayMs = 500) {
   throw new Error(`Server did not become ready at ${url}`);
 }
 
-function stopServer() {
+async function stopServer() {
   if (serverProcess) {
-    serverProcess.kill('SIGTERM');
-    serverProcess = undefined;
+    return new Promise((resolve) => {
+      serverProcess.once('exit', () => {
+        serverProcess = undefined;
+        resolve();
+      });
+      serverProcess.kill('SIGTERM');
+      // Force kill after 2 seconds if still running
+      setTimeout(() => {
+        if (serverProcess) {
+          serverProcess.kill('SIGKILL');
+          serverProcess = undefined;
+        }
+        resolve();
+      }, 2000);
+    });
   }
 }
 
@@ -45,13 +58,20 @@ before(async () => {
 });
 
 after(async () => {
-  if (driver) {
-    await driver.quit();
+  try {
+    if (driver) {
+      await Promise.race([
+        driver.quit(),
+        new Promise((resolve) => setTimeout(resolve, 5000)), // 5 second timeout
+      ]);
+    }
+  } catch (err) {
+    console.error('Error quitting driver:', err);
   }
-  stopServer();
+  await stopServer();
 });
 
-test('Tunnel animation renders correctly', async () => {
+test('Tunnel animation renders correctly', { timeout: 30000 }, async () => {
   await driver.get(SERVER_URL);
 
   // Wait for the page to load

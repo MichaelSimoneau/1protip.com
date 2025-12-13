@@ -1,6 +1,15 @@
 import { useState, useCallback, useEffect } from 'react';
-import { supabase } from '@/services/supabase/client';
-import type { Tip } from '@/services/supabase/types';
+import { auth, db } from '@/services/firebase/client';
+import { collection, addDoc, updateDoc, deleteDoc, getDocs, query, orderBy, doc, Timestamp } from 'firebase/firestore';
+
+export type Tip = {
+  id: string;
+  content: string;
+  created_at: string;
+  published: boolean;
+  user_id: string;
+  linkedin_url?: string;
+};
 
 interface TipsState {
   tips: Tip[];
@@ -19,15 +28,24 @@ export function useTips() {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      const { data, error } = await supabase
-        .from('tips')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const q = query(collection(db, 'tips'), orderBy('created_at', 'desc'));
+      const querySnapshot = await getDocs(q);
+      
+      const tips: Tip[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        tips.push({
+          id: doc.id,
+          content: data.content,
+          created_at: data.created_at?.toDate?.()?.toISOString() || new Date().toISOString(),
+          published: data.published,
+          user_id: data.user_id,
+          linkedin_url: data.linkedin_url,
+        });
+      });
 
       setState({
-        tips: data || [],
+        tips,
         isLoading: false,
         error: null,
       });
@@ -42,27 +60,34 @@ export function useTips() {
 
   const createTip = useCallback(async (content: string) => {
     try {
-      const { data: session } = await supabase.auth.getSession();
-      if (!session.session) throw new Error('No active session');
+      const user = auth.currentUser;
+      if (!user) throw new Error('No active session');
 
-      const { data, error } = await supabase
-        .from('tips')
-        .insert({
-          content,
-          user_id: session.session.user.id,
-          published: false,
-        })
-        .select()
-        .single();
+      const now = Timestamp.now();
+      const newTipData = {
+        content,
+        user_id: user.uid,
+        published: false,
+        created_at: now,
+        updated_at: now,
+      };
 
-      if (error) throw error;
+      const docRef = await addDoc(collection(db, 'tips'), newTipData);
+      
+      const newTip: Tip = {
+        id: docRef.id,
+        content: newTipData.content,
+        created_at: now.toDate().toISOString(),
+        published: newTipData.published,
+        user_id: newTipData.user_id,
+      };
 
       setState((prev) => ({
         ...prev,
-        tips: [data, ...prev.tips],
+        tips: [newTip, ...prev.tips],
       }));
 
-      return data;
+      return newTip;
     } catch (error) {
       throw error;
     }
@@ -70,21 +95,18 @@ export function useTips() {
 
   const updateTip = useCallback(async (id: string, updates: Partial<Tip>) => {
     try {
-      const { data, error } = await supabase
-        .from('tips')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
-
-      if (error) throw error;
+      const tipRef = doc(db, 'tips', id);
+      await updateDoc(tipRef, {
+        ...updates,
+        updated_at: Timestamp.now()
+      });
 
       setState((prev) => ({
         ...prev,
-        tips: prev.tips.map((tip) => (tip.id === id ? data : tip)),
+        tips: prev.tips.map((tip) => (tip.id === id ? { ...tip, ...updates } : tip)),
       }));
 
-      return data;
+      return { id, ...updates };
     } catch (error) {
       throw error;
     }
@@ -92,9 +114,7 @@ export function useTips() {
 
   const deleteTip = useCallback(async (id: string) => {
     try {
-      const { error } = await supabase.from('tips').delete().eq('id', id);
-
-      if (error) throw error;
+      await deleteDoc(doc(db, 'tips', id));
 
       setState((prev) => ({
         ...prev,

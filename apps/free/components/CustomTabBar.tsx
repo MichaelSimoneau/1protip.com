@@ -1,17 +1,54 @@
-import { View, Text, Pressable, StyleSheet, Animated, TextInput, ActivityIndicator, PanResponder } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Animated, TextInput, ActivityIndicator, PanResponder, LayoutChangeEvent } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { useState, useRef, useEffect } from 'react';
 import { useTabPanel } from '@/contexts/TabPanelContext';
-import { X, Send, Lock, Unlock } from 'lucide-react-native';
+import { X, Send, ExternalLink, Heart, DollarSign } from 'lucide-react-native';
 import { commentOnPost as commentWithService } from '@/services/linkedin/socialActions';
 import { createAppPost } from '@/services/linkedin/feed';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
+import AnimatedReanimated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 
 interface CustomTabBarProps extends Partial<BottomTabBarProps> {
   onTabPress?: (index: number) => void;
+  pageIndex?: number;
 }
 
-export function CustomTabBar({ state, descriptors, navigation, onTabPress }: CustomTabBarProps) {
+const Tile = ({ 
+  icon: Icon, 
+  title, 
+  subtitle, 
+  onPress, 
+  color = '#ffffff', 
+  textColor = '#1a1a1a',
+  size = 'medium' 
+}: { 
+  icon: any, 
+  title: string, 
+  subtitle?: string, 
+  onPress: () => void, 
+  color?: string,
+  textColor?: string,
+  size?: 'small' | 'medium' | 'large'
+}) => (
+  <Pressable 
+    style={[
+      styles.tile, 
+      { backgroundColor: color, flex: size === 'large' ? 1 : 0.48 }
+    ]} 
+    onPress={onPress}
+  >
+    <View style={styles.tileHeader}>
+      <Icon size={24} color={textColor} />
+      <ExternalLink size={16} color={textColor} style={{ opacity: 0.5 }} />
+    </View>
+    <View>
+      <Text style={[styles.tileTitle, { color: textColor }]}>{title}</Text>
+      {subtitle && <Text style={[styles.tileSubtitle, { color: textColor, opacity: 0.8 }]}>{subtitle}</Text>}
+    </View>
+  </Pressable>
+);
+
+export function CustomTabBar({ state, descriptors, navigation, onTabPress, pageIndex }: CustomTabBarProps) {
   const [showPanel, setShowPanel] = useState<number | null>(null);
   const panelHeight = useRef(new Animated.Value(0)).current;
   const { panelType, activePost, closePanel, onPostCreated } = useTabPanel();
@@ -21,6 +58,45 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
   const [isPosting, setIsPosting] = useState(false);
   const { profile, logout } = useLinkedInAuth();
   const isAuthenticated = !!profile;
+
+  // Tab bar height animation for hidden pages
+  const isHiddenPage = pageIndex === 0 || pageIndex === 4;
+  const tabBarHeight = useRef(new Animated.Value(120)).current; // Initial height from styles
+
+  // Animated highlight indicator
+  const indicatorPosition = useSharedValue(0);
+  const indicatorWidth = useSharedValue(0);
+  const tabLayouts = useRef<{ [key: number]: { x: number; width: number } }>({});
+
+  useEffect(() => {
+    Animated.timing(tabBarHeight, {
+      toValue: isHiddenPage ? 0 : 120,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [isHiddenPage, tabBarHeight]);
+
+  // Update indicator position when active tab changes
+  useEffect(() => {
+    if (state?.index !== undefined && tabLayouts.current[state.index]) {
+      const layout = tabLayouts.current[state.index];
+      indicatorPosition.value = withTiming(layout.x, {
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+      });
+      indicatorWidth.value = withTiming(layout.width, {
+        duration: 300,
+        easing: Easing.out(Easing.cubic),
+      });
+    }
+  }, [state?.index, indicatorPosition, indicatorWidth]);
+
+  const indicatorAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: indicatorPosition.value }],
+      width: indicatorWidth.value,
+    };
+  });
 
   // Swipe Gesture Handling
   const panResponder = useRef(
@@ -33,8 +109,6 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
         if (gestureState.dy < -50) {
           // Swipe Up - Show Panel if active tab allows
           if (state && state.index !== undefined) {
-             const activeRouteName = state.routes[state.index].name;
-             // Only allow swipe up on certain tabs if needed, currently all
              setShowPanel(state.index);
           }
         } else if (gestureState.dy > 50) {
@@ -65,7 +139,7 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
       duration: 300,
       useNativeDriver: false,
     }).start();
-  }, [showPanel, panelType]);
+  }, [showPanel, panelType, panelHeight]);
 
   const handleTabPress = (index: number) => {
     // If locked (Feed tab logic handled in FeedTab itself via TunnelSplash), 
@@ -231,12 +305,34 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
       case 'ms':
         return (
           <View style={styles.panelContent}>
-            <Text style={styles.panelTitle}>MS Actions</Text>
-            <Text style={styles.panelText}>Michael Simoneau quick actions</Text>
-            <Pressable style={styles.primaryActionButton} onPress={handleMsDonate}>
-              <Text style={styles.primaryActionText}>Donate via PayPal</Text>
-              <Text style={styles.primaryActionSubtext}>Supports @michaelsimoneau</Text>
-            </Pressable>
+            <View style={styles.commentHeader}>
+              <Text style={styles.panelTitle}>Michael Simoneau</Text>
+              <Pressable onPress={() => setShowPanel(null)} style={styles.closeButton}>
+                <X size={24} color="#666666" />
+              </Pressable>
+            </View>
+            <Text style={[styles.panelText, { marginBottom: 24 }]}>Support the developer & platform</Text>
+            
+            <View style={styles.tilesContainer}>
+              <Tile 
+                icon={DollarSign}
+                title="Donate"
+                subtitle="via PayPal"
+                color="#0070ba"
+                textColor="#ffffff"
+                size="large"
+                onPress={handleMsDonate}
+              />
+              <Tile 
+                icon={Heart}
+                title="Sponsor"
+                subtitle="GitHub"
+                color="#24292e"
+                textColor="#ffffff"
+                size="large"
+                onPress={() => {}} // TODO: Add GitHub sponsor link
+              />
+            </View>
           </View>
         );
       default:
@@ -250,18 +346,30 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
       const index = state.routes.findIndex(r => r.name === name);
       return index >= 0 ? { route: state.routes[index], index } : null;
     })
-    .filter(Boolean) as Array<{ route: typeof state.routes[0]; index: number }> : [];
+    .filter(Boolean) as { route: typeof state.routes[0]; index: number }[] : [];
+
+  const handleTabLayout = (index: number, event: LayoutChangeEvent) => {
+    const { x, width } = event.nativeEvent.layout;
+    tabLayouts.current[index] = { x, width };
+    
+    // If this is the active tab, immediately update indicator position
+    if (state?.index === index) {
+      indicatorPosition.value = x;
+      indicatorWidth.value = width;
+    }
+  };
 
   return (
-    <View style={styles.container} {...panResponder.panHandlers}>
+    <Animated.View style={[styles.container, { height: tabBarHeight, overflow: 'hidden' }]} {...panResponder.panHandlers}>
       <Animated.View style={[styles.panel, { height: panelHeight }]}>
         {panelType !== null ? renderPanel('') : (showPanel !== null && state ? renderPanel(state.routes[showPanel].name) : null)}
       </Animated.View>
 
       <View style={styles.tabBar}>
         {orderedRoutes.map(({ route, index }) => {
-          const { options } = descriptors[route.key];
-          const isFocused = state.index === index;
+          const descriptor = descriptors ? descriptors[route.key] : null;
+          const options = descriptor ? descriptor.options : {};
+          const isFocused = state ? state.index === index : false;
           const isPanelOpen = showPanel === index || panelType !== null;
 
           // Dynamic Icon for Feed
@@ -277,23 +385,31 @@ export function CustomTabBar({ state, descriptors, navigation, onTabPress }: Cus
             <Pressable
               key={route.key}
               onPress={() => handleTabPress(index)}
+              onLayout={(event) => handleTabLayout(index, event)}
               style={[
                 styles.tab,
-                isFocused && styles.tabActive,
+                // Remove tabActive background since we're using indicator instead
                 isPanelOpen && isFocused && styles.tabWithPanel,
               ]}
             >
               {icon &&
                 icon({
                   focused: isFocused,
-                  color: isFocused ? '#ffffff' : '#666666',
+                  color: isFocused ? '#0066cc' : '#666666',
                   size: 32,
                 })}
             </Pressable>
           );
         })}
+        {/* Animated highlight indicator */}
+        <AnimatedReanimated.View
+          style={[
+            styles.indicator,
+            indicatorAnimatedStyle,
+          ]}
+        />
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -329,20 +445,29 @@ const styles = StyleSheet.create({
     height: 120,
     paddingBottom: 16,
     paddingTop: 16,
+    position: 'relative',
+    zIndex: 1,
   },
   tab: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: 'transparent',
     borderRadius: 16,
     marginHorizontal: 8,
-  },
-  tabActive: {
-    backgroundColor: '#0066cc',
+    position: 'relative',
+    zIndex: 3,
   },
   tabWithPanel: {
     backgroundColor: '#0052a3',
+  },
+  indicator: {
+    position: 'absolute',
+    bottom: 12,
+    height: 3,
+    backgroundColor: '#0066cc',
+    borderRadius: 2,
+    zIndex: 2,
   },
   commentHeader: {
     flexDirection: 'row',
@@ -383,27 +508,44 @@ const styles = StyleSheet.create({
     backgroundColor: '#cccccc',
   },
   primaryActionButton: {
-    marginTop: 20,
-    backgroundColor: '#0070ba',
-    paddingVertical: 18,
-    paddingHorizontal: 16,
-    borderRadius: 14,
+    padding: 16,
+    borderRadius: 12,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 6,
-    elevation: 3,
   },
   primaryActionText: {
-    fontSize: 18,
-    fontWeight: '800',
     color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  tilesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 16,
+    justifyContent: 'space-between',
+  },
+  tile: {
+    padding: 20,
+    borderRadius: 20,
+    minHeight: 140,
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  tileHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  tileTitle: {
+    fontSize: 20,
+    fontWeight: '800',
     marginBottom: 4,
   },
-  primaryActionSubtext: {
+  tileSubtitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#e6f0ff',
   },
 });

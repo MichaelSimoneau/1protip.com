@@ -1,7 +1,10 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Linking from 'expo-linking';
-import { supabase } from '@/services/supabase/client';
+import { auth, functions, db } from '@/services/firebase/client';
+import { httpsCallable } from 'firebase/functions';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { signInWithCustomToken, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { Platform } from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -16,7 +19,10 @@ const getRedirectUri = () => {
     // However, LinkedIn requires an EXACT match.
     // If we are in production (window.location.hostname !== 'localhost'), we should use the prod URI.
     if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-       return 'https://free/auth/linkedin/callback';
+       // Support multiple production domains (e.g. app.1protip.com, www.1protip.com)
+       // by constructing the redirect URI from the current origin.
+       // This avoids cross-domain cookie issues if the user is on a subdomain.
+       return `${window.location.origin}/auth/linkedin/callback`;
     }
   }
   // Default fallback or local dev
@@ -93,30 +99,46 @@ export function useLinkedInAuth() {
     return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
   }, []);
 
-  const exchangeCodeForToken = useCallback(async (code: string): Promise<string> => {
-    const { data, error } = await supabase.functions.invoke(
-      'linkedin-oauth-exchange',
-      {
-        body: { code, redirect_uri: LINKEDIN_REDIRECT_URI },
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in, fetch profile
+        try {
+          const profileDoc = await getDoc(doc(db, 'profiles', user.uid));
+          if (profileDoc.exists()) {
+            const data = profileDoc.data();
+            setState(prev => ({
+              ...prev,
+              profile: {
+                id: user.uid,
+                firstName: data.firstName || '',
+                lastName: data.lastName || '',
+                profilePicture: data.avatar_url,
+                has_connected_with_owner: data.has_connected_with_owner ?? false,
+              }
+            }));
+          }
+        } catch (e) {
+          console.error('Error fetching profile on auth change:', e);
+        }
+      } else {
+        setState(prev => ({ ...prev, profile: null }));
       }
-    );
-
-    if (error) throw error;
-
-    return data.access_token;
+    });
+    return () => unsubscribe();
   }, []);
 
-  const storeAccessToken = useCallback(async (token: string): Promise<void> => {
-    const { data: session } = await supabase.auth.getSession();
-    if (!session.session) throw new Error('No active session');
-
-    const { error } = await supabase.from('profiles').upsert({
-      id: session.session.user.id,
-      linkedin_access_token: token,
-      updated_at: new Date().toISOString(),
+  const exchangeCodeForToken = useCallback(async (code: string): Promise<string> => {
+    const exchangeFunc = httpsCallable(functions, 'linkedinSignIn');
+    // Note: The Firebase function handles exchange + profile fetch + custom token creation
+    // We don't just get an access token back, we get a Firebase Auth custom token.
+    const result = await exchangeFunc({ 
+      code, 
+      redirect_uri: LINKEDIN_REDIRECT_URI 
     });
-
-    if (error) throw error;
+    
+    const data = result.data as { token: string; profile: any };
+    return data.token;
   }, []);
 
   const handleCallback = useCallback(
@@ -129,23 +151,25 @@ export function useLinkedInAuth() {
         const parsed = Linking.parse(url);
         code = parsed.queryParams?.code as string;
         returnedState = parsed.queryParams?.state as string;
+        
+        // Check for OAuth errors
+        if (parsed.queryParams?.error) {
+          const errorDesc = parsed.queryParams?.error_description as string;
+          throw new Error(errorDesc || (parsed.queryParams?.error as string));
+        }
       } catch (e) {
+        if (e instanceof Error && e.message !== 'Linking.parse failed') throw e;
         console.warn('Linking.parse failed', e);
       }
 
-      // Fallback: Manually parse if Linking failed or returned empty
+      // Fallback parsing logic...
       if (!code && typeof window !== 'undefined') {
-          // If the 'url' passed is just the path or partial, we might want to check window.location
-          // But 'result.url' from openAuthSessionAsync should be the full return URL.
-          // Let's try to parse the 'url' argument as a URL object first.
           try {
              const urlObj = new URL(url);
              const params = new URLSearchParams(urlObj.search);
              code = params.get('code');
              returnedState = params.get('state');
           } catch (e) {
-             // If url argument is not a valid full URL, fallback to window.location
-             // This happens if the redirect came back to the app root and we are reading current location
              const params = new URLSearchParams(window.location.search);
              code = params.get('code');
              returnedState = params.get('state');
@@ -161,15 +185,20 @@ export function useLinkedInAuth() {
         throw new Error('No authorization code received');
       }
 
-      const token = await exchangeCodeForToken(code);
-      await storeAccessToken(token);
+      // Exchange code for Firebase Custom Token
+      const customToken = await exchangeCodeForToken(code);
+      
+      // Sign in to Firebase
+      await signInWithCustomToken(auth, customToken);
+      
+      // Profile update happens in onAuthStateChanged
     },
-    [exchangeCodeForToken, storeAccessToken]
+    [exchangeCodeForToken]
   );
 
   const updateConnectionStatus = useCallback(async (status: boolean) => {
-    const { data: session } = await supabase.auth.getSession();
-    if (!session.session) return;
+    const user = auth.currentUser;
+    if (!user) return;
 
     // Optimistic update
     setState((prev) => ({
@@ -177,67 +206,46 @@ export function useLinkedInAuth() {
       profile: prev.profile ? { ...prev.profile, has_connected_with_owner: status } : null,
     }));
 
-    const { error } = await supabase
-      .from('profiles')
-      .update({ has_connected_with_owner: status })
-      .eq('id', session.session.user.id);
-      
-    if (error) {
+    try {
+      await updateDoc(doc(db, 'profiles', user.uid), {
+        has_connected_with_owner: status
+      });
+    } catch (error) {
       console.error('Error updating connection status:', error);
     }
   }, []);
 
   const getProfile = useCallback(async (): Promise<LinkedInProfile | null> => {
-    const { data: session } = await supabase.auth.getSession();
-    if (!session.session) return null;
+    const user = auth.currentUser;
+    if (!user) return null;
 
     try {
-      // Fetch fresh LinkedIn data from the edge function
-      const { data: linkedInData, error: linkedInError } = await supabase.functions.invoke(
-        'linkedin-get-profile',
-        {
-          body: {},
-        }
-      );
-
-      if (linkedInError) {
-        console.error('Error fetching LinkedIn profile:', linkedInError);
-      }
-
-      // Fetch local profile data (connection status etc)
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('has_connected_with_owner, full_name, avatar_url')
-        .eq('id', session.session.user.id)
-        .single();
-
-      if (profileError) {
-         console.error('Error fetching local profile:', profileError);
-      }
-
-      let combinedProfile: LinkedInProfile | null = null;
-
-      if (linkedInData) {
-        combinedProfile = {
-          ...linkedInData,
-          has_connected_with_owner: profileData?.has_connected_with_owner ?? false,
+      const docSnap = await getDoc(doc(db, 'profiles', user.uid));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const profile = {
+          id: user.uid,
+          firstName: data.firstName || '',
+          lastName: data.lastName || '',
+          profilePicture: data.avatar_url,
+          has_connected_with_owner: data.has_connected_with_owner ?? false,
         };
-      } else if (profileData) {
-         const nameParts = (profileData.full_name || '').split(' ');
-         combinedProfile = {
-            id: session.session.user.id,
-            firstName: nameParts[0] || '',
-            lastName: nameParts.slice(1).join(' ') || '',
-            profilePicture: profileData.avatar_url,
-            has_connected_with_owner: profileData?.has_connected_with_owner ?? false,
-         }
+        setState(prev => ({ ...prev, profile }));
+        return profile;
       }
-
-      setState((prev) => ({ ...prev, profile: combinedProfile }));
-      return combinedProfile;
+      return null;
     } catch (error) {
       console.error('Error fetching LinkedIn profile:', error);
       return null;
+    }
+  }, []);
+
+  const logout = useCallback(async () => {
+    try {
+      await signOut(auth);
+      setState(prev => ({ ...prev, profile: null }));
+    } catch (e) {
+      console.error('Logout failed:', e);
     }
   }, []);
 
@@ -278,6 +286,7 @@ export function useLinkedInAuth() {
 
   return {
     login,
+    logout,
     getProfile,
     updateConnectionStatus,
     isLoading: state.isLoading,

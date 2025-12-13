@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "1ProTip",
+    "name": "#1ProTip",
     "slug": "1protip",
     "version": "1.0.1",
     "orientation": "portrait",
@@ -9,9 +9,9 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/logo.png",
+      "image": "@1protip/free/assets/images/splashscreen.jpeg",
       "resizeMode": "contain",
-      "backgroundColor": "#0066cc"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "assets/**/*"
@@ -19,7 +19,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.michaelsimoneau.oneprotip",
-      "buildNumber": "2",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to capture photos for your posts.",
         "NSPhotoLibraryUsageDescription": "This app accesses your photo library to select images for your posts.",
@@ -28,10 +27,9 @@
     },
     "android": {
       "package": "com.michaelsimoneau.oneprotip",
-      "versionCode": 2,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/logo.png",
-        "backgroundColor": "#0066cc"
+        "foregroundImage": "@1protip/free/assets/images/splashscreen.jpeg",
+        "backgroundColor": "#000000"
       },
       "permissions": [
         "android.permission.CAMERA",
@@ -42,7 +40,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "@1protip/free/assets/images/favicon.png"
     },
     "plugins": [
       [
@@ -52,6 +50,7 @@
         }
       ],
       "expo-font",
+      "expo-updates",
       "expo-web-browser",
       [
         "expo-camera",

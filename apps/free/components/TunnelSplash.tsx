@@ -8,33 +8,26 @@ let Animated: typeof import('react-native-reanimated').default;
 let Easing: typeof import('react-native-reanimated').Easing;
 let useSharedValue: typeof import('react-native-reanimated').useSharedValue;
 let withTiming: typeof import('react-native-reanimated').withTiming;
-let withRepeat: typeof import('react-native-reanimated').withRepeat;
-let withSequence: typeof import('react-native-reanimated').withSequence;
 let useAnimatedStyle: typeof import('react-native-reanimated').useAnimatedStyle;
 
 try {
   // Reanimated may not be available in some environments (like web)
   // so we use a try-catch to avoid crashes.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const reanimated = require('react-native-reanimated');
   Animated = reanimated.default;
   Easing = reanimated.Easing;
   useSharedValue = reanimated.useSharedValue;
   withTiming = reanimated.withTiming;
-  withRepeat = reanimated.withRepeat;
-  withSequence = reanimated.withSequence;
   useAnimatedStyle = reanimated.useAnimatedStyle;
-} catch (e) {
+} catch {
   Animated = undefined as never;
   Easing = undefined as never;
   useSharedValue = undefined as never;
   withTiming = undefined as never;
-  withRepeat = undefined as never;
-  withSequence = undefined as never;
   useAnimatedStyle = undefined as never;
 }
 
-const SQUARE_COUNT = 9; // 8 border squares + 1 filled logo square
 const LINKEDIN_BLUE = '#0077b5';
 const INITIAL_SIZE = 40;
 const LOGO_FINAL_SIZE = 160; // Final size for the logo square
@@ -260,7 +253,7 @@ export function TunnelSplash({
           size={LOGO_FINAL_SIZE}
         />
         {onSkip && (
-          <View style={[styles.skipButtonContainer, { top: skipButtonTop }]}>
+          <View style={[styles.skipButtonContainer, { top: skipButtonTop, bottom: 0 }]}>
             <Pressable onPress={onSkip} style={styles.skipButton}>
               <Text style={styles.skipButtonText}>SKIP LOGIN</Text>
             </Pressable>
@@ -297,7 +290,7 @@ export function TunnelSplash({
 
       {/* Skip Login Button */}
       {onSkip && mounted && (
-        <View style={[styles.skipButtonContainer, { top: skipButtonTop }]}>
+        <View style={[styles.skipButtonContainer, { top: skipButtonTop, bottom: 0 }]}>
           <Pressable onPress={onSkip} style={styles.skipButton}>
             <Text style={styles.skipButtonText}>SKIP LOGIN</Text>
           </Pressable>
@@ -398,11 +391,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    alignItems: 'center',
     zIndex: 20,
     opacity: 0.5,
   },
   skipButton: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
   skipButtonText: {

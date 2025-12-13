@@ -8,12 +8,13 @@ import Animated, {
   useSharedValue,
   withTiming,
   Easing,
+  SharedValue,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { useFeed } from '@/features/feed/hooks/useFeed';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye, Lock, Hash } from 'lucide-react-native';
+import { Rss, User, ThumbsUp, MessageCircle, Repeat2, Eye, Hash } from 'lucide-react-native';
 import { useCallback, useRef, useState, useEffect } from 'react';
 import { router } from 'expo-router';
 import { useTabPanel } from '@/contexts/TabPanelContext';
@@ -21,7 +22,6 @@ import { TunnelSplash } from '@/components/TunnelSplash';
 import type { FeedPost } from '@/services/linkedin/feed';
 import {
   likePost as likeWithService,
-  commentOnPost as commentWithService,
   repostPost as repostWithService,
 } from '@/services/linkedin/socialActions';
 
@@ -33,7 +33,7 @@ const CARD_TOTAL = CARD_HEIGHT + CARD_SPACING;
 type CardProps = {
   item: FeedPost;
   index: number;
-  scrollY: Animated.SharedValue<number>;
+  scrollY: SharedValue<number>;
   onLike: (postUrn: string) => void;
   onComment: (post: FeedPost) => void;
   onRepost: (postUrn: string) => void;
@@ -184,11 +184,11 @@ export default function FeedTab() {
     }
   }, [isAuthenticated]);
 
-  const handleUnlock = () => {
+  const handleUnlock = useCallback(() => {
     setIsLocked(false);
     lockOpacity.value = withTiming(0, { duration: 500, easing: Easing.out(Easing.ease) });
     feedOpacity.value = withTiming(1, { duration: 500, easing: Easing.in(Easing.ease) });
-  };
+  }, []);
 
   const handleSkipLogin = () => {
     handleUnlock();
@@ -259,7 +259,7 @@ export default function FeedTab() {
     try {
       await likeWithService(postUrn);
       showFeedback('Liked on LinkedIn!');
-    } catch (err) {
+    } catch {
       showFeedback('Failed to like post');
     } finally {
       setActionInProgress(null);
@@ -285,7 +285,7 @@ export default function FeedTab() {
     try {
       await repostWithService(postUrn);
       showFeedback('Reposted to LinkedIn!');
-    } catch (err) {
+    } catch {
       showFeedback('Failed to repost');
     } finally {
       setActionInProgress(null);
@@ -350,9 +350,10 @@ export default function FeedTab() {
 
           <GestureDetector gesture={panGesture}>
             <AnimatedFlatList
-              ref={listRef}
+              // @ts-ignore: Animated component ref type mismatch
+              ref={listRef as any}
               data={posts}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item: FeedPost) => item.id}
               contentContainerStyle={styles.listContent}
               scrollEventThrottle={16}
               onScroll={onScroll}

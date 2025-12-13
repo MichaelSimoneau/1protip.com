@@ -41,13 +41,6 @@
         }
       },
       {
-        "source": "/feed",
-        "function": {
-          "functionId": "feed",
-          "region": "us-central1"
-        }
-      },
-      {
         "source": "/api/menuSuggestion",
         "function": {
           "functionId": "menuSuggestion",
@@ -93,31 +86,31 @@
   "emulators": {
     "auth": {
       "host": "0.0.0.0",
-      "port": 9999
+      "port": 9876
     },
     "functions": {
       "host": "0.0.0.0",
-      "port": 8888
+      "port": 8765
     },
     "firestore": {
       "host": "0.0.0.0",
-      "port": 7777
+      "port": 7654
     },
     "hosting": {
       "host": "0.0.0.0",
-      "port": 3333
+      "port": 8081
     },
     "pubsub": {
       "host": "0.0.0.0",
-      "port": 4444
+      "port": 4567
     },
     "eventarc": {
       "host": "0.0.0.0",
-      "port": 5555
+      "port": 5678
     },
     "tasks": {
       "host": "0.0.0.0",
-      "port": 6666
+      "port": 6789
     },
     "ui": {
       "enabled": true

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/services/supabase/client';
+import { auth, db } from '@/services/firebase/client';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 export function useHashtagPreferences() {
   const [hashtags, setHashtags] = useState<string[]>(['#1protip']);
@@ -11,22 +12,21 @@ export function useHashtagPreferences() {
     setError(null);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = auth.currentUser;
       if (!user) {
         setHashtags(['#1protip']);
         return;
       }
 
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('hashtag_preferences')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (profileError) throw profileError;
-
-      if (profile?.hashtag_preferences && profile.hashtag_preferences.length > 0) {
-        setHashtags(profile.hashtag_preferences);
+      const docSnap = await getDoc(doc(db, 'profiles', user.uid));
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.hashtag_preferences && Array.isArray(data.hashtag_preferences) && data.hashtag_preferences.length > 0) {
+          setHashtags(data.hashtag_preferences);
+        } else {
+          setHashtags(['#1protip']);
+        }
       } else {
         setHashtags(['#1protip']);
       }
@@ -44,15 +44,12 @@ export function useHashtagPreferences() {
     setError(null);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = auth.currentUser;
       if (!user) throw new Error('Not authenticated');
 
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({ hashtag_preferences: newHashtags })
-        .eq('id', user.id);
-
-      if (updateError) throw updateError;
+      await updateDoc(doc(db, 'profiles', user.uid), {
+        hashtag_preferences: newHashtags
+      });
 
       setHashtags(newHashtags);
     } catch (err) {

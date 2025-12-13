@@ -1,6 +1,14 @@
+import { Platform } from 'react-native';
+
+const getBaseUrl = () => {
+  if (Platform.OS === 'web') return '';
+  return process.env.EXPO_PUBLIC_API_URL || 'https://hashtag-1-pro-tip.web.app';
+};
+
+const API_BASE = getBaseUrl();
 const DEFAULT_HASHTAG = '#1ProTip';
-const FEED_API_URL = '/api/feed';
-const POST_API_URL = '/api/postToPage';
+const FEED_API_URL = `${API_BASE}/api/feed`;
+const POST_API_URL = `${API_BASE}/api/postToPage`;
 
 export type FeedResponse = {
   posts: FeedPost[];
@@ -78,4 +86,42 @@ export async function createAppPost(content: string): Promise<FeedPost> {
   }
 
   return await response.json();
+}
+
+export async function likePost(postUrn: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/api/like`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ postUrn }),
+  });
+
+  if (!response.ok) {
+     console.warn('Like failed', await response.text());
+     // We suppress throw here for better UX unless critical, or handle in caller
+     // throw new Error('Failed to like');
+  }
+}
+
+export async function commentOnPost(postUrn: string, text: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/api/comment`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ postUrn, text }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Comment failed: ${await response.text()}`);
+  }
+}
+
+export async function repostPost(postUrn: string, commentary?: string): Promise<void> {
+  const response = await fetch(`${API_BASE}/api/repost`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ postUrn, commentary }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Repost failed: ${await response.text()}`);
+  }
 }

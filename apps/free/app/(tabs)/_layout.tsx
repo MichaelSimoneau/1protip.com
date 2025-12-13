@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { TabPanelProvider } from '@/contexts/TabPanelContext';
@@ -7,15 +7,15 @@ import ScreenAL from '../ScreenAL';
 import ScreenAR from '../ScreenAR';
 import AccountTab from './settings';
 import FeedTab from './feed';
-import MSTab from './MichaelSimoneau';
+import MSTab from './ms';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
+import { User, Hash } from 'lucide-react-native';
 
 // Use a simplified navigation context for the pager
 // Since we're not using Expo Router's Tabs anymore for the main layout
 export default function PagerLayout() {
   const pagerRef = useRef<PagerView>(null);
   const [pageIndex, setPageIndex] = useState(2); // Start at Feed (index 2)
-  const { profile } = useLinkedInAuth();
   
   // Custom navigation object to pass to CustomTabBar
   // This mocks the necessary parts of the navigation prop
@@ -46,9 +46,27 @@ export default function PagerLayout() {
   };
 
   const descriptors = {
-    'settings': { options: { tabBarIcon: () => null } },
-    'feed': { options: { tabBarIcon: () => null } },
-    'ms': { options: { tabBarIcon: () => null } },
+    'settings': { 
+      options: { 
+        tabBarIcon: ({ focused, color, size }: { focused: boolean; color: string; size: number }) => (
+          <User size={size} color={color} />
+        )
+      } 
+    },
+    'feed': { 
+      options: { 
+        tabBarIcon: ({ focused, color, size }: { focused: boolean; color: string; size: number }) => (
+          <Hash size={size} color={color} />
+        )
+      } 
+    },
+    'ms': { 
+      options: { 
+        tabBarIcon: ({ focused, color, size }: { focused: boolean; color: string; size: number }) => (
+          <User size={size} color={color} />
+        )
+      } 
+    },
   };
 
   return (
@@ -86,6 +104,7 @@ export default function PagerLayout() {
             // Pass extra prop to handle manual page setting
             onTabPress={(index) => pagerRef.current?.setPage(index + 1)} 
             // Correct index mapping: Tab 0 -> Page 1, Tab 1 -> Page 2, Tab 2 -> Page 3
+            pageIndex={pageIndex}
           />
         </View>
       </View>
