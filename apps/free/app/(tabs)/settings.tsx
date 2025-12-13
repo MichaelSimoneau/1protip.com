@@ -5,6 +5,7 @@ import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from 'react';
 import { useHashtagPreferences } from '@/features/settings/hooks/useHashtagPreferences';
+import { TAB_BAR_HEIGHT } from './_layout';
 
 const MICHAEL_PROFILE_URL = 'https://linkedin.com/in/michaelsimoneau';
 // Placeholder for Michael's profile picture if not dynamically fetched (which implies web scraping). 
@@ -163,7 +164,12 @@ export default function AccountScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: 'relative',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: TAB_BAR_HEIGHT,
+    overflow: 'hidden',
     backgroundColor: '#f3f2ef', // LinkedIn-like background gray
   },
   scrollContent: {

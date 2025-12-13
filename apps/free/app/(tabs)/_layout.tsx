@@ -11,6 +11,9 @@ import MSTab from './ms';
 import { useLinkedInAuth } from '@/features/auth/hooks/useLinkedInAuth';
 import { User, Hash } from 'lucide-react-native';
 
+// Tab bar height constant - must match CustomTabBar.tsx tabBar height
+export const TAB_BAR_HEIGHT = 120;
+
 // Use a simplified navigation context for the pager
 // Since we're not using Expo Router's Tabs anymore for the main layout
 export default function PagerLayout() {

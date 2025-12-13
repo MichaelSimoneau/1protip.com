@@ -6,6 +6,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { fetchHashtagFeed, type FeedPost } from '@/services/linkedin/feed';
 import { User, ArrowLeft } from 'lucide-react-native';
 import { router } from 'expo-router';
+import { TAB_BAR_HEIGHT } from './_layout';
 
 export default function MSTab() {
   const [loading, setLoading] = useState(true);
@@ -149,7 +150,12 @@ export default function MSTab() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: 'relative',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: TAB_BAR_HEIGHT,
+    overflow: 'hidden',
     backgroundColor: '#ffffff',
   },
   webview: {

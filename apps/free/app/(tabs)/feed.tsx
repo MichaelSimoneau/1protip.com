@@ -24,6 +24,7 @@ import {
   likePost as likeWithService,
   repostPost as repostWithService,
 } from '@/services/linkedin/socialActions';
+import { TAB_BAR_HEIGHT } from './_layout';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const CARD_HEIGHT = Math.min(420, SCREEN_HEIGHT * 0.7);
@@ -409,7 +410,12 @@ export default function FeedTab() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: 'relative',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: TAB_BAR_HEIGHT,
+    overflow: 'hidden',
     backgroundColor: '#f5f5f5',
   },
   header: {

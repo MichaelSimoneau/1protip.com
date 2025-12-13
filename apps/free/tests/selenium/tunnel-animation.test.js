@@ -36,12 +36,12 @@ async function stopServer() {
         serverProcess = undefined;
         resolve();
       });
-      serverProcess.kill('SIGTERM');
+    serverProcess.kill('SIGTERM');
       // Force kill after 2 seconds if still running
       setTimeout(() => {
         if (serverProcess) {
           serverProcess.kill('SIGKILL');
-          serverProcess = undefined;
+    serverProcess = undefined;
         }
         resolve();
       }, 2000);
@@ -59,7 +59,7 @@ before(async () => {
 
 after(async () => {
   try {
-    if (driver) {
+  if (driver) {
       await Promise.race([
         driver.quit(),
         new Promise((resolve) => setTimeout(resolve, 5000)), // 5 second timeout

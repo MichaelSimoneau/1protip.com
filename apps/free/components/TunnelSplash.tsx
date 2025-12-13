@@ -53,11 +53,13 @@ type RoundedSquareProps = {
 };
 
 function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress, isLoading = false, disabled = false, finalSize }: RoundedSquareProps) {
+  // TunnelSplash ensures hooks are available before rendering this component
+  // Call hooks unconditionally to maintain hook order
+  const [isReady, setIsReady] = React.useState(false);
   const squareSize = useSharedValue(INITIAL_SIZE);
   const squareOpacity = useSharedValue(0);
   const textSize = useSharedValue(0);
   const loginTextSize = useSharedValue(0);
-  const [isReady, setIsReady] = React.useState(false);
 
   const startDelay = index * DELAY_BETWEEN_SQUARES;
   const isLogoSquare = isFilled && showLogoText;
@@ -136,7 +138,9 @@ function RoundedSquare({ index, isFilled = false, showLogoText = false, onPress,
     opacity: squareOpacity.value as number,
   }));
 
-  if (!Animated) return null;
+  // Safety check: if reanimated is not available, return null
+  // This should not happen since TunnelSplash checks before rendering, but provides defense in depth
+  if (!Animated || typeof useAnimatedStyle !== 'function') return null;
 
   // For logo square, we need to show text and make it pressable
   if (isLogoSquare) {
@@ -240,7 +244,11 @@ export function TunnelSplash({
     return <View style={styles.container} />;
   }
 
-  if (!Animated) {
+  // Check if reanimated and its hooks are available
+  // This prevents crashes when react-native-reanimated fails to load
+  const hasReanimated = Animated && typeof useSharedValue === 'function' && typeof useAnimatedStyle === 'function';
+  
+  if (!hasReanimated) {
     return (
       <View style={[styles.container, styles.fallback]}>
         {brandText && mounted ? (
