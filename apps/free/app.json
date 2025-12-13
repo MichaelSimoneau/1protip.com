@@ -45,7 +45,12 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      [
+        "expo-router",
+        {
+          "origin": "https://1protip.com"
+        }
+      ],
       "expo-font",
       "expo-web-browser",
       [
@@ -68,8 +73,6 @@
       "url": "https://u.expo.dev/0ce2f32f-83bf-4499-8fe6-631239bc2b10"
     },
     "owner": "michael-simoneau",
-    "runtimeVersion": {
-      "policy": "appVersion"
-    }
+    "runtimeVersion": "1.0.1"
   }
 }

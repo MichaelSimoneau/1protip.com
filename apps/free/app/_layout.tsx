@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { Stack } from 'expo-router';
 import Head from 'expo-router/head';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
@@ -10,8 +11,9 @@ export default function RootLayout() {
   useFrameworkReady();
 
   return (
-    <ErrorBoundary>
-      <Head>
+    <GestureHandlerRootView style={{ backgroundColor: '#000814' }}>
+      <ErrorBoundary>
+        <Head>
         <meta charSet="utf-8" />
         <title>#1ProTip</title>
         <meta name="description" content="The best pro tips, crowdsourced and collected in one place. Share yours at #1ProTip!" />
@@ -43,5 +45,6 @@ export default function RootLayout() {
         <StatusBar style="auto" />
       </Suspense>
     </ErrorBoundary>
+    </GestureHandlerRootView>
   );
 }
