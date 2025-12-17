@@ -3,19 +3,21 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const ENV_FILES = [
-  path.join(__dirname, '../apps/1protip.com/.env'),
+  path.join(__dirname, '../apps/free/.env'),
   path.join(__dirname, '../functions/.env')
 ];
 
 const TARGET_KEYS = [
   'EXPO_PUBLIC_LINKEDIN_CLIENT_ID',
   'EXPO_SECRET_LINKEDIN_CLIENT_SECRET',
+  'EXPO_SECRET_LINKEDIN_SERVICE_TOKEN',
   'EXPO_PUBLIC_LINKEDIN_REDIRECT_URI'
 ];
 
 const KEY_ALIASES = {
   EXPO_PUBLIC_CLIENT_ID: 'EXPO_PUBLIC_LINKEDIN_CLIENT_ID',
   EXPO_SECRET_CLIENT_SECRET: 'EXPO_SECRET_LINKEDIN_CLIENT_SECRET',
+  LINKEDIN_SERVICE_ACCESS_TOKEN: 'EXPO_SECRET_LINKEDIN_SERVICE_TOKEN',
 };
 
 function parseEnv(filePath) {
@@ -91,5 +93,7 @@ function syncSecrets() {
 }
 
 syncSecrets();
+
+
 
 

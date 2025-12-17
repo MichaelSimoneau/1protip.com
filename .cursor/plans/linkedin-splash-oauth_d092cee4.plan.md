@@ -24,7 +24,7 @@ todos:
 
 # LinkedIn Splash OAuth
 
-- Update `apps/1protip.com/app/(tabs)/index.tsx` to replace the timer-based redirect with a splash screen that centers a large embossed LinkedIn-rounded-square logo; require a tap on that logo to trigger the login flow and show inline loading/error states.
+- Update `apps/free/app/(tabs)/index.tsx` to replace the timer-based redirect with a splash screen that centers a large embossed LinkedIn-rounded-square logo; require a tap on that logo to trigger the login flow and show inline loading/error states.
 - Enhance `shared/components/TunnelSplash.tsx` (or a wrapper) to render the LinkedIn logo CTA overlay on the tunnel effect, with styling that matches the embossed blue brand treatment and exposes props/callbacks for press/loading/disabled states; add a subtle idle pulse (scale/size/saturation) when untouched.
 - Reuse `useLinkedInAuth` for the OAuth launch: on tap, call `login`, surface errors, and navigate to `/feed` on success; if a cached token/session is valid and can re-auth, skip the OAuth prompt and go straight to the feed.
 - After implementing, record the new directive in `docs/overlord/COMMANDS.md` per overlord rule once edits are allowed.
