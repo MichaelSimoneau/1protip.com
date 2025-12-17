@@ -1,14 +1,11 @@
 const { getDefaultConfig } = require('expo/metro-config');
-const path = require('path');
 
 const config = getDefaultConfig(__dirname);
 
 config.resolver.sourceExts.push('jsx', 'js', 'ts', 'tsx', 'json');
 
-config.watchman = { enabled: true };
-
 config.resolver.blockList = [
-  ...config.resolver.blockList || [],
+  ...(config.resolver.blockList || []),
   /node_modules\/.*\/node_modules\/.*/,
 ];
 
