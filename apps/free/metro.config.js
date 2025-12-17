@@ -1,21 +1,8 @@
 const { getDefaultConfig } = require('expo/metro-config');
-const path = require('path');
 
 const config = getDefaultConfig(__dirname);
 
 config.resolver.sourceExts.push('jsx', 'js', 'ts', 'tsx', 'json');
-
-// Configure watch folders to avoid hitting system file watcher limits
-config.watchFolders = [
-  __dirname,
-  path.resolve(__dirname, '../../shared'),
-];
-
-// Configure projectRoot to focus on necessary directories
-config.projectRoot = __dirname;
-
-// Add blacklist for node_modules to prevent watching unnecessary files
-config.resolver.blacklistRE = /node_modules[/\\](?!@1protip)/;
 
 config.resolver.resolveRequest = (context, moduleName, platform) => {
   if (platform === 'web') {
