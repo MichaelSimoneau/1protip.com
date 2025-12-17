@@ -23,7 +23,7 @@ todos:
 
 ## App data layer
 
-- Extend `apps/1protip.com/services/linkedin/feed.ts` to request `/api/feed` with pagination params (start/count=10) and surface `posts` plus `nextStart`.
+- Extend `apps/free/services/linkedin/feed.ts` to request `/api/feed` with pagination params (start/count=10) and surface `posts` plus `nextStart`.
 - Update `features/feed/hooks/useFeed.ts` to manage cursor-based incremental loading (10 at a time), dedupe, and expose load-more state.
 
 ## Rolodex UI with Reanimated

@@ -46,28 +46,32 @@ type FeedPost = {
   author_avatar_url?: string;
   author_profile_url?: string;
   is_owner?: boolean;
+  hashtag?: string; // Added for Firestore filtering
 };
 
 const CLIENT_ID =
-  process.env.LINKEDIN_CLIENT_ID ||
-  process.env.EXPO_PUBLIC_CLIENT_ID ||
-  process.env.EXPO_PUBLIC_LINKEDIN_CLIENT_ID;
+  process.env.EXPO_PUBLIC_LINKEDIN_CLIENT_ID ||
+  process.env.LINKEDIN_CLIENT_ID; // Fallback for backward compat if needed
+
 const CLIENT_SECRET =
-  process.env.LINKEDIN_CLIENT_SECRET ||
-  process.env.EXPO_SECRET_CLIENT_SECRET ||
-  process.env.EXPO_SECRET_LINKEDIN_CLIENT_SECRET;
+  process.env.EXPO_SECRET_LINKEDIN_CLIENT_SECRET ||
+  process.env.LINKEDIN_CLIENT_SECRET; // Fallback for backward compat if needed
+
 const SERVICE_TOKEN =
-  process.env.LINKEDIN_SERVICE_ACCESS_TOKEN ||
-  process.env.LINKEDIN_SERVICE_TOKEN;
+  process.env.EXPO_SECRET_LINKEDIN_SERVICE_TOKEN ||
+  process.env.LINKEDIN_SERVICE_ACCESS_TOKEN; // Fallback for backward compat if needed
 const OWNER_URN =
   process.env.LINKEDIN_OWNER_URN || "urn:li:person:michaelsimoneau";
 const OWNER_HANDLE =
   process.env.LINKEDIN_OWNER_HANDLE || "michaelsimoneau";
+const ORG_URN =
+  process.env.LINKEDIN_ORG_URN || "urn:li:organization:105663673";
 const DEFAULT_HASHTAG = "#1ProTip";
 const DEFAULT_COUNT = 10;
 const MAX_COUNT = 100;
 const MAX_REQUESTS = 5;
 const LINKEDIN_PAGE_LIMIT = 50;
+const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 
 function isOwner(authorUrn?: string, authorProfileUrl?: string) {
   if (!authorUrn && !authorProfileUrl) return false;
@@ -84,73 +88,10 @@ function isOwner(authorUrn?: string, authorProfileUrl?: string) {
 
 async function getAppAccessToken(): Promise<string> {
   if (SERVICE_TOKEN) {
-    // #region agent log
-    fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        sessionId: "debug-session",
-        runId: "pre-fix",
-        hypothesisId: "H3",
-        location: "functions/src/index.ts:getAppAccessToken",
-        message: "using service token",
-        data: { hasServiceToken: true },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
     return SERVICE_TOKEN;
   }
 
-  // #region agent log
-  fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({
-      sessionId: "debug-session",
-      runId: "pre-fix",
-      hypothesisId: "H3",
-      location: "functions/src/index.ts:getAppAccessToken",
-      message: "env check",
-      data: {
-        hasClientId: Boolean(CLIENT_ID),
-        hasClientSecret: Boolean(CLIENT_SECRET),
-        envKeysPresent: [
-          CLIENT_ID ? "CLIENT_ID" : null,
-          process.env.EXPO_PUBLIC_CLIENT_ID ? "EXPO_PUBLIC_CLIENT_ID" : null,
-          process.env.EXPO_PUBLIC_LINKEDIN_CLIENT_ID ? "EXPO_PUBLIC_LINKEDIN_CLIENT_ID" : null,
-          process.env.LINKEDIN_CLIENT_ID ? "LINKEDIN_CLIENT_ID" : null,
-          CLIENT_SECRET ? "CLIENT_SECRET" : null,
-          process.env.EXPO_SECRET_CLIENT_SECRET ? "EXPO_SECRET_CLIENT_SECRET" : null,
-          process.env.EXPO_SECRET_LINKEDIN_CLIENT_SECRET ? "EXPO_SECRET_LINKEDIN_CLIENT_SECRET" : null,
-          process.env.LINKEDIN_CLIENT_SECRET ? "LINKEDIN_CLIENT_SECRET" : null,
-        ].filter(Boolean),
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
-
   if (!CLIENT_ID || !CLIENT_SECRET) {
-    // #region agent log
-    fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        sessionId: "debug-session",
-        runId: "pre-fix",
-        hypothesisId: "H3",
-        location: "functions/src/index.ts:getAppAccessToken",
-        message: "missing credentials",
-        data: {
-          hasClientId: Boolean(CLIENT_ID),
-          hasClientSecret: Boolean(CLIENT_SECRET),
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
-
     throw new Error(
       "LinkedIn API credentials missing: set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET"
     );
@@ -170,23 +111,6 @@ async function getAppAccessToken(): Promise<string> {
 
   if (!response.ok) {
     const text = await response.text();
-
-    // #region agent log
-    fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        sessionId: "debug-session",
-        runId: "pre-fix",
-        hypothesisId: "H3",
-        location: "functions/src/index.ts:getAppAccessToken",
-        message: "token request failed",
-        data: { status: response.status, text: text.slice(0, 200) },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => {});
-    // #endregion
-
     throw new Error(`LinkedIn token request failed: ${text}`);
   }
 
@@ -231,15 +155,8 @@ function normalizePost(element: LinkedInPostElement, hashtag: string): FeedPost 
     author_avatar_url: element.actorImageUrl || undefined,
     author_profile_url: authorProfileUrl,
     is_owner: owner,
+    hashtag,
   };
-}
-
-function sortPosts(posts: FeedPost[]): FeedPost[] {
-  return [...posts].sort((a, b) => {
-    if (a.is_owner && !b.is_owner) return -1;
-    if (!a.is_owner && b.is_owner) return 1;
-    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-  });
 }
 
 async function fetchLinkedInSearchPage(
@@ -405,11 +322,146 @@ export const linkedinSignIn = onCall(async (request) => {
   }
 });
 
+export const postToPage = onRequest(
+  { cors: true },
+  async (req, res) => {
+    try {
+      if (req.method !== "POST") {
+        throw new Error("Method not allowed");
+      }
+
+      const { content } = req.body;
+      if (!content || typeof content !== "string") {
+        throw new Error("Missing or invalid content");
+      }
+
+      // Prepend hashtag if not present
+      const finalContent = content.includes(DEFAULT_HASHTAG)
+        ? content
+        : `${DEFAULT_HASHTAG} ${content}`;
+
+      const token = await getAppAccessToken();
+
+      if (!ORG_URN) {
+        throw new Error("Organization URN not configured");
+      }
+
+      const body = {
+        author: ORG_URN,
+        commentary: finalContent,
+        visibility: "PUBLIC",
+        distribution: {
+          feedDistribution: "MAIN_FEED",
+          targetEntities: [],
+          thirdPartyDistributionChannels: []
+        },
+        lifecycleState: "PUBLISHED",
+        isReshareDisabledByAuthor: false
+      };
+
+      const response = await fetch("https://api.linkedin.com/rest/posts", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "LinkedIn-Version": "202412",
+          "X-Restli-Protocol-Version": "2.0.0",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`LinkedIn post failed: ${text}`);
+      }
+
+      // The response header 'x-restli-id' contains the URN of the created post
+      const newPostUrn = response.headers.get("x-restli-id") || `urn:li:share:${Date.now()}`;
+
+      // Construct a FeedPost to return immediately
+      const newPost: FeedPost = {
+        id: newPostUrn,
+        content: finalContent,
+        created_at: new Date().toISOString(),
+        linkedin_post_id: newPostUrn,
+        author_name: "1ProTip App", // Or fetch org name if we want to be fancy, but static is fine for now
+        is_owner: false, // It's the app page, not the user
+        hashtag: DEFAULT_HASHTAG,
+      };
+
+      res.status(200).json(newPost);
+    } catch (error: unknown) {
+      logger.error("postToPage error", error);
+      res.status(500).json({
+        error: error instanceof Error ? error.message : "Internal server error",
+      });
+    }
+  }
+);
+
+// Helper function to update Firestore cache from LinkedIn
+async function updateFeedCache(hashtag: string) {
+  const metaRef = db.collection('hashtags').doc(hashtag);
+  const metaSnap = await metaRef.get();
+  const meta = metaSnap.data();
+  const now = Date.now();
+
+  // If cache is fresh, do nothing
+  if (meta && meta.last_synced && (now - meta.last_synced < CACHE_DURATION_MS)) {
+    return;
+  }
+
+  // Fetch from LinkedIn
+  const token = await getAppAccessToken();
+  const collected: FeedPost[] = [];
+  const seen = new Set<string>();
+  let cursor = 0;
+  let remaining = MAX_COUNT;
+  let requests = 0;
+
+  while (remaining > 0 && requests < MAX_REQUESTS) {
+    const fetchCount = Math.min(LINKEDIN_PAGE_LIMIT, Math.max(remaining, DEFAULT_COUNT));
+    const elements = await fetchLinkedInSearchPage(token, hashtag, cursor, fetchCount);
+    requests += 1;
+
+    if (!elements.length) break;
+
+    const normalized = elements
+      .map((element) => normalizePost(element, hashtag))
+      .filter((p): p is FeedPost => Boolean(p));
+
+    for (const post of normalized) {
+      if (!seen.has(post.id)) {
+        seen.add(post.id);
+        collected.push(post);
+      }
+    }
+
+    cursor += elements.length;
+    remaining = MAX_COUNT - collected.length;
+
+    if (collected.length >= MAX_COUNT) break;
+  }
+
+  // Batch write to Firestore
+  if (collected.length > 0) {
+    const batch = db.batch();
+    for (const post of collected) {
+      const postRef = db.collection('posts').doc(post.id);
+      // Use set with merge to update existing posts without overwriting everything
+      batch.set(postRef, post, { merge: true });
+    }
+    // Update metadata
+    batch.set(metaRef, { last_synced: now, count: collected.length }, { merge: true });
+    
+    await batch.commit();
+  }
+}
+
 export const feed = onRequest(
   { cors: true },
   async (req, res) => {
     try {
-      // Force the only supported hashtag.
       const hashtag = DEFAULT_HASHTAG;
 
       const startParam = Number(req.query.start ?? 0);
@@ -420,146 +472,47 @@ export const feed = onRequest(
         Math.min(Math.floor(countParam), MAX_COUNT) :
         DEFAULT_COUNT;
 
-      // #region agent log
-      fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          sessionId: "debug-session",
-          runId: "pre-fix",
-          hypothesisId: "H2",
-          location: "functions/src/index.ts:feed",
-          message: "feed request start",
-          data: { start, requestedCount, rawQuery: req.query },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
-
-      const token = await getAppAccessToken();
-
-      const collected: FeedPost[] = [];
-      const seen = new Set<string>();
-      let cursor = 0;
-      let remaining = MAX_COUNT;
-      let requests = 0;
-
-      // Collect up to MAX_COUNT so we can pin owner posts reliably.
-      while (remaining > 0 && requests < MAX_REQUESTS) {
-        const fetchCount = Math.min(LINKEDIN_PAGE_LIMIT, Math.max(remaining, DEFAULT_COUNT));
-        const elements = await fetchLinkedInSearchPage(token, hashtag, cursor, fetchCount);
-        requests += 1;
-
-        if (!elements.length) {
-          // #region agent log
-          fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-              sessionId: "debug-session",
-              runId: "pre-fix",
-              hypothesisId: "H2",
-              location: "functions/src/index.ts:feed",
-              message: "linkedin page empty",
-              data: { cursor, fetchCount },
-              timestamp: Date.now(),
-            }),
-          }).catch(() => {});
-          // #endregion
-          break;
-        }
-
-        const normalized = elements
-          .map((element) => normalizePost(element, hashtag))
-          .filter((p): p is FeedPost => Boolean(p));
-
-        // #region agent log
-        fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            sessionId: "debug-session",
-            runId: "pre-fix",
-            hypothesisId: "H2",
-            location: "functions/src/index.ts:feed",
-            message: "linkedin page fetched",
-            data: { cursor, fetchCount, elements: elements.length, normalized: normalized.length },
-            timestamp: Date.now(),
-          }),
-        }).catch(() => {});
-        // #endregion
-
-        for (const post of normalized) {
-          if (!seen.has(post.id) && collected.length < MAX_COUNT) {
-            seen.add(post.id);
-            collected.push(post);
-          }
-        }
-
-        cursor += elements.length;
-        remaining = MAX_COUNT - collected.length;
-
-        if (collected.length >= MAX_COUNT) {
-          break;
-        }
+      // Update cache if needed (blocking for now to ensure data availability on first load)
+      try {
+        await updateFeedCache(hashtag);
+      } catch (e) {
+        logger.error("Failed to update feed cache", e);
+        // Continue to serve stale data if cache update fails
       }
 
-      // Order: newest owner posts pinned to the top (up to 10), then everyone else.
-      const sortedByOwnerThenDate = sortPosts(collected);
-      const ownerSorted = sortedByOwnerThenDate.filter((p) => p.is_owner);
-      const pinned = ownerSorted.slice(0, 10);
-      const others = sortedByOwnerThenDate.filter((p) => !p.is_owner);
-      const ordered = [...pinned, ...others];
+      // Query Firestore
+      // Index required: posts [hashtag ASC, is_owner DESC, created_at DESC]
+      const postsRef = db.collection('posts');
+      const snapshot = await postsRef
+        .where('hashtag', '==', hashtag)
+        .orderBy('is_owner', 'desc')
+        .orderBy('created_at', 'desc')
+        .limit(requestedCount)
+        .offset(start)
+        .get();
 
-      const page = ordered.slice(start, start + requestedCount);
-      const nextStart = start + page.length < ordered.length ? start + page.length : undefined;
-
-      // #region agent log
-      fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          sessionId: "debug-session",
-          runId: "pre-fix",
-          hypothesisId: "H2",
-          location: "functions/src/index.ts:feed",
-          message: "response ready",
-          data: { total: ordered.length, page: page.length, pinned: pinned.length, start, nextStart },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
+      const page = snapshot.docs.map(doc => doc.data() as FeedPost);
+      
+      // Determine if there are more
+      // Note: This is an approximation. Ideally we'd fetch requestedCount + 1 to check for next page
+      const totalSnapshot = await postsRef.where('hashtag', '==', hashtag).count().get();
+      const total = totalSnapshot.data().count;
+      const nextStart = (start + page.length < total) ? start + page.length : undefined;
 
       res.status(200).json({
         posts: page,
-        synced: ordered.length,
+        synced: page.length, // Should ideally be total cached, but page length is fine for now
         start,
         count: requestedCount,
         nextStart,
         hashtag,
-        pinnedCount: pinned.length,
-        total: ordered.length,
+        pinnedCount: page.filter(p => p.is_owner).length,
+        total,
       });
     } catch (error: unknown) {
       logger.error("feed error", error);
-      // #region agent log
-      fetch("http://127.0.0.1:7243/ingest/8b03ddb3-6464-4674-b4fe-3cc7ab9454d1", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          sessionId: "debug-session",
-          runId: "pre-fix",
-          hypothesisId: "H2",
-          location: "functions/src/index.ts:feed",
-          message: "feed error",
-          data: { error: error instanceof Error ? error.message : String(error) },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      // #endregion
       res.status(500).json({
-        error:
-          error instanceof Error ? error.message : "Internal server error",
+        error: error instanceof Error ? error.message : "Internal server error",
       });
     }
   }

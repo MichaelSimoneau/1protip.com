@@ -29,7 +29,7 @@ todos:
 
 ## File Structure
 
-- Create `apps/1protip.com/tests/selenium/tunnel-animation.test.js`
+- Create `apps/free/tests/selenium/tunnel-animation.test.js`
 - Follow existing test patterns from `smoke.test.js`
 - Use Node.js test framework (node:test)
 - Integrate with existing test suite via `test:selenium` npm script

@@ -26,7 +26,7 @@ todos:
 
 ## Changes to TunnelSplash Component
 
-- Replace `Ring` component with `RoundedSquare` component in `apps/1protip.com/components/TunnelSplash.tsx`:
+- Replace `Ring` component with `RoundedSquare` component in `apps/free/components/TunnelSplash.tsx`:
 - Change from circular (`borderRadius: size / 2`) to rounded square (`borderRadius: size * 0.15` to match LinkedIn logo)
 - Use border-only styling (no fill, just `borderWidth` and `borderColor`)
 - Border color: LinkedIn blue `#0077b5`
@@ -43,7 +43,7 @@ todos:
 
 ## Enhanced LinkedIn Logo Pulse
 
-- Update `LinkedInLogoButton` component in `apps/1protip.com/components/LinkedInLogoButton.tsx`:
+- Update `LinkedInLogoButton` component in `apps/free/components/LinkedInLogoButton.tsx`:
 - Add multiple overlapping pulse animations:
   - Scale animation (more dramatic: 1.0 to 1.15+)
   - Shadow opacity pulsing (0.6 to 1.2)
@@ -53,7 +53,7 @@ todos:
 
 ## Update Index Screen
 
-- Modify `apps/1protip.com/app/(tabs)/index.tsx`:
+- Modify `apps/free/app/(tabs)/index.tsx`:
 - Remove overlay prop usage since logo is now integrated into TunnelSplash
 - Pass LinkedIn logo button as part of the tunnel animation sequence
 - Keep "#1ProTip" text overlay but adjust positioning to work with integrated logo
