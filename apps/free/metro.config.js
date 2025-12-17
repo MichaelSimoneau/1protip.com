@@ -1,5 +1,20 @@
 const { getDefaultConfig } = require('expo/metro-config');
+const path = require('path');
+const fs = require('fs');
 
+// Find workspace root by looking for pnpm-workspace.yaml
+function findWorkspaceRoot(startPath) {
+  let currentPath = startPath;
+  while (currentPath !== path.dirname(currentPath)) {
+    if (fs.existsSync(path.join(currentPath, 'pnpm-workspace.yaml'))) {
+      return currentPath;
+    }
+    currentPath = path.dirname(currentPath);
+  }
+  return startPath;
+}
+
+const workspaceRoot = findWorkspaceRoot(__dirname);
 const config = getDefaultConfig(__dirname);
 
 config.resolver.sourceExts.push('jsx', 'js', 'ts', 'tsx', 'json');
